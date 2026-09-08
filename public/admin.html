@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ElectroMart Admin Panel</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+<!-- ================================
+     ADMIN LOGIN
+================================ -->
+
+<section id="adminLoginSection"
+         class="admin-login-wrapper">
+
+    <div class="admin-login-box">
+
+        <h1> ElectroMart</h1>
+
+        <p>Administrator Login</p>
+
+        <form id="adminLoginForm">
+
+            <label>Email Address</label>
+
+            <input
+                type="email"
+                id="adminEmail"
+                placeholder="Enter admin email"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Enter password"
+                required
+            >
+
+            <button
+                type="submit"
+                class="admin-login-btn">
+
+                Login to Admin Panel
+
+            </button>
+
+        </form>
+
+        <p id="adminLoginMessage"
+           class="message">
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================================
+     ADMIN DASHBOARD
+================================ -->
+
+<section id="adminDashboard"
+         class="hidden">
+
+    <!-- HEADER -->
+
+    <header class="admin-header">
+
+        <div class="admin-logo">
+            ⚡ Electro<span>Mart</span>
+        </div>
+
+        <div>
+
+            <span>
+                Administrator
+            </span>
+
+            <button
+                class="logout-btn"
+                onclick="adminLogout()">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="admin-container">
+
+        <!-- TITLE -->
+
+        <div class="admin-title">
+
+            <h1>Admin Dashboard</h1>
+
+            <p>
+                Manage your ElectroMart store.
+            </p>
+
+        </div>
+
+
+        <!-- ================================
+             STATISTICS
+        ================================= -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <h3>
+                    Total Customers
+                </h3>
+
+                <div
+                    class="stat-number"
+                    id="totalUsers">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📦
+                </div>
+
+                <h3>
+                    Total Products
+                </h3>
+
+                <div
+                    class="stat-number"
+                    id="totalProducts">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🛒
+                </div>
+
+                <h3>
+                    Total Orders
+                </h3>
+
+                <div
+                    class="stat-number"
+                    id="totalOrders">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    💰
+                </div>
+
+                <h3>
+                    Total Sales
+                </h3>
+
+                <div
+                    class="stat-number">
+
+                    ₹<span id="totalSales">
+                        0
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================
+             PRODUCT MANAGEMENT
+        ================================= -->
+
+        <section class="admin-section">
+
+            <div class="section-header">
+
+                <h2>
+                    📦 Product Management
+                </h2>
+                <button
+    type="button"
+    class="add-btn"
+    onclick="openProductForm()">
+    + Add Product
+</button>
+            </div>
+
+
+            <!-- PRODUCT FORM -->
+
+            <div
+                id="productFormContainer"
+                class="product-form-container hidden">
+
+                <h3 id="productFormTitle">
+                    Add Product
+                </h3>
+
+                <form
+    id="productForm"
+    class="product-form"
+    onsubmit="saveProduct(event)">
+
+                    <input
+                        type="hidden"
+                        id="productId">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Product Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productName"
+                            placeholder="Product name"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <select
+                            id="productCategory"
+                            required>
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option value="mobile">
+                                Mobile
+                            </option>
+
+                            <option value="laptop">
+                                Laptop
+                            </option>
+                            <option value="camera">
+                                Camera
+                            </option>
+
+                            <option value="tv">
+                                TV
+                            </option>
+
+                            <option value="speaker">
+                                Speaker
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Price
+                        </label>
+
+                        <input
+                            type="number"
+                            id="productPrice"
+                            min="0"
+                            step="0.01"
+                            placeholder="Product price"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Stock
+                        </label>
+
+                        <input
+                            type="number"
+                            id="productStock"
+                            min="0"
+                            placeholder="Stock quantity"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Icon
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productIcon"
+                            placeholder="Example: 📱">
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Description
+                        </label>
+
+                        <textarea
+                            id="productDescription"
+                            rows="4"
+                            placeholder="Product description">
+                        </textarea>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="save-btn">
+
+                            Save Product
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="closeProductForm()">
+
+                            Cancel
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- PRODUCTS TABLE -->
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Product</th>
+
+                            <th>Category</th>
+
+                            <th>Price</th>
+
+                            <th>Stock</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="productsTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================
+             CUSTOMERS
+        ================================= -->
+
+        <section class="admin-section">
+
+            <div class="section-header">
+
+                <h2>
+                    👥 Customers
+                </h2>
+
+                <button
+                    class="add-btn"
+                    onclick="loadUsers()">
+
+                    Refresh
+
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Name</th>
+
+                            <th>Email</th>
+
+                            <th>Registered</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="usersTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================
+             ORDERS
+        ================================= -->
+
+        <section class="admin-section">
+
+            <div class="section-header">
+
+                <h2>
+                    🛒 All Orders
+                </h2>
+
+                <button
+                    class="add-btn"
+                    onclick="loadOrders()">
+
+                    Refresh
+
+                </button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Order ID</th>
+
+                            <th>Customer</th>
+
+                            <th>Email</th>
+
+                            <th>Total</th>
+
+                            <th>Payment</th>
+
+                            <th>Status</th>
+
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="ordersTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+     CUSTOMER SUPPORT
+========================================== -->
+
+<div class="admin-section">
+
+    <h2>🛟 Customer Support</h2>
+
+    <p class="admin-section-description">
+        Manage customer support requests, complaints,
+        delivery issues, return requests and refund requests.
+    </p>
+
+    <div id="supportAdminTable">
+
+        <div class="support-admin-loading">
+            Loading customer support requests...
+        </div>
+
+    </div>
+
+</div>
+
+    </main>
+
+</section>
+
+
+<script src="admin.js"></script>
+
+</body>
+
+</html>
+
