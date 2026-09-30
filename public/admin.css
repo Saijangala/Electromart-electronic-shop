@@ -1238,3 +1238,3797 @@ td select:focus {
     }
 
 }
+/* =====================================================
+   ADMIN SIDEBAR
+===================================================== */
+
+.admin-layout {
+    display: flex;
+    min-height: calc(100vh - 70px);
+}
+
+.admin-sidebar {
+    width: 250px;
+    min-width: 250px;
+    background: #111827;
+    color: white;
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 70px);
+}
+
+.sidebar-brand {
+    padding: 10px 15px 25px;
+    border-bottom: 1px solid #374151;
+    margin-bottom: 20px;
+    font-size: 21px;
+}
+
+.sidebar-brand span {
+    color: #38bdf8;
+}
+
+.sidebar-brand small {
+    display: block;
+    margin-top: 6px;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.side-link {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #d1d5db;
+    padding: 13px 15px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.side-link:hover {
+    background: #1f2937;
+    color: white;
+}
+
+.side-link.active {
+    background: #2563eb;
+    color: white;
+}
+
+.logout-side {
+    margin-top: auto;
+    background: #dc2626;
+    color: white;
+}
+
+.logout-side:hover {
+    background: #b91c1c;
+}
+
+.admin-main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.clickable-stat {
+    cursor: pointer;
+}
+
+.clickable-stat:hover {
+    transform: translateY(-5px);
+}
+
+/* Hide sections until selected */
+
+.admin-section {
+    display: none;
+}
+
+.admin-section.active-section {
+    display: block;
+}
+
+/* Dashboard section */
+
+.dashboard-section {
+    display: block;
+}
+
+/* ORDER STATUS CARDS */
+
+.order-status-grid,
+.support-status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 20px 0 25px;
+}
+
+.status-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.status-card h3 {
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.status-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #111827;
+}
+
+/* SALES */
+
+.sales-summary {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.sales-total {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #16a34a;
+}
+
+@media (max-width: 900px) {
+
+    .admin-sidebar {
+        width: 210px;
+        min-width: 210px;
+    }
+
+    .order-status-grid,
+    .support-status-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .sidebar-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .logout-side {
+        margin-top: 15px;
+    }
+
+    .order-status-grid,
+    .support-status-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* =====================================================
+   CLEAN DASHBOARD
+===================================================== */
+
+#dashboardSection {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+#dashboardSection .stats-grid {
+    display: block !important;
+    width: 100%;
+    margin: 20px 0 0;
+}
+
+#dashboardSection .stat-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+#dashboardSection .stat-card.green,
+#dashboardSection .stat-card.purple,
+#dashboardSection .stat-card.orange {
+    display: none !important;
+}
+/* =========================================
+   CLEAN DASHBOARD - CUSTOMER CARD ONLY
+========================================= */
+
+#dashboardSection {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+#dashboardSection .stats-grid {
+    display: block !important;
+    width: 100%;
+    margin-top: 25px;
+}
+
+#dashboardSection .stat-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+/* =========================================
+   CLEAN DASHBOARD
+========================================= */
+
+#dashboardSection {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#dashboardSection .admin-title {
+    margin-bottom: 25px;
+}
+
+#dashboardSection .stats-grid {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#dashboardSection .stat-card {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+}
+
+#dashboardSection .stat-card:not(:first-child) {
+    display: none !important;
+}
+/* =========================================
+   ADMIN SECTION VISIBILITY
+========================================= */
+
+.admin-section {
+    display: none;
+}
+
+.admin-section.active-section {
+    display: block;
+}
+
+
+/* =========================================
+   CLICKABLE ORDER CARDS
+========================================= */
+
+.order-filter-card {
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.order-filter-card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.12);
+}
+
+.order-filter-card:active {
+    transform: scale(0.98);
+}
+/* ==========================================
+   CUSTOMER SUPPORT STATUS ALIGNMENT
+========================================== */
+
+.support-status-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    margin: 25px 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.support-status-grid .status-card {
+    width: 100% !important;
+    min-height: 125px !important;
+    padding: 25px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+
+    background: #ffffff !important;
+    border: 1px solid #e1e6ef !important;
+    border-radius: 16px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06) !important;
+}
+
+.support-status-grid .status-card h3 {
+    margin: 0 0 12px 0 !important;
+    font-size: 17px !important;
+    color: #526b8a !important;
+    font-weight: 700 !important;
+}
+
+.support-status-grid .status-number {
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+}
+
+/* Hover */
+.support-status-grid .status-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10) !important;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .support-status-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .support-status-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+/* ==========================================
+   FIX SUPPORT SECTION WIDTH
+========================================== */
+
+#supportSection {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+}
+
+#supportSection .support-status-grid {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+#supportSection #supportAdminTable {
+    width: 100% !important;
+    max-width: none !important;
+}
+/* ==========================================
+   FINAL SUPPORT CARD FIX
+========================================== */
+
+#supportSection {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+#supportSection .support-status-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    margin: 25px 0 !important;
+}
+
+#supportSection .support-status-grid .status-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 125px !important;
+
+    margin: 0 !important;
+    padding: 25px !important;
+
+    background: #ffffff !important;
+    border: 1px solid #e1e6ef !important;
+    border-radius: 16px !important;
+
+    box-sizing: border-box !important;
+}
+
+#supportSection .support-status-grid .status-card h3 {
+    margin: 0 0 12px 0 !important;
+    font-size: 17px !important;
+    color: #526b8a !important;
+}
+
+#supportSection .support-status-grid .status-number {
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+}
+
+@media (max-width: 900px) {
+    #supportSection .support-status-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    #supportSection .support-status-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+/* =====================================================
+   CLICKABLE SUPPORT FILTER CARDS
+===================================================== */
+
+.support-filter-card {
+    cursor: pointer !important;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+    user-select: none;
+}
+
+
+.support-filter-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.10) !important;
+}
+
+
+.support-filter-card.active {
+    border: 2px solid #2563eb !important;
+    box-shadow:
+        0 8px 25px rgba(37, 99, 235, 0.15) !important;
+}
+
+
+.support-filter-card:active {
+    transform: scale(0.98);
+}
+
+
+/* Filter heading */
+
+.support-filter-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 25px 0 15px;
+}
+
+
+.support-filter-title h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+
+.support-filter-clear {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+
+.support-filter-clear:hover {
+    background: #1d4ed8;
+}
+
+
+/* Hidden support ticket */
+
+.support-admin-card.support-hidden {
+    display: none !important;
+}
+/* =====================================================
+   CUSTOMER SUPPORT TABLE
+===================================================== */
+
+.support-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 25px;
+    background: #ffffff;
+    border: 1px solid #e1e6ef;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+
+.support-table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+
+.support-table thead {
+    background: #f5f7fb;
+}
+
+
+.support-table th {
+    padding: 16px 14px;
+    text-align: left;
+    color: #334e73;
+    font-size: 14px;
+    font-weight: 800;
+    border-bottom: 1px solid #dfe5ef;
+    white-space: nowrap;
+}
+
+
+.support-table td {
+    padding: 16px 14px;
+    color: #334155;
+    border-bottom: 1px solid #edf0f5;
+    vertical-align: middle;
+}
+
+
+.support-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+
+.support-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+
+.support-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* CUSTOMER */
+
+.support-customer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+.support-customer strong {
+    color: #14213d;
+    font-size: 14px;
+}
+
+
+.support-customer small {
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* CATEGORY */
+
+.support-category {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 7px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+
+/* MESSAGE */
+
+.support-message-cell {
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #475569;
+}
+
+
+/* STATUS */
+
+.support-status-badge {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+
+/* OPEN / PENDING */
+
+.support-status-badge.open,
+.support-status-badge.pending {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+
+/* IN PROGRESS */
+
+.support-status-badge.in-progress,
+.support-status-badge.processing {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+/* SOLVED */
+
+.support-status-badge.solved,
+.support-status-badge.resolved {
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+
+/* CLOSED */
+
+.support-status-badge.closed {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+
+/* CREATED TIME */
+
+.support-created {
+    white-space: nowrap;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* EMPTY */
+
+.support-empty {
+    padding: 45px 20px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e1e6ef;
+    border-radius: 16px;
+}
+
+
+.support-empty h3 {
+    margin-bottom: 8px;
+    color: #14213d;
+}
+
+
+.support-empty p {
+    color: #64748b;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+    .support-table {
+        min-width: 950px;
+    }
+
+}
+/* =====================================================
+   SUPPORT STATUS DROPDOWN
+===================================================== */
+
+.support-status-select {
+    min-width: 125px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    outline: none;
+    appearance: auto;
+}
+
+
+/* OPEN */
+
+.support-status-select.open {
+    background: #fff7ed;
+    color: #ea580c;
+    border-color: #fed7aa;
+}
+
+
+/* IN PROGRESS */
+
+.support-status-select.progress {
+    background: #eff6ff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+
+/* RESOLVED */
+
+.support-status-select.resolved {
+    background: #ecfdf5;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+
+/* CLOSED */
+
+.support-status-select.closed {
+    background: #f1f5f9;
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+
+.support-status-select:hover {
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+
+.support-status-select:focus {
+    border-color: #2563eb;
+}
+
+
+.support-status-select:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+/* =====================================================
+   SUPPORT VIEW / CHAT MODAL
+===================================================== */
+
+.support-chat-modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+}
+
+
+.support-chat-modal.show {
+
+    display: block;
+
+}
+
+
+/* BACKGROUND */
+
+.support-chat-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.60);
+
+    backdrop-filter: blur(3px);
+
+}
+
+
+/* CHAT BOX */
+
+.support-chat-box {
+
+    position: fixed;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(720px, 94vw);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.30);
+
+    z-index: 100000;
+
+}
+
+
+/* HEADER */
+
+.support-chat-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 25px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    background: #f8fafc;
+
+}
+
+
+.support-chat-header h2 {
+
+    margin: 0;
+
+    font-size: 22px;
+
+    color: #173b6d;
+
+}
+
+
+.support-chat-header p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+}
+
+
+.support-chat-close {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #eef2f7;
+
+    font-size: 26px;
+
+    cursor: pointer;
+
+    line-height: 38px;
+
+}
+
+
+.support-chat-close:hover {
+
+    background: #e2e8f0;
+
+}
+
+
+/* CUSTOMER DETAILS */
+
+.support-chat-details {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 14px;
+
+    padding: 20px 25px;
+
+}
+
+
+.chat-detail-item {
+
+    padding: 13px 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+}
+
+
+.chat-detail-item span {
+
+    display: block;
+
+    font-size: 12px;
+
+    color: #64748b;
+
+    margin-bottom: 5px;
+
+}
+
+
+.chat-detail-item strong {
+
+    color: #172554;
+
+    font-size: 14px;
+
+}
+
+
+/* CHAT AREA */
+
+.support-chat-messages {
+
+    padding: 20px 25px;
+
+    background: #f1f5f9;
+
+    min-height: 170px;
+
+}
+
+
+/* CUSTOMER MESSAGE */
+
+.customer-chat-message {
+
+    max-width: 85%;
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 15px 17px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.08);
+
+}
+
+
+.customer-chat-label {
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #2563eb;
+
+    margin-bottom: 7px;
+
+}
+
+
+.customer-chat-text {
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    color: #1e293b;
+
+    white-space: pre-wrap;
+
+}
+
+
+.customer-chat-time {
+
+    margin-top: 8px;
+
+    font-size: 11px;
+
+    color: #94a3b8;
+
+}
+
+
+/* ADMIN RESPONSE */
+
+.admin-chat-message {
+
+    max-width: 85%;
+
+    margin-left: auto;
+
+    margin-top: 15px;
+
+    background: #dbeafe;
+
+    border-radius: 14px;
+
+    padding: 15px 17px;
+
+}
+
+
+.admin-chat-label {
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #1d4ed8;
+
+    margin-bottom: 7px;
+
+}
+
+
+/* STATUS */
+
+.support-chat-status-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px 25px 10px;
+
+}
+
+
+.support-chat-status-row label {
+
+    font-weight: 700;
+
+    color: #334155;
+
+}
+
+
+.support-chat-status-row select {
+
+    padding: 10px 14px;
+
+    border-radius: 9px;
+
+    border: 1px solid #cbd5e1;
+
+    background: white;
+
+    font-weight: 600;
+
+}
+
+
+/* REPLY */
+
+.support-chat-reply {
+
+    padding: 10px 25px 20px;
+
+}
+
+
+.support-chat-reply label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: 700;
+
+    color: #334155;
+
+}
+
+
+.support-chat-reply textarea {
+
+    width: 100%;
+
+    min-height: 110px;
+
+    resize: vertical;
+
+    padding: 13px 15px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+}
+
+
+.support-chat-reply textarea:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.10);
+
+}
+
+
+/* FOOTER */
+
+.support-chat-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px 25px 22px;
+
+    border-top: 1px solid #e5e7eb;
+
+}
+
+
+.support-send-btn {
+
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.support-send-btn:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+#supportReplyMessage {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+@media (max-width: 600px) {
+
+    .support-chat-details {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .support-chat-box {
+
+        width: 96vw;
+
+    }
+
+    .support-chat-header {
+
+        padding: 18px;
+
+    }
+
+    .support-chat-details,
+
+    .support-chat-messages,
+
+    .support-chat-status-row,
+
+    .support-chat-reply {
+
+        padding-left: 18px;
+
+        padding-right: 18px;
+
+    }
+
+}
+/* =====================================================
+   SUPPORT ADMIN TABLE
+===================================================== */
+
+.support-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.support-admin-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 1100px;
+
+}
+
+
+.support-admin-table th {
+
+    padding: 18px 16px;
+
+    text-align: left;
+
+    background: #f8fafc;
+
+    color: #173b6d;
+
+    font-size: 15px;
+
+    border-bottom: 1px solid #dbe3ef;
+
+    white-space: nowrap;
+
+}
+
+
+.support-admin-table td {
+
+    padding: 18px 16px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #334155;
+
+    vertical-align: middle;
+
+}
+
+
+.support-admin-table tbody tr:hover {
+
+    background: #f8fbff;
+
+}
+
+
+/* CUSTOMER */
+
+.support-customer {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.support-customer strong {
+
+    color: #0f172a;
+
+}
+
+
+.support-customer small {
+
+    color: #64748b;
+
+}
+
+
+/* CATEGORY */
+
+.support-category {
+
+    display: inline-block;
+
+    padding: 8px 13px;
+
+    border-radius: 9px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-weight: 700;
+
+    font-size: 13px;
+
+}
+
+
+/* MESSAGE */
+
+.support-message-view {
+
+    border: none;
+
+    background: transparent;
+
+    color: #334155;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    max-width: 220px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    font-family: inherit;
+
+}
+
+
+.support-message-view:hover {
+
+    color: #2563eb;
+
+    text-decoration: underline;
+
+}
+
+
+/* VIEW BUTTON */
+
+.support-view-btn {
+
+    border: none;
+
+    padding: 9px 14px;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.support-view-btn:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+/* STATUS SELECT */
+
+.support-status-select {
+
+    padding: 8px 12px;
+
+    border-radius: 20px;
+
+    border: 1px solid #cbd5e1;
+
+    background: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+/* =====================================================
+   SUPPORT CHAT VIEW MODAL
+===================================================== */
+
+.support-chat-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+}
+
+.support-chat-modal.show {
+    display: block;
+}
+
+.support-chat-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.support-chat-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 700px;
+    max-width: 95vw;
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+    border-radius: 18px;
+
+    box-shadow: 0 25px 70px rgba(0,0,0,.35);
+
+    z-index: 1000000;
+}
+
+.support-chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 25px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.support-chat-header h2 {
+    margin: 0;
+}
+
+.support-chat-header p {
+    margin: 5px 0 0;
+    color: #64748b;
+}
+
+.support-chat-close {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+    border-radius: 50%;
+
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.support-chat-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    padding: 20px 25px;
+}
+
+.support-chat-info div {
+    padding: 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.support-chat-info small {
+    display: block;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.support-chat-info strong {
+    display: block;
+}
+
+.support-chat-messages {
+    padding: 20px 25px;
+    background: #f1f5f9;
+}
+
+.customer-chat-message {
+    background: #ffffff;
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    margin-bottom: 15px;
+}
+
+.admin-chat-message {
+    background: #dbeafe;
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    margin-bottom: 15px;
+}
+
+.customer-chat-label,
+.admin-chat-label {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.customer-chat-text {
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.customer-chat-time {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.support-chat-controls,
+.support-chat-reply {
+    padding: 18px 25px;
+}
+
+.support-chat-controls label,
+.support-chat-reply label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.support-chat-controls select,
+.support-chat-reply textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 11px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+.support-chat-reply textarea {
+    resize: vertical;
+}
+
+.send-reply-btn {
+    margin-top: 10px;
+
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.support-chat-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    padding: 18px 25px;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+.support-close-main {
+    padding: 10px 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #64748b;
+    color: white;
+
+    cursor: pointer;
+}
+
+.support-view-btn {
+    padding: 8px 14px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #2563eb;
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.support-view-btn:hover {
+    background: #1d4ed8;
+}
+
+@media (max-width: 600px) {
+
+    .support-chat-info {
+        grid-template-columns: 1fr;
+    }
+
+    .support-chat-box {
+        width: 95vw;
+    }
+
+}
+/* =====================================================
+   SUPPORT VIEW BUTTON
+===================================================== */
+
+.support-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.support-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.support-table th,
+.support-table td {
+    padding: 14px 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.support-view-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 8px 14px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+}
+
+.support-view-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+/* =====================================================
+   SUPPORT ACTION / VIEW BUTTON
+===================================================== */
+
+.support-action-cell {
+    text-align: center !important;
+    white-space: nowrap;
+}
+
+.support-view-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 85px;
+    padding: 9px 15px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.support-view-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.support-view-btn:active {
+    transform: translateY(0);
+}
+/* =====================================================
+   CUSTOMER SUPPORT EXPORT BUTTONS
+===================================================== */
+
+.support-export-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    margin: 20px 0;
+
+    align-items: center;
+}
+
+
+.support-export-btn {
+    border: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+
+    color: #ffffff;
+}
+
+
+.support-export-btn:hover {
+    transform: translateY(-1px);
+
+    opacity: 0.92;
+}
+
+
+.support-export-btn:active {
+    transform: translateY(0);
+}
+
+
+/* PRINT */
+
+.support-print-btn {
+    background: #2563eb;
+}
+
+
+/* CSV */
+
+.support-csv-btn {
+    background: #16a34a;
+}
+
+
+/* PDF */
+
+.support-pdf-btn {
+    background: #dc2626;
+}
+
+
+/* =====================================================
+   PRINT TABLE
+===================================================== */
+
+.support-print-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+}
+
+
+.support-print-table th,
+.support-print-table td {
+    border: 1px solid #333333;
+
+    padding: 7px;
+
+    text-align: left;
+
+    vertical-align: top;
+}
+
+
+.support-print-table th {
+    font-weight: 700;
+}
+
+
+.support-print-table tr {
+    page-break-inside: avoid;
+}
+
+
+/* =====================================================
+   PRINT SETTINGS
+===================================================== */
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #supportPrintArea,
+    #supportPrintArea * {
+        visibility: visible;
+    }
+
+    #supportPrintArea {
+        position: absolute;
+
+        left: 0;
+        top: 0;
+
+        width: 100%;
+    }
+
+}
+
+
+/* A4 landscape */
+
+@page {
+    size: A4 landscape;
+
+    margin: 10mm;
+}
+/* ==========================================
+   ORDER STATUS DASHBOARD
+========================================== */
+
+.order-status-dashboard {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px;
+    margin: 25px 0;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+}
+
+
+/* HEADER */
+
+.order-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.order-status-header h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #0f172a;
+}
+
+.order-status-header p {
+    margin: 6px 0 0;
+    color: #64748b;
+}
+
+
+/* REFRESH BUTTON */
+
+.order-status-refresh {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.order-status-refresh:hover {
+    background: #1d4ed8;
+}
+
+
+/* CONTENT */
+
+.order-status-content {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 45px;
+    align-items: center;
+}
+
+
+/* DONUT AREA */
+
+/* =========================================
+   DONUT AREA
+========================================= */
+
+.order-donut-area {
+    position: relative;
+
+    width: 280px;
+    height: 280px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: visible;
+}
+/* =========================================
+   PERCENTAGES AROUND DONUT
+========================================= */
+
+.order-donut-area {
+    position: relative;
+    width: 360px;
+    height: 330px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+
+/* PERCENTAGE CONTAINER */
+.order-percentages {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+
+    z-index: 20;
+}
+
+/* PERCENTAGE TEXT */
+/* =========================================
+   PERCENTAGE LABELS
+========================================= */
+
+.chart-percentage {
+    position: absolute;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 30;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 28px;
+
+    padding: 3px 7px;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.15);
+
+    white-space: nowrap;
+}
+
+.chart-percentage.blue {
+    color: #2563eb;
+}
+
+.chart-percentage.yellow {
+    color: #d97706;
+}
+
+.chart-percentage.green {
+    color: #059669;
+}
+
+.chart-percentage.cyan {
+    color: #0891b2;
+}
+
+.chart-percentage.purple {
+    color: #7c3aed;
+}
+
+.chart-percentage.red {
+    color: #dc2626;
+}
+.order-percent {
+    position: absolute;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    padding: 5px 8px;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.10);
+
+    white-space: nowrap;
+}
+
+/* BLUE - TOP */
+.order-percent.blue {
+    color: #3b82f6;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* YELLOW - TOP RIGHT */
+.order-percent.yellow {
+    color: #f59e0b;
+    top: 48px;
+    right: 5px;
+}
+
+/* GREEN - RIGHT */
+.order-percent.green {
+    color: #10b981;
+    top: 50%;
+    right: -5px;
+    transform: translateY(-50%);
+}
+
+/* CYAN - BOTTOM RIGHT */
+.order-percent.cyan {
+    color: #06b6d4;
+    bottom: 15px;
+    right: 25px;
+}
+
+/* PURPLE - BOTTOM */
+.order-percent.purple {
+    color: #8b5cf6;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* RED - LEFT */
+.order-percent.red {
+    color: #ef4444;
+    top: 50%;
+    left: -5px;
+    transform: translateY(-50%);
+}
+
+/* DONUT */
+
+.donut-chart {
+    width: 210px;
+    height: 210px;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            #e5e7eb 0deg 360deg
+        );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+
+/* INNER CIRCLE */
+
+.donut-chart::before {
+    content: "";
+
+    position: absolute;
+
+    width: 135px;
+    height: 135px;
+
+    background: white;
+
+    border-radius: 50%;
+}
+
+
+/* CENTER */
+
+.donut-center {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-center strong {
+    font-size: 38px;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.donut-center span {
+    margin-top: 8px;
+
+    font-size: 13px;
+
+    color: #64748b;
+}
+
+
+/* STATUS LIST */
+
+.order-status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+/* STATUS ROW */
+
+.order-status-row {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        14px
+        1fr
+        50px;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    border: 1px solid #e5e7eb;
+
+    background: #ffffff;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition: 0.2s;
+}
+
+.order-status-row:hover {
+    background: #f8fafc;
+
+    transform: translateX(3px);
+
+    border-color: #2563eb;
+}
+
+
+/* STATUS NAME */
+
+.status-name {
+    color: #334155;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+/* NUMBER */
+
+.order-status-row strong {
+    text-align: right;
+
+    font-size: 17px;
+
+    color: #0f172a;
+}
+
+
+/* STATUS COLORS */
+
+.status-color {
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+
+    display: block;
+}
+
+.status-blue {
+    background: #3b82f6;
+}
+
+.status-orange {
+    background: #f59e0b;
+}
+
+.status-green {
+    background: #10b981;
+}
+
+.status-cyan {
+    background: #06b6d4;
+}
+
+.status-purple {
+    background: #8b5cf6;
+}
+
+.status-red {
+    background: #ef4444;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .order-status-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .order-status-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .order-donut-area {
+        margin-bottom: 10px;
+    }
+
+}
+/* =====================================================
+   ORDER STATUS CHART
+===================================================== */
+
+.order-status-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.order-status-content {
+    display: flex;
+    align-items: center;
+    gap: 70px;
+    padding: 25px 10px;
+}
+
+
+/* =====================================================
+   DONUT AREA
+===================================================== */
+
+.donut-wrapper {
+    width: 380px;
+    min-width: 380px;
+    height: 380px;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =====================================================
+   DONUT
+===================================================== */
+
+.donut-chart {
+
+    width: 270px;
+    height: 270px;
+
+    border-radius: 50%;
+
+    position: relative;
+
+    background: conic-gradient(
+        #3b82f6 0deg 195deg,
+        #f59e0b 195deg 210deg,
+        #10b981 210deg 240deg,
+        #06b6d4 240deg 255deg,
+        #8b5cf6 255deg 337deg,
+        #ef4444 337deg 360deg
+    );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.10);
+}
+
+
+/* WHITE CENTER */
+
+.donut-chart::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 155px;
+    height: 155px;
+
+    background: #ffffff;
+
+    border-radius: 50%;
+}
+
+
+/* =====================================================
+   CENTER TEXT
+===================================================== */
+
+.donut-center {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.donut-center strong {
+
+    font-size: 42px;
+
+    font-weight: 800;
+
+    color: #071b41;
+
+    line-height: 1;
+}
+
+
+.donut-center span {
+
+    margin-top: 8px;
+
+    font-size: 15px;
+
+    color: #60708a;
+}
+
+
+/* =====================================================
+   PERCENTAGE LABELS
+===================================================== */
+
+.order-percentages {
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+}
+
+
+.chart-percentage {
+
+    position: absolute;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.12);
+
+    white-space: nowrap;
+}
+
+
+/* Individual percentage colors */
+
+.chart-percentage.blue {
+    color: #2563eb;
+}
+
+.chart-percentage.yellow {
+    color: #d97706;
+}
+
+.chart-percentage.green {
+    color: #059669;
+}
+
+.chart-percentage.cyan {
+    color: #0891b2;
+}
+
+.chart-percentage.purple {
+    color: #7c3aed;
+}
+
+.chart-percentage.red {
+    color: #dc2626;
+}
+
+
+/* =====================================================
+   STATUS LIST
+===================================================== */
+
+.status-list {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.status-row {
+
+    min-height: 60px;
+
+    border: 1px solid #dfe5ef;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 20px;
+
+    background: #ffffff;
+
+    transition: 0.2s;
+}
+
+
+.status-row:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,0.08);
+}
+
+
+.status-row strong {
+
+    margin-left: 14px;
+
+    font-size: 17px;
+
+    color: #19345d;
+}
+
+
+.status-row b {
+
+    margin-left: auto;
+
+    font-size: 18px;
+
+    color: #071b41;
+}
+
+
+/* =====================================================
+   STATUS DOTS
+===================================================== */
+
+.status-dot {
+
+    width: 15px;
+
+    height: 15px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+
+.status-dot.blue {
+    background: #3b82f6;
+}
+
+.status-dot.yellow {
+    background: #f59e0b;
+}
+
+.status-dot.green {
+    background: #10b981;
+}
+
+.status-dot.cyan {
+    background: #06b6d4;
+}
+
+.status-dot.purple {
+    background: #8b5cf6;
+}
+
+.status-dot.red {
+    background: #ef4444;
+}
+
+
+/* =====================================================
+   REFRESH BUTTON
+===================================================== */
+
+.refresh-order-status {
+
+    border: none;
+
+    background: #2563eb;
+
+    color: white;
+
+    padding: 13px 22px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.refresh-order-status:hover {
+
+    background: #1d4ed8;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .order-status-content {
+
+        flex-direction: column;
+
+        gap: 30px;
+    }
+
+    .donut-wrapper {
+
+        width: 320px;
+
+        min-width: 320px;
+
+        height: 320px;
+    }
+
+    .donut-chart {
+
+        width: 230px;
+
+        height: 230px;
+    }
+
+    .status-list {
+
+        width: 100%;
+    }
+
+}
+/* =====================================================
+   FINAL FIX - ORDER DONUT PERCENTAGES
+   ===================================================== */
+
+/* Make the percentage labels position relative
+   to the donut area */
+.order-donut-area {
+    position: relative !important;
+
+    width: 320px !important;
+    height: 320px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    flex-shrink: 0;
+}
+
+/* Percentage layer */
+.order-donut-area .order-percentages {
+    position: absolute !important;
+
+    top: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    inset: auto !important;
+
+    z-index: 20 !important;
+
+    pointer-events: none !important;
+}
+
+/* Percentage text */
+.order-donut-area .chart-percentage {
+    position: absolute !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    display: block !important;
+
+    min-width: 42px;
+    padding: 5px 9px;
+
+    background: #ffffff !important;
+
+    border-radius: 20px;
+
+    font-size: 14px !important;
+    font-weight: 800 !important;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    z-index: 30 !important;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Percentage colors */
+.order-donut-area .chart-percentage.blue {
+    color: #2563eb !important;
+}
+
+.order-donut-area .chart-percentage.yellow {
+    color: #d97706 !important;
+}
+
+.order-donut-area .chart-percentage.green {
+    color: #059669 !important;
+}
+
+.order-donut-area .chart-percentage.cyan {
+    color: #0891b2 !important;
+}
+
+.order-donut-area .chart-percentage.purple {
+    color: #7c3aed !important;
+}
+
+.order-donut-area .chart-percentage.red {
+    color: #dc2626 !important;
+}
+
+/* Keep donut inside the percentage area */
+.order-donut-area .donut-chart {
+    position: relative !important;
+
+    z-index: 5 !important;
+
+    width: 270px !important;
+    height: 270px !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .order-donut-area {
+        width: 320px !important;
+        height: 320px !important;
+        max-width: 100%;
+    }
+
+}
+.order-donut-area {
+    position: relative !important;
+}
+/* =====================================================
+   FINAL ORDER DONUT PERCENTAGE FIX
+===================================================== */
+
+.order-donut-area {
+    position: relative !important;
+
+    width: 380px !important;
+    height: 380px !important;
+
+    display: flex !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+
+    overflow: visible !important;
+}
+
+
+.order-donut-area .order-percentages {
+    position: absolute !important;
+
+    top: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    inset: auto !important;
+
+    pointer-events: none !important;
+
+    z-index: 50 !important;
+
+    overflow: visible !important;
+}
+
+
+.order-donut-area .chart-percentage {
+    position: absolute !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 45px !important;
+
+    height: 30px !important;
+
+    padding: 3px 8px !important;
+
+    background: #ffffff !important;
+
+    border-radius: 20px !important;
+
+    font-size: 14px !important;
+
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+
+    z-index: 100 !important;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.15) !important;
+}
+
+
+.chart-percentage.blue {
+    color: #2563eb !important;
+}
+
+.chart-percentage.yellow {
+    color: #d97706 !important;
+}
+
+.chart-percentage.green {
+    color: #059669 !important;
+}
+
+.chart-percentage.cyan {
+    color: #0891b2 !important;
+}
+
+.chart-percentage.purple {
+    color: #7c3aed !important;
+}
+
+.chart-percentage.red {
+    color: #dc2626 !important;
+}
+/* =====================================================
+   SUPPORT TYPES BAR GRAPH
+===================================================== */
+
+.support-types-dashboard {
+
+    width: 100%;
+
+    margin: 25px 0;
+
+    padding: 28px;
+
+    background: #020617;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 12px 30px
+        rgba(0,0,0,0.18);
+
+    color: #f8fafc;
+}
+
+
+.support-types-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+}
+
+
+.support-types-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.support-types-icon {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #08245a;
+
+    color: #60a5fa;
+
+    font-size: 22px;
+}
+
+
+.support-types-header h2 {
+
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+
+.support-types-header p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+.support-types-chart {
+
+    width: 100%;
+}
+
+
+.support-type-rows {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+.support-type-row {
+
+    display: grid;
+
+    grid-template-columns:
+        130px
+        minmax(0, 1fr)
+        30px;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.support-type-label {
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    line-height: 1.2;
+
+    text-align: right;
+}
+
+
+.support-type-track {
+
+    position: relative;
+
+    height: 32px;
+
+    overflow: hidden;
+
+    border-bottom:
+        1px dashed
+        rgba(
+            100,
+            116,
+            139,
+            0.25
+        );
+
+    background:
+
+        repeating-linear-gradient(
+            to right,
+
+            transparent 0,
+
+            transparent calc(25% - 1px),
+
+            rgba(
+                100,
+                116,
+                139,
+                0.14
+            )
+            calc(25% - 1px),
+
+            rgba(
+                100,
+                116,
+                139,
+                0.14
+            )
+            25%
+        );
+}
+
+
+.support-type-bar {
+
+    height: 100%;
+
+    border-radius: 3px;
+
+    transition:
+        width 0.6s ease;
+}
+
+
+.order-bar {
+    background: #3b82f6;
+}
+
+
+.delivery-bar {
+    background: #f97316;
+}
+
+
+.payment-bar {
+    background: #a43df0;
+}
+
+
+.return-bar {
+    background: #dc3f51;
+}
+
+
+.other-bar {
+    background: #20b8e8;
+}
+
+
+.support-type-count {
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+.support-type-axis {
+
+    display: grid;
+
+    grid-template-columns:
+        130px
+        minmax(0, 1fr)
+        30px;
+
+    gap: 12px;
+
+    margin-top: 8px;
+}
+
+
+.support-type-axis span {
+
+    color: #64748b;
+
+    font-size: 10px;
+}
+
+
+.support-type-axis span:nth-child(1) {
+
+    grid-column: 2;
+
+    justify-self: start;
+}
+
+
+.support-type-axis span:nth-child(2) {
+
+    grid-column: 2;
+
+    margin-left: 25%;
+}
+
+
+.support-type-axis span:nth-child(3) {
+
+    grid-column: 2;
+
+    margin-left: 50%;
+}
+
+
+.support-type-axis span:nth-child(4) {
+
+    grid-column: 2;
+
+    margin-left: 75%;
+}
+
+
+.support-type-axis span:nth-child(5) {
+
+    grid-column: 2;
+
+    justify-self: end;
+}
+
+
+.support-types-empty {
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+    color: #64748b;
+}
+
+
+@media (max-width: 700px) {
+
+    .support-types-dashboard {
+
+        padding: 20px 15px;
+
+    }
+
+
+    .support-type-row {
+
+        grid-template-columns:
+            105px
+            minmax(0, 1fr)
+            25px;
+
+        gap: 8px;
+
+    }
+
+
+    .support-type-label {
+
+        font-size: 11px;
+
+    }
+
+}
+/* =====================================================
+   CUSTOMER SUPPORT PIE CHART
+===================================================== */
+
+.support-pie-dashboard {
+    width: 100%;
+    margin: 25px 0;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #e1e6ef;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+}
+
+.support-pie-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.support-pie-header h2 {
+    margin: 0;
+    font-size: 26px;
+    color: #0f172a;
+}
+
+.support-pie-header p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 17px;
+}
+
+.support-pie-refresh {
+    border: none;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.support-pie-refresh:hover {
+    background: #1d4ed8;
+}
+
+
+/* =====================================================
+   MAIN CHART AREA
+===================================================== */
+
+.support-pie-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+
+/* =====================================================
+   CIRCLE + CLICK RESULT
+===================================================== */
+
+.support-pie-area {
+    width: 100%;
+    min-height: 330px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+/* =====================================================
+   DONUT
+===================================================== */
+
+.support-pie {
+    width: 270px;
+    height: 270px;
+
+    border-radius: 50%;
+
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    background:
+        conic-gradient(
+            #f59e0b 0deg 90deg,
+            #2563eb 90deg 180deg,
+            #16a34a 180deg 270deg,
+            #ef4444 270deg 360deg
+        );
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.15);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* HOVER */
+
+.support-pie:hover {
+    transform: scale(1.03);
+
+    box-shadow:
+        0 14px 35px rgba(15, 23, 42, 0.20);
+}
+
+
+/* =====================================================
+   DONUT WHITE CENTER
+===================================================== */
+
+.support-pie::before {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    background: #ffffff;
+
+    border-radius: 50%;
+}
+
+
+/* =====================================================
+   CENTER TEXT
+===================================================== */
+
+.support-pie-center {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.support-pie-center strong {
+    font-size: 42px;
+    line-height: 1;
+
+    color: #0f172a;
+}
+
+.support-pie-center span {
+    margin-top: 8px;
+
+    font-size: 16px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   PERCENTAGE LIST
+   REFERENCE 2 STYLE = BOTTOM LEGEND
+===================================================== */
+
+.support-pie-labels {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 35px;
+
+    padding-top: 5px;
+}
+
+
+/* =====================================================
+   EACH LEGEND ITEM
+===================================================== */
+
+.support-pie-label {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: auto;
+
+    padding: 5px 10px;
+
+    border: none;
+
+    background: transparent;
+
+    border-radius: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* LEFT SIDE */
+
+.support-pie-label-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+/* COLOR DOT */
+
+.support-pie-dot {
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+}
+
+
+/* NAME */
+
+.support-pie-name {
+    font-weight: 500;
+
+    color: #1e293b;
+
+    font-size: 16px;
+}
+
+
+/* PERCENTAGE */
+
+.support-pie-percent {
+    margin-left: 6px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+
+/* =====================================================
+   COLORS
+===================================================== */
+
+.support-pie-dot.pending {
+    background: #f59e0b;
+}
+
+.support-pie-dot.progress {
+    background: #2563eb;
+}
+
+.support-pie-dot.solved {
+    background: #16a34a;
+}
+
+.support-pie-dot.closed {
+    background: #ef4444;
+}
+
+
+/* =====================================================
+   CLICK RESULT
+===================================================== */
+
+.support-pie-selected {
+    margin-top: 5px;
+
+    min-width: 280px;
+
+    padding: 12px 20px;
+
+    background: #ffffff;
+
+    border: 2px solid #2563eb;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #0f172a;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.08);
+
+    transition: all 0.2s ease;
+}
+
+.support-pie-selected.active {
+    background: #f8fafc;
+}
+
+.support-pie-selected .selected-name {
+    font-weight: 700;
+}
+
+.support-pie-selected .selected-percent {
+    font-size: 23px;
+
+    font-weight: 800;
+
+    margin-left: 8px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 800px) {
+
+    .support-pie {
+        width: 220px;
+        height: 220px;
+    }
+
+    .support-pie::before {
+        width: 120px;
+        height: 120px;
+    }
+
+    .support-pie-labels {
+        gap: 12px;
+    }
+
+    .support-pie-label {
+        width: auto;
+    }
+}
+
+.support-pie-selected .selected-percent {
+    font-size: 24px;
+    font-weight: 800;
+    margin-left: 8px;
+}
+/* =====================================================
+   PERCENTAGE INSIDE / AROUND DONUT
+===================================================== */
+
+.support-pie {
+    position: relative !important;
+}
+
+
+/* Percentage text placed on colored section */
+
+.support-pie .pie-percentage {
+
+    position: absolute;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 10;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 1px 2px rgba(255,255,255,0.9);
+
+}
+
+
+/* Make percentage easier to see */
+
+.support-pie .pie-percentage::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 42px;
+
+    height: 24px;
+
+    background: rgba(255,255,255,0.85);
+
+    border-radius: 20px;
+
+    z-index: -1;
+
+}
+
+
+/* Hover */
+
+.support-pie .pie-percentage {
+
+    transition:
+        transform 0.2s ease;
+
+}
+
+
+/* Keep center text above percentage */
+
+.support-pie-center {
+
+    position: relative !important;
+
+    z-index: 20 !important;
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 800px) {
+
+    .support-pie .pie-percentage {
+
+        font-size: 13px;
+
+    }
+
+}
+/* =====================================================
+   ORDER DONUT - PERCENTAGES AROUND CIRCLE
+===================================================== */
+
+.order-donut-area {
+    position: relative !important;
+
+    width: 360px !important;
+    height: 360px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: visible !important;
+}
+
+/* Percentage container */
+#orderPercentages {
+    position: absolute !important;
+
+    top: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    z-index: 100 !important;
+
+    pointer-events: none !important;
+
+    overflow: visible !important;
+}
+
+/* Percentage text */
+#orderPercentages .chart-percentage {
+    position: absolute !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    min-width: 55px !important;
+
+    padding: 4px 8px !important;
+
+    background: #ffffff !important;
+
+    border-radius: 20px !important;
+
+    font-size: 16px !important;
+
+    font-weight: 800 !important;
+
+    text-align: center !important;
+
+    white-space: nowrap !important;
+
+    z-index: 200 !important;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* BLUE */
+#orderPercentages .blue {
+    color: #2563eb !important;
+}
+
+/* YELLOW */
+#orderPercentages .yellow {
+    color: #f59e0b !important;
+}
+
+/* GREEN */
+#orderPercentages .green {
+    color: #10b981 !important;
+}
+
+/* CYAN */
+#orderPercentages .cyan {
+    color: #06b6d4 !important;
+}
+
+/* PURPLE */
+#orderPercentages .purple {
+    color: #8b5cf6 !important;
+}
+
+/* RED */
+#orderPercentages .red {
+    color: #ef4444 !important;
+}
+
+/* Donut */
+.order-donut-area #donutChart {
+    position: relative !important;
+
+    z-index: 10 !important;
+
+    width: 270px !important;
+    height: 270px !important;
+
+    flex-shrink: 0 !important;
+}
+
+/* Keep center above donut */
+.order-donut-area .donut-center {
+    position: absolute !important;
+
+    z-index: 15 !important;
+}

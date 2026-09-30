@@ -59,6 +59,10 @@
         <p id="adminLoginMessage"
            class="message">
         </p>
+ <div
+    id="orderPercentages"
+    class="order-percentages"
+></div>
 
     </div>
 
@@ -71,7 +75,82 @@
 
 <section id="adminDashboard"
          class="hidden">
+<!-- =========================================
+     ADMIN LAYOUT
+========================================= -->
 
+<div class="admin-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="admin-sidebar">
+
+        <div class="sidebar-brand">
+            ⚡ <strong>Electro<span>Mart</span></strong>
+            <small>Admin Panel</small>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <button
+                class="side-link active"
+                data-section="dashboard"
+                onclick="showAdminSection('dashboard')">
+                🏠 Dashboard
+            </button>
+
+            <button
+                class="side-link"
+                data-section="customers"
+                onclick="showAdminSection('customers')">
+                👥 Customers
+            </button>
+
+            <button
+                class="side-link"
+                data-section="products"
+                onclick="showAdminSection('products')">
+                📦 Products
+            </button>
+
+            <button
+                class="side-link"
+                data-section="orders"
+                onclick="showAdminSection('orders')">
+                🛒 Orders
+            </button>
+
+            <button
+                class="side-link"
+                data-section="sales"
+                onclick="showAdminSection('sales')">
+                💰 Sales
+            </button>
+
+            <button
+                class="side-link"
+                data-section="support"
+                onclick="showAdminSection('support')">
+                🛟 Customer Support
+            </button>
+
+            <button
+                class="side-link"
+                data-section="reviews"
+                onclick="showAdminSection('reviews')">
+                ⭐ Reviews
+            </button>
+        </nav>
+
+        <button
+            class="side-link logout-side"
+            onclick="adminLogout()">
+            🚪 Logout
+        </button>
+
+    </aside>
+
+    <!-- RIGHT CONTENT -->
+    <div class="admin-main-content">
     <!-- HEADER -->
 
     <header class="admin-header">
@@ -102,111 +181,55 @@
     <main class="admin-container">
 
         <!-- TITLE -->
+<!-- =========================================
+     CLEAN DASHBOARD
+========================================= -->
 
-        <div class="admin-title">
+<section
+    id="dashboardSection" class="admin-section dashboard-section active-section">
 
-            <h1>Admin Dashboard</h1>
+    <div class="admin-title">
 
-            <p>
-                Manage your ElectroMart store.
-            </p>
+        <h1>Admin Dashboard</h1>
 
-        </div>
+        <p>
+            Manage your ElectroMart store.
+        </p>
+
+    </div>
 
 
-        <!-- ================================
-             STATISTICS
-        ================================= -->
+    <!-- TOTAL CUSTOMERS ONLY -->
 
-        <div class="stats-grid">
+    <div class="stats-grid">
 
-            <div class="stat-card">
+        <div
+            class="stat-card clickable-stat"
+            onclick="showAdminSection('customers')">
 
-                <div class="stat-icon">
-                    👥
-                </div>
-
-                <h3>
-                    Total Customers
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="totalUsers">
-                    0
-                </div>
-
+            <div class="stat-icon">
+                👥
             </div>
 
+            <h3>
+                Total Customers
+            </h3>
 
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    📦
-                </div>
-
-                <h3>
-                    Total Products
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="totalProducts">
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    🛒
-                </div>
-
-                <h3>
-                    Total Orders
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="totalOrders">
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    💰
-                </div>
-
-                <h3>
-                    Total Sales
-                </h3>
-
-                <div
-                    class="stat-number">
-
-                    ₹<span id="totalSales">
-                        0
-                    </span>
-
-                </div>
-
+            <div
+                class="stat-number"
+                id="totalCustomers">
+                0
             </div>
 
         </div>
 
+    </div>
 
-        <!-- ================================
+</section>
+  <!-- ================================
              PRODUCT MANAGEMENT
-        ================================= -->
-
-        <section class="admin-section">
-
+    ================================= -->
+       <section id="productsSection" class="admin-section">
             <div class="section-header">
 
                 <h2>
@@ -218,7 +241,7 @@
     onclick="openProductForm()">
     + Add Product
 </button>
-            </div>
+     </div>
 
 
             <!-- PRODUCT FORM -->
@@ -383,6 +406,213 @@
 
 
             <!-- PRODUCTS TABLE -->
+        <!-- ORDER STATUS SUMMARY -->
+    <!-- =========================================
+     ORDER STATUS SUMMARY
+========================================= -->
+
+<div class="order-status-grid">
+
+    <div
+        class="status-card order-filter-card"
+        onclick="filterOrdersByStatus('Order Placed')">
+
+        <h3>📦 Order Placed</h3>
+
+        <div
+            class="status-number"
+            id="orderPlacedCount">
+            0
+        </div>
+
+    </div>
+
+
+    <div
+        class="status-card order-filter-card"
+        onclick="filterOrdersByStatus('Processing')">
+
+        <h3>⚙️ Processing</h3>
+
+        <div
+            class="status-number"
+            id="orderProcessingCount">
+            0
+        </div>
+
+    </div>
+
+
+    <div
+        class="status-card order-filter-card"
+        onclick="filterOrdersByStatus('Shipped')">
+
+        <h3>🚚 Shipped</h3>
+
+        <div
+            class="status-number"
+            id="orderShippedCount">
+            0
+        </div>
+
+    </div>
+
+
+    <div
+        class="status-card order-filter-card"
+        onclick="filterOrdersByStatus('Out for Delivery')">
+
+        <h3>🚛 Out for Delivery</h3>
+
+        <div
+            class="status-number"
+            id="orderDeliveryCount">
+            0
+        </div>
+
+    </div>
+
+
+    <div
+        class="status-card order-filter-card"
+        onclick="filterOrdersByStatus('Delivered')">
+
+        <h3>✅ Delivered</h3>
+
+        <div
+            class="status-number"
+            id="orderDeliveredCount">
+            0
+        </div>
+
+    </div>
+
+
+    <div
+        class="status-card order-filter-card"
+        onclick="filterOrdersByStatus('Cancelled')">
+
+        <h3>❌ Cancelled</h3>
+
+        <div
+            class="status-number"
+            id="orderCancelledCount">
+            0
+        </div>
+
+    </div>
+
+</div>
+<!-- ==========================================
+     ORDER STATUS DASHBOARD
+========================================== -->
+
+<div class="order-status-dashboard">
+
+    <div class="order-status-header">
+
+        <div>
+            <h2>🛒 Order Status</h2>
+
+            <p>
+                Current order distribution
+            </p>
+        </div>
+
+        <button
+            type="button"
+            class="order-status-refresh"
+            onclick="loadOrders()"
+        >
+            🔄 Refresh
+        </button>
+
+    </div>
+
+
+    <div class="order-status-content">
+
+
+        <!-- ===============================
+             DONUT CHART
+        ================================ -->
+<div
+    class="donut-chart"
+    id="donutChart"
+>
+
+    <div class="donut-center">
+
+        <strong id="donutTotal">
+            0
+        </strong>
+
+        <span>
+            Total Orders
+        </span>
+
+    </div>
+
+    <!-- PERCENTAGES AROUND DONUT -->
+    <div
+        id="orderPercentages"
+        class="order-percentages"
+    ></div>
+
+</div>
+
+        <!-- STATUS LIST -->
+
+        <div
+            class="status-list"
+            id="orderStatusList"
+        >
+
+            <div class="status-row">
+                <span class="status-dot blue"></span>
+                <strong>Order Placed</strong>
+                <b id="placedCount">0</b>
+            </div>
+
+            <div class="status-row">
+                <span class="status-dot yellow"></span>
+                <strong>Processing</strong>
+                <b id="processingCount">0</b>
+            </div>
+
+            <div class="status-row">
+                <span class="status-dot green"></span>
+                <strong>Shipped</strong>
+                <b id="shippedCount">0</b>
+            </div>
+
+            <div class="status-row">
+                <span class="status-dot cyan"></span>
+                <strong>Out for Delivery</strong>
+                <b id="outDeliveryCount">0</b>
+            </div>
+
+            <div class="status-row">
+                <span class="status-dot purple"></span>
+                <strong>Delivered</strong>
+                <b id="deliveredCount">0</b>
+            </div>
+
+            <div class="status-row">
+                <span class="status-dot red"></span>
+                <strong>Cancelled</strong>
+                <b id="cancelledCount">0</b>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     END ORDER STATUS DASHBOARD
+========================================== -->
 
             <div class="table-wrapper">
 
@@ -423,9 +653,7 @@
         <!-- ================================
              CUSTOMERS
         ================================= -->
-
-        <section class="admin-section">
-
+     <section id="customersSection" class="admin-section">
             <div class="section-header">
 
                 <h2>
@@ -478,15 +706,23 @@
              ORDERS
         ================================= -->
 
-        <section class="admin-section">
+        <section id="ordersSection"
+    class="admin-section">
 
             <div class="section-header">
 
                 <h2>
                     🛒 All Orders
                 </h2>
+     <button
+    type="button"
+    class="add-btn"
+    onclick="loadOrders()">
 
-                <button
+    🔄 Show All Orders
+
+</button>           
+             <button
                     class="add-btn"
                     onclick="loadOrders()">
 
@@ -532,19 +768,246 @@
             </div>
 
         </section>
-
-        <!-- ==========================================
-     CUSTOMER SUPPORT
+<!-- ==========================================
+     SALES
 ========================================== -->
 
-<div class="admin-section">
+<section
+    id="salesSection"
+    class="admin-section">
 
+    <div class="section-header">
+
+        <h2>
+            💰 Sales
+        </h2>
+
+        <button
+            class="add-btn"
+            onclick="loadDashboard()">
+            Refresh
+        </button>
+
+    </div>
+
+    <div class="sales-summary">
+
+        <h3>Total Sales</h3>
+
+        <div
+            class="sales-total"
+            id="salesPageTotal">
+            ₹0
+        </div>
+
+        <p style="margin-top:10px;color:#64748b;">
+            Total sales from non-cancelled orders.
+        </p>
+
+    </div>
+
+</section>
+
+ <!-- ==========================================
+     CUSTOMER SUPPORT
+========================================== -->
+<section
+    id="supportSection"
+    class="admin-section">
     <h2>🛟 Customer Support</h2>
 
     <p class="admin-section-description">
         Manage customer support requests, complaints,
         delivery issues, return requests and refund requests.
     </p>
+    <!-- ==========================================
+     CUSTOMER SUPPORT EXPORT BUTTONS
+========================================== -->
+
+<div class="support-export-buttons">
+
+    <button
+        type="button"
+        class="support-export-btn support-print-btn"
+        onclick="printSupportTable()">
+        🖨️ Print
+    </button>
+
+    <button
+        type="button"
+        class="support-export-btn support-csv-btn"
+        onclick="downloadSupportCSV()">
+        📊 Download CSV
+    </button>
+
+    <button
+        type="button"
+        class="support-export-btn support-pdf-btn"
+        onclick="downloadSupportPDF()">
+        📄 Download PDF
+    </button>
+
+</div>
+
+    <!-- SUPPORT STATUS SUMMARY -->
+   <!-- SUPPORT STATUS SUMMARY -->
+<div class="support-status-grid">
+
+    <!-- TOTAL -->
+    <div
+        class="status-card support-filter-card active"
+        onclick="filterSupportRequests('all')"
+    >
+        <h3>🛟 Total Complaints</h3>
+
+        <div
+            class="status-number"
+            id="totalComplaints">
+            0
+        </div>
+    </div>
+
+
+    <!-- PENDING -->
+    <div
+        class="status-card support-filter-card"
+        onclick="filterSupportRequests('pending')"
+    >
+        <h3>⏳ Pending</h3>
+
+        <div
+            class="status-number"
+            id="pendingComplaints">
+            0
+        </div>
+    </div>
+
+
+    <!-- IN PROGRESS -->
+    <div
+        class="status-card support-filter-card"
+        onclick="filterSupportRequests('in progress')"
+    >
+        <h3>🔄 In Progress</h3>
+
+        <div
+            class="status-number"
+            id="inProgressComplaints">
+            0
+        </div>
+    </div>
+
+
+    <!-- SOLVED -->
+    <div
+        class="status-card support-filter-card"
+        onclick="filterSupportRequests('solved')"
+    >
+        <h3>✅ Solved</h3>
+
+        <div
+            class="status-number"
+            id="solvedComplaints">
+            0
+        </div>
+    </div>
+
+
+    <!-- CLOSED -->
+    <div
+        class="status-card support-filter-card"
+        onclick="filterSupportRequests('closed')"
+    >
+        <h3>🔒 Closed</h3>
+
+        <div
+            class="status-number"
+            id="closedComplaints">
+            0
+        </div>
+    </div>
+
+</div>
+<!-- ==========================================
+     CUSTOMER SUPPORT TYPES BAR CHART
+========================================== -->
+
+<div class="support-types-dashboard">
+
+    <div class="support-types-header">
+
+        <div class="support-types-title">
+
+            <div class="support-types-icon">
+                📊
+            </div>
+
+            <div>
+                <h2>Support Types</h2>
+
+                <p>
+                    Customer support request distribution
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div
+        id="supportTypesChart"
+        class="support-types-chart"
+    >
+        <div class="support-types-empty">
+            Loading support types...
+        </div>
+    </div>
+
+</div>
+  <!-- ==========================================
+     CUSTOMER SUPPORT PIE CHART
+========================================== -->
+
+<div class="support-pie-dashboard">
+
+    <div class="support-pie-header">
+        <div>
+            <h2>📊 Support Status Distribution</h2>
+            <p>Current customer support percentage</p>
+        </div>
+       
+    </div>
+
+    <div class="support-pie-content">
+
+        <div class="support-pie-area">
+
+           <div
+    class="support-pie"
+    id="supportPieChart"
+    title="Click a color to see percentage">
+
+    <div class="support-pie-center">
+        <strong id="supportPieTotal">0</strong>
+        <span>Total</span>
+    </div>
+
+</div>
+
+<!-- SELECTED PERCENTAGE -->
+
+        </div>
+
+        <div
+            class="support-pie-labels"
+            id="supportPieLabels">
+
+        </div>
+
+    </div>
+
+</div>
+
 
     <div id="supportAdminTable">
 
@@ -554,16 +1017,340 @@
 
     </div>
 
-</div>
+</section>
+</main>
 
-    </main>
+    </div>
+    <!-- END admin-main-content -->
+
+</div>
+<!-- END admin-layout -->
 
 </section>
 
+<!-- PDF LIBRARIES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 <script src="admin.js"></script>
 
-</body>
+    <!-- =====================================================
+     SUPPORT CHAT / VIEW MODAL
+===================================================== -->
 
+<div id="supportChatModal" class="support-chat-modal">
+
+    <div class="support-chat-overlay"
+         onclick="closeSupportChat()">
+    </div>
+
+    <div class="support-chat-box">
+
+        <!-- HEADER -->
+        <div class="support-chat-header">
+
+            <div>
+                <h2>
+                    🛟 Support Ticket
+                    <span id="chatTicketId">#0</span>
+                </h2>
+
+                <p id="chatCustomerName">
+                    Customer
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="support-chat-close"
+                onclick="closeSupportChat()">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- CUSTOMER DETAILS -->
+        <div class="support-chat-details">
+
+            <div class="chat-detail-item">
+
+                <span>Customer</span>
+
+                <strong id="chatCustomer">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="chat-detail-item">
+
+                <span>Email</span>
+
+                <strong id="chatEmail">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="chat-detail-item">
+
+                <span>Order</span>
+
+                <strong id="chatOrder">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="chat-detail-item">
+
+                <span>Category</span>
+
+                <strong id="chatCategory">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHAT AREA -->
+        <div
+            id="supportChatMessages"
+            class="support-chat-messages">
+
+            <!-- Customer message will appear here -->
+
+        </div>
+
+
+        <!-- STATUS -->
+        <div class="support-chat-status-row">
+
+            <label for="chatStatus">
+                Status
+            </label>
+
+            <select id="chatStatus">
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="In Progress">
+                    In Progress
+                </option>
+
+                <option value="Resolved">
+                    Resolved
+                </option>
+
+                <option value="Closed">
+                    Closed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ADMIN RESPONSE -->
+        <div class="support-chat-reply">
+
+            <label for="adminReply">
+                Reply to Customer
+            </label>
+
+            <textarea
+                id="adminReply"
+                rows="4"
+                placeholder="Type your response to the customer...">
+            </textarea>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="support-chat-footer">
+
+            <span id="supportReplyMessage"></span>
+
+            <button
+                type="button"
+                class="support-send-btn"
+                onclick="sendSupportResponse()">
+
+                📤 Send Response
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+</body>
+<!-- =====================================================
+     SUPPORT CHAT VIEW MODAL
+===================================================== -->
+
+<div id="supportChatModal" class="support-chat-modal">
+
+    <div class="support-chat-overlay"
+         onclick="closeSupportChat()">
+    </div>
+
+    <div class="support-chat-box">
+
+        <!-- HEADER -->
+
+        <div class="support-chat-header">
+
+            <div>
+
+                <h2>
+                    🛟 Support Ticket
+                    <span id="chatTicketId">#0</span>
+                </h2>
+
+                <p id="chatCustomerName">
+                    Customer
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="support-chat-close"
+                onclick="closeSupportChat()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- CUSTOMER DETAILS -->
+
+        <div class="support-chat-info">
+
+            <div>
+                <small>Customer</small>
+                <strong id="chatCustomer">-</strong>
+            </div>
+
+            <div>
+                <small>Email</small>
+                <strong id="chatEmail">-</strong>
+            </div>
+
+            <div>
+                <small>Order</small>
+                <strong id="chatOrder">-</strong>
+            </div>
+
+            <div>
+                <small>Category</small>
+                <strong id="chatCategory">-</strong>
+            </div>
+
+        </div>
+
+
+        <!-- CHAT MESSAGES -->
+
+        <div
+            id="supportChatMessages"
+            class="support-chat-messages">
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="support-chat-controls">
+
+            <label>
+                Update Status
+            </label>
+
+            <select id="chatStatus">
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="In Progress">
+                    In Progress
+                </option>
+
+                <option value="Resolved">
+                    Resolved
+                </option>
+
+                <option value="Closed">
+                    Closed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ADMIN RESPONSE -->
+
+        <div class="support-chat-reply">
+
+            <label>
+                💬 Admin Response
+            </label>
+
+            <textarea
+                id="adminReply"
+                rows="4"
+                placeholder="Type your response to the customer...">
+            </textarea>
+
+            <p
+                id="supportReplyMessage"
+                class="support-reply-message">
+            </p>
+
+            <button
+                type="button"
+                class="send-reply-btn"
+                onclick="sendSupportResponse()">
+
+                💬 Send Reply
+
+            </button>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="support-chat-footer">
+
+            <button
+                type="button"
+                onclick="closeSupportChat()"
+                class="support-close-main">
+
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 </html>
 

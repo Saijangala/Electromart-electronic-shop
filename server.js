@@ -4,8 +4,11 @@ const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config();
+const nodemailer = require("nodemailer");
 
+
+require("dotenv").config();
+ 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
@@ -71,8 +74,7 @@ app.use(
    MYSQL
 ===================================================== */
 
-const db =
-    mysql.createPool({
+const db = mysql.createPool({
 
         host:
             process.env.DB_HOST,
@@ -92,8 +94,115 @@ const db =
 
         queueLimit: 0
     });
+  /* =====================================================
+   EMAIL TRANSPORTER
+===================================================== */
+const mailTransporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
 
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+    }
+});
 
+mailTransporter.verify((error, success) => {
+
+    if (error) {
+
+        console.error("EMAIL CONFIGURATION ERROR:");
+        console.error(error.message);
+
+    } else {
+
+        console.log(
+            "EMAIL SERVER READY - Gmail authentication successful!"
+        );
+
+    }
+
+});
+/* =====================================================
+   TEST EMAIL
+===================================================== */
+
+app.get("/api/test-email", async (req, res) => {
+
+    try {
+
+        console.log("================================");
+        console.log("TEST EMAIL STARTED");
+        console.log("EMAIL USER:", process.env.EMAIL_USER);
+        console.log(
+            "EMAIL PASSWORD EXISTS:",
+            !!process.env.EMAIL_PASSWORD
+        );
+
+        const mailResult =
+            await mailTransporter.sendMail({
+
+                from:
+                    `"ElectroMart" <${process.env.EMAIL_USER}>`,
+
+                to:
+                    process.env.EMAIL_USER,
+
+                subject:
+                    "ElectroMart Test Email",
+
+                text:
+                    "This is a test email from ElectroMart.",
+
+                html: `
+                    <div style="
+                        font-family:Arial,sans-serif;
+                        padding:30px;
+                        text-align:center;
+                    ">
+
+                        <h2>⚡ ElectroMart</h2>
+
+                        <h3>Email Test Successful</h3>
+
+                        <p>
+                            This is a test email from
+                            your ElectroMart application.
+                        </p>
+
+                    </div>
+                `
+            });
+
+        console.log("TEST EMAIL SENT SUCCESSFULLY");
+        console.log("Message ID:", mailResult.messageId);
+        console.log("Response:", mailResult.response);
+        console.log("================================");
+
+        res.json({
+            success: true,
+            message: "Test email sent successfully.",
+            messageId: mailResult.messageId
+        });
+
+    } catch (error) {
+
+        console.error("================================");
+        console.error("TEST EMAIL ERROR");
+        console.error("Code:", error.code);
+        console.error("Message:", error.message);
+        console.error("================================");
+
+        res.status(500).json({
+            success: false,
+            code: error.code,
+            message: error.message
+        });
+
+    }
+
+});
 /* =====================================================
    DATABASE TEST
 ===================================================== */
@@ -342,15 +451,540 @@ app.post(
         );
     }
 );
+/* =====================================================
+   FORGOT PASSWORD - SEND OTP
+===================================================== */
 
+app.post(
+    "/api/forgot-password",
+    async (req, res) => {
+
+        try {
+
+            const email =
+                String(req.body.email || "")
+                    .trim()
+                    .toLowerCase();
+
+
+            /* CHECK EMAIL */
+
+            if (!email) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Please enter your email address."
+                });
+
+            }
+
+
+            /* FIND USER */
+
+            const [users] =
+                await db.execute(
+                    `SELECT
+                        id,
+                        name,
+                        email
+                     FROM users
+                     WHERE LOWER(email) = ?`,
+                    [email]
+                );
+
+
+            if (users.length === 0) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "No account found with this email address."
+                });
+
+            }
+
+
+            const user = users[0];
+
+
+            /* GENERATE 6 DIGIT OTP */
+
+            const otp =
+                Math.floor(
+                    100000 +
+                    Math.random() * 900000
+                ).toString();
+
+
+            /* OTP VALID FOR 10 MINUTES */
+
+            const expiresAt =
+                new Date(
+                    Date.now() +
+                    10 * 60 * 1000
+                );
+
+
+            console.log(
+                "--------------------------------"
+            );
+
+            console.log(
+                "PASSWORD RESET REQUEST"
+            );
+
+            console.log(
+                "Email:",
+                email
+            );
+
+            console.log(
+                "OTP GENERATED:",
+                otp
+            );
+
+            console.log(
+                "OTP EXPIRES:",
+                expiresAt
+            );
+
+
+            /* DELETE OLD OTP */
+
+            await db.execute(
+                `DELETE FROM password_reset_tokens
+                 WHERE email = ?`,
+                [email]
+            );
+
+
+            /* SEND OTP EMAIL FIRST */
+
+            const mailResult =
+                await mailTransporter.sendMail({
+
+                    from:
+                        `"ElectroMart" <${process.env.EMAIL_USER}>`,
+
+                    to: email,
+
+                    subject:
+                        "ElectroMart - Password Reset OTP",
+
+                    text:
+                        `Hello ${user.name},
+
+Your ElectroMart password reset OTP is:
+
+${otp}
+
+This OTP is valid for 10 minutes.
+
+If you did not request a password reset, please ignore this email.
+
+ElectroMart Electronic Shop`,
+
+                    html: `
+                        <div style="
+                            font-family: Arial, sans-serif;
+                            max-width: 600px;
+                            margin: auto;
+                            padding: 30px;
+                            border: 1px solid #ddd;
+                            border-radius: 12px;
+                            background: #ffffff;
+                        ">
+
+                            <h2 style="
+                                color:#2563eb;
+                                text-align:center;
+                            ">
+                                ElectroMart
+                            </h2>
+
+                            <p>
+                                Hello
+                                <strong>
+                                    ${user.name}
+                                </strong>,
+                            </p>
+
+                            <p>
+                                We received a request to reset
+                                your ElectroMart password.
+                            </p>
+
+                            <p>
+                                Your OTP is:
+                            </p>
+
+                            <div style="
+                                font-size: 32px;
+                                font-weight: bold;
+                                letter-spacing: 8px;
+                                color: #2563eb;
+                                padding: 20px;
+                                text-align: center;
+                                background: #f3f6ff;
+                                border-radius: 10px;
+                            ">
+                                ${otp}
+                            </div>
+
+                            <p>
+                                This OTP will expire in
+                                <strong>
+                                    10 minutes
+                                </strong>.
+                            </p>
+
+                            <p>
+                                If you did not request a
+                                password reset, you can ignore
+                                this email.
+                            </p>
+
+                            <hr>
+
+                            <p style="
+                                color:#777;
+                                text-align:center;
+                            ">
+                                ElectroMart Electronic Shop
+                            </p>
+
+                        </div>
+                    `
+                });
+
+
+            console.log(
+                "EMAIL SENT SUCCESSFULLY"
+            );
+
+            console.log(
+                "Message ID:",
+                mailResult.messageId
+            );
+
+
+            /* SAVE OTP AFTER EMAIL SUCCESS */
+
+            await db.execute(
+                `INSERT INTO password_reset_tokens
+                (
+                    user_id,
+                    email,
+                    otp,
+                    expires_at,
+                    used
+                )
+                VALUES (?, ?, ?, ?, 0)`,
+                [
+                    user.id,
+                    email,
+                    otp,
+                    expiresAt
+                ]
+            );
+
+
+            console.log(
+                "OTP SAVED TO DATABASE"
+            );
+
+            console.log(
+                "--------------------------------"
+            );
+
+
+            res.json({
+
+                success: true,
+
+                message:
+                    "OTP has been sent to your email."
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "--------------------------------"
+            );
+
+            console.error(
+                "FORGOT PASSWORD ERROR"
+            );
+
+            console.error(
+                "Error Code:",
+                error.code
+            );
+
+            console.error(
+                "Error Message:",
+                error.message
+            );
+
+            console.error(
+                "Full Error:",
+                error
+         );
+
+            console.error(
+                "--------------------------------"
+            );
+res.status(500).json({
+
+    success: false,
+
+    message:
+        error.message || "Unable to send password reset OTP.",
+
+    errorCode:
+        error.code || "UNKNOWN_ERROR"
+});
+
+        }
+
+    }
+);
+
+/* =====================================================
+   VERIFY PASSWORD RESET OTP
+===================================================== */
+
+app.post(
+    "/api/verify-reset-otp",
+    async (req, res) => {
+
+        try {
+
+            const email =
+                String(req.body.email || "")
+                    .trim()
+                    .toLowerCase();
+
+            const otp =
+                String(req.body.otp || "")
+                    .trim();
+
+            if (!email || !otp) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Email and OTP are required."
+                });
+
+            }
+
+            const [rows] =
+                await db.execute(
+                    `SELECT id
+                     FROM password_reset_tokens
+                     WHERE email = ?
+                     AND otp = ?
+                     AND used = 0
+                     AND expires_at > NOW()
+                     ORDER BY id DESC
+                     LIMIT 1`,
+                    [
+                        email,
+                        otp
+                    ]
+                );
+
+            if (rows.length === 0) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid or expired OTP."
+                });
+
+            }
+
+            res.json({
+
+                success: true,
+
+                message:
+                    "OTP verified successfully."
+            });
+
+        } catch (error) {
+
+            console.error(
+                "VERIFY OTP ERROR:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to verify OTP."
+            });
+        }
+    }
+);
+
+
+/* =====================================================
+   RESET PASSWORD
+===================================================== */
+
+app.post(
+    "/api/reset-password",
+    async (req, res) => {
+
+        try {
+
+            const email =
+                String(req.body.email || "")
+                    .trim()
+                    .toLowerCase();
+
+            const otp =
+                String(req.body.otp || "")
+                    .trim();
+
+            const newPassword =
+                String(
+                    req.body.newPassword || ""
+                );
+
+            if (
+                !email ||
+                !otp ||
+                !newPassword
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Please fill all fields."
+                });
+
+            }
+
+            if (newPassword.length < 6) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Password must contain at least 6 characters."
+                });
+
+            }
+
+            /* VERIFY OTP AGAIN */
+
+            const [tokens] =
+                await db.execute(
+                    `SELECT id, user_id
+                     FROM password_reset_tokens
+                     WHERE email = ?
+                     AND otp = ?
+                     AND used = 0
+                     AND expires_at > NOW()
+                     ORDER BY id DESC
+                     LIMIT 1`,
+                    [
+                        email,
+                        otp
+                    ]
+                );
+
+            if (tokens.length === 0) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid or expired OTP."
+                });
+
+            }
+
+            const resetToken =
+                tokens[0];
+
+            /* HASH PASSWORD */
+
+            const hashedPassword =
+                await bcrypt.hash(
+                    newPassword,
+                    10
+                );
+
+            /* UPDATE PASSWORD */
+
+            await db.execute(
+                `UPDATE users
+                 SET password = ?
+                 WHERE id = ?`,
+                [
+                    hashedPassword,
+                    resetToken.user_id
+                ]
+            );
+
+            /* MARK OTP AS USED */
+
+            await db.execute(
+                `UPDATE password_reset_tokens
+                 SET used = 1
+                 WHERE id = ?`,
+                [resetToken.id]
+            );
+
+            res.json({
+
+                success: true,
+
+                message:
+                    "Password reset successfully."
+            });
+
+        } catch (error) {
+
+            console.error(
+                "RESET PASSWORD ERROR:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to reset password."
+            });
+        }
+    }
+);
 
 /* =====================================================
    CUSTOMER SESSION
 ===================================================== */
 
-app.get(
-    "/api/user",
-    (req, res) => {
+app.get( "/api/user", (req, res) => {
 
         if (!req.session.user) {
 
@@ -504,6 +1138,7 @@ function requireAdmin(
 
 /* =====================================================
    PRODUCTS - CUSTOMER
+   WITH RATINGS
 ===================================================== */
 
 app.get(
@@ -513,18 +1148,40 @@ app.get(
         try {
 
             const [products] =
-                await db.execute(
-                    `SELECT
-                        id,
-                        name,
-                        category,
-                        price,
-                        description,
-                        icon,
-                        stock
-                     FROM products
-                     ORDER BY id ASC`
-                );
+                await db.execute(`
+                    SELECT
+                        p.id,
+                        p.name,
+                        p.category,
+                        p.price,
+                        p.description,
+                        p.icon,
+                        p.stock,
+
+                        COALESCE(
+                            ROUND(AVG(pr.rating), 1),
+                            0
+                        ) AS average_rating,
+
+                        COUNT(pr.id)
+                            AS review_count
+
+                    FROM products p
+
+                    LEFT JOIN product_reviews pr
+                        ON p.id = pr.product_id
+
+                    GROUP BY
+                        p.id,
+                        p.name,
+                        p.category,
+                        p.price,
+                        p.description,
+                        p.icon,
+                        p.stock
+
+                    ORDER BY p.id ASC
+                `);
 
             res.json({
                 success: true,
@@ -547,6 +1204,232 @@ app.get(
     }
 );
 
+/* =====================================================
+   GET PRODUCT REVIEWS
+===================================================== */
+
+app.get(
+    "/api/products/:id/reviews",
+    async (req, res) => {
+
+        try {
+
+            const productId =
+                Number(req.params.id);
+
+            if (!productId) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Invalid product ID."
+                });
+            }
+
+            const [reviews] =
+                await db.execute(`
+                    SELECT
+                        pr.id,
+                        pr.product_id,
+                        pr.user_id,
+                        pr.rating,
+                        pr.review,
+                        pr.created_at,
+                        u.name AS customer_name
+
+                    FROM product_reviews pr
+
+                    INNER JOIN users u
+                        ON pr.user_id = u.id
+
+                    WHERE pr.product_id = ?
+
+                    ORDER BY
+                        pr.created_at DESC
+                `, [productId]);
+
+            res.json({
+                success: true,
+                reviews
+            });
+
+        } catch (error) {
+
+            console.error(
+                "GET REVIEWS ERROR:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Unable to load reviews."
+            });
+        }
+    }
+);
+
+/* =====================================================
+   ADD PRODUCT RATING / REVIEW
+===================================================== */
+
+app.post(
+    "/api/products/:id/reviews",
+    requireLogin,
+    async (req, res) => {
+
+        try {
+
+            const productId =
+                Number(req.params.id);
+
+            const userId =
+                req.session.userId;
+
+            const rating =
+                Number(req.body.rating);
+
+            const review =
+                String(
+                    req.body.review || ""
+                ).trim();
+
+
+            if (!productId) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Invalid product ID."
+                });
+            }
+
+
+            if (
+                !Number.isInteger(rating) ||
+                rating < 1 ||
+                rating > 5
+            ) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Rating must be between 1 and 5."
+                });
+            }
+
+
+            if (review.length > 1000) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Review cannot exceed 1000 characters."
+                });
+            }
+
+
+            const [products] =
+                await db.execute(
+                    `SELECT id
+                     FROM products
+                     WHERE id = ?`,
+                    [productId]
+                );
+
+
+            if (products.length === 0) {
+
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        "Product not found."
+                });
+            }
+        const [existingReview] =
+    await db.execute(
+        `SELECT id
+         FROM product_reviews
+         WHERE product_id = ?
+         AND user_id = ?`,
+        [
+            productId,
+            userId
+        ]
+    );
+
+if (existingReview.length > 0) {
+
+    // UPDATE EXISTING REVIEW
+    await db.execute(
+        `UPDATE product_reviews
+         SET rating = ?,
+             review = ?
+         WHERE id = ?`,
+        [
+            rating,
+            review || null,
+            existingReview[0].id
+        ]
+    );
+
+    return res.status(200).json({
+        success: true,
+        message: "Review updated successfully."
+    });
+}
+await db.execute(
+    `INSERT INTO product_reviews
+    (
+        product_id,
+        user_id,
+        rating,
+        review
+    )
+    VALUES (?, ?, ?, ?)`,
+    [
+        productId,
+        userId,
+        rating,
+        review || null
+    ]
+);
+
+res.status(201).json({
+    success: true,
+    message:
+        "Rating submitted successfully."
+});
+
+        } catch (error) {
+
+            console.error(
+                "ADD REVIEW ERROR:",
+                error
+            );
+
+
+            if (
+                error.code ===
+                "ER_DUP_ENTRY"
+            ) {
+
+                return res.status(409).json({
+                    success: false,
+                    message:
+                        "You have already rated this product."
+                });
+            }
+
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Unable to submit rating."
+            });
+        }
+    }
+);
 
 /* =====================================================
    CART - GET
@@ -560,29 +1443,38 @@ app.get(
         try {
 
             const userId =
-                req.session.userId;
+                Number(req.session.userId);
+
 
             const [items] =
                 await db.execute(
-                    `SELECT
-                        cart.id,
-                        cart.product_id,
-                        cart.quantity,
-                        products.name,
-                        products.price,
-                        products.description,
-                        products.icon,
-                        products.stock
-                     FROM cart
-                     INNER JOIN products
-                     ON cart.product_id =
-                        products.id
-                     WHERE cart.user_id = ?
-                     ORDER BY cart.id DESC`,
+                    `
+                    SELECT
+                        c.id,
+                        c.product_id,
+                        c.quantity,
+
+                        p.name,
+                        p.price,
+                        p.description,
+                        p.icon,
+                        p.stock
+
+                    FROM cart c
+
+                    INNER JOIN products p
+                        ON c.product_id = p.id
+
+                    WHERE c.user_id = ?
+
+                    ORDER BY c.id DESC
+                    `,
                     [userId]
                 );
 
+
             let total = 0;
+
 
             items.forEach(item => {
 
@@ -592,29 +1484,37 @@ app.get(
 
             });
 
+
             res.json({
                 success: true,
-                items,
-                total
+                items: items,
+                total: total
             });
+
 
         } catch (error) {
 
             console.error(
-                "CART ERROR:",
+                "CART GET ERROR:",
                 error
             );
+
 
             res.status(500).json({
                 success: false,
                 message:
+                    error.sqlMessage ||
+                    error.message ||
                     "Unable to load cart."
             });
+
         }
+
     }
 );
-
-
+/* =====================================================
+   CART - ADD
+===================================================== */
 /* =====================================================
    CART - ADD
 ===================================================== */
@@ -627,76 +1527,128 @@ app.post(
         try {
 
             const userId =
-                req.session.userId;
+                Number(req.session.userId);
 
             const productId =
-                Number(
-                    req.body.productId
-                );
+                Number(req.body.productId);
 
             const quantity =
-                Number(
-                    req.body.quantity
-                ) || 1;
+                Number(req.body.quantity) || 1;
+
+
+            console.log("ADD CART REQUEST");
+            console.log("User ID:", userId);
+            console.log("Product ID:", productId);
+            console.log("Quantity:", quantity);
+
+
+            if (!userId) {
+
+                return res.status(401).json({
+                    success: false,
+                    message: "Please login first."
+                });
+
+            }
+
 
             if (!productId) {
 
                 return res.status(400).json({
                     success: false,
-                    message:
-                        "Product ID is required."
+                    message: "Invalid product ID."
                 });
+
             }
+
+
+            /* CHECK PRODUCT */
 
             const [products] =
                 await db.execute(
-                    "SELECT * FROM products WHERE id = ?",
+                    `
+                    SELECT
+                        id,
+                        name,
+                        price,
+                        stock
+                    FROM products
+                    WHERE id = ?
+                    `,
                     [productId]
                 );
+
 
             if (products.length === 0) {
 
                 return res.status(404).json({
                     success: false,
-                    message:
-                        "Product not found."
+                    message: "Product not found."
                 });
+
             }
+
 
             const product =
                 products[0];
 
-            if (product.stock <= 0) {
+
+            if (
+                Number(product.stock) <= 0
+            ) {
 
                 return res.status(400).json({
                     success: false,
                     message:
                         "Product is out of stock."
                 });
+
             }
+
+
+            if (
+                quantity >
+                Number(product.stock)
+            ) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Not enough stock."
+                });
+
+            }
+
+
+            /* CHECK EXISTING CART ITEM */
 
             const [existing] =
                 await db.execute(
-                    `SELECT *
-                     FROM cart
-                     WHERE user_id = ?
-                     AND product_id = ?`,
+                    `
+                    SELECT
+                        id,
+                        quantity
+                    FROM cart
+                    WHERE user_id = ?
+                    AND product_id = ?
+                    `,
                     [
                         userId,
                         productId
                     ]
                 );
 
+
             if (existing.length > 0) {
 
                 const newQuantity =
-                    Number(
-                        existing[0].quantity
-                    ) + quantity;
+                    Number(existing[0].quantity) +
+                    quantity;
+
 
                 if (
                     newQuantity >
-                    product.stock
+                    Number(product.stock)
                 ) {
 
                     return res.status(400).json({
@@ -704,13 +1656,17 @@ app.post(
                         message:
                             "Not enough stock."
                     });
+
                 }
 
+
                 await db.execute(
-                    `UPDATE cart
-                     SET quantity = ?
-                     WHERE user_id = ?
-                     AND product_id = ?`,
+                    `
+                    UPDATE cart
+                    SET quantity = ?
+                    WHERE user_id = ?
+                    AND product_id = ?
+                    `,
                     [
                         newQuantity,
                         userId,
@@ -720,51 +1676,83 @@ app.post(
 
             } else {
 
-                if (
-                    quantity >
-                    product.stock
-                ) {
-
-                    return res.status(400).json({
-                        success: false,
-                        message:
-                            "Not enough stock."
-                    });
-                }
-
                 await db.execute(
-                    `INSERT INTO cart
-                    (user_id, product_id, quantity)
-                    VALUES (?, ?, ?)`,
+                    `
+                    INSERT INTO cart
+                    (
+                        user_id,
+                        product_id,
+                        quantity
+                    )
+                    VALUES (?, ?, ?)
+                    `,
                     [
                         userId,
                         productId,
                         quantity
                     ]
                 );
+
             }
+
+
+            console.log(
+                "PRODUCT ADDED TO CART"
+            );
+
 
             res.json({
                 success: true,
                 message:
-                    "Product added to cart."
+                    "Product added to cart successfully."
             });
+
 
         } catch (error) {
 
             console.error(
-                "ADD CART ERROR:",
-                error
+                "================================"
             );
+
+            console.error(
+                "ADD CART MYSQL ERROR"
+            );
+
+            console.error(
+                "Code:",
+                error.code
+            );
+
+            console.error(
+                "Message:",
+                error.message
+            );
+
+            console.error(
+                "SQL Message:",
+                error.sqlMessage
+            );
+
+            console.error(
+                "================================"
+            );
+
 
             res.status(500).json({
                 success: false,
                 message:
-                    "Unable to add product to cart."
+                    error.sqlMessage ||
+                    error.message ||
+                    "Unable to add product to cart.",
+                errorCode:
+                    error.code || "UNKNOWN"
             });
+
         }
+
     }
 );
+
 
 
 /* =====================================================
@@ -1072,23 +2060,390 @@ app.post(
                  WHERE user_id = ?`,
                 [userId]
             );
+await connection.commit();
+
+connection.release();
+/* =====================================================
+   SEND ORDER CONFIRMATION EMAIL
+===================================================== */
+
+try {
+
+    /* GET CUSTOMER DETAILS FROM DATABASE */
+
+    const [customerRows] = await db.execute(
+        `SELECT name, email
+         FROM users
+         WHERE id = ?`,
+        [userId]
+    );
+
+    if (customerRows.length === 0) {
+
+        console.log(
+            "CUSTOMER NOT FOUND - EMAIL NOT SENT"
+        );
+
+    } else {
+      
+    const customerName =
+    String(
+        req.body.name ||
+        customerRows[0].name ||
+        "Customer"
+    ).trim();
+
+const customerEmail =
+    String(
+        req.body.email ||
+        ""
+    ).trim();
+       
+
+        console.log("--------------------------------");
+        console.log("ORDER EMAIL");
+        console.log("Order ID:", orderId);
+        console.log("Customer:", customerName);
+        console.log("Email:", customerEmail);
+        console.log("--------------------------------");
+
+        if (!customerEmail) {
+
+            console.log(
+                "CUSTOMER EMAIL IS EMPTY"
+            );
+
+        } else {
+
+            /* CREATE PRODUCT TABLE */
+
+            const productsHTML =
+                items.map((item, index) => {
+
+                    const itemTotal =
+                        Number(item.price) *
+                        Number(item.quantity);
+
+                    return `
+                        <tr>
+
+                            <td style="
+                                padding:12px;
+                                border-bottom:1px solid #eee;
+                            ">
+                                ${index + 1}
+                            </td>
+
+                            <td style="
+                                padding:12px;
+                                border-bottom:1px solid #eee;
+                            ">
+                                ${item.name}
+                            </td>
+
+                            <td style="
+                                padding:12px;
+                                text-align:center;
+                                border-bottom:1px solid #eee;
+                            ">
+                                ${item.quantity}
+                            </td>
+
+                            <td style="
+                                padding:12px;
+                                text-align:right;
+                                border-bottom:1px solid #eee;
+                            ">
+                                ₹${itemTotal.toLocaleString("en-IN")}
+                            </td>
+
+                        </tr>
+                    `;
+
+                }).join("");
 
 
-            await connection.commit();
+            /* SEND EMAIL */
+console.log("================================");
+console.log("TEST ORDER RECEIPT");
+console.log("SENDING TO:", process.env.EMAIL_USER);
+console.log("ORDER ID:", orderId);
+console.log("TOTAL:", total);
+console.log("================================");
+            const mailResult =
+                await mailTransporter.sendMail({
+               
+                    from:
+                        `"ElectroMart" <${process.env.EMAIL_USER}>`,
 
-            connection.release();
+                    to:
+                          process.env.EMAIL_USER,
 
-            res.status(201).json({
+                    subject:
+                        `Order #${orderId} Confirmed - ElectroMart`,
 
-                success: true,
+                    text:
+                        `Hello ${customerName},
 
-                message:
-                    "Order placed successfully!",
+Your ElectroMart order #${orderId} has been successfully placed.
 
-                orderId,
+Order Total:
+₹${Number(total).toLocaleString("en-IN")}
 
-                total
-            });
+Thank you for shopping with ElectroMart.`,
+
+ html: `
+
+                        <div style="
+                            max-width:650px;
+                            margin:auto;
+                            font-family:Arial,sans-serif;
+                            background:#ffffff;
+                            border:1px solid #ddd;
+                            border-radius:12px;
+                            overflow:hidden;
+                        ">
+
+                            <div style="
+                                padding:25px;
+                                text-align:center;
+                                background:#f8fafc;
+                            ">
+
+                                <h1>
+                                    ⚡ ElectroMart
+                                </h1>
+
+                                <p>
+                                    Electronic Shop
+                                </p>
+
+                            </div>
+
+
+                            <div style="
+                                padding:30px;
+                            ">
+
+                                <h2 style="
+                                    color:#16a34a;
+                                ">
+                                    ✅ Order Confirmed
+                                </h2>
+
+                                <p>
+                                    Hello
+                                    <strong>
+                                        ${customerName}
+                                    </strong>,
+                                </p>
+
+                                <p>
+                                    Thank you for shopping
+                                    with ElectroMart.
+                                </p>
+
+
+                                <div style="
+                                    background:#f8fafc;
+                                    padding:20px;
+                                    border-radius:10px;
+                                ">
+
+                                    <p>
+                                        <strong>
+                                            Order ID:
+                                        </strong>
+                                        #${orderId}
+                                    </p>
+
+                                    <p>
+                                        <strong>
+                                            Status:
+                                        </strong>
+                                        Order Placed
+                                    </p>
+
+                                    <p>
+                                        <strong>
+                                            Total:
+                                        </strong>
+                                        ₹${Number(total)
+                                            .toLocaleString("en-IN")}
+                                    </p>
+
+                                </div>
+
+
+                                <h3>
+                                    Order Items
+                                </h3>
+
+
+                                <table
+                                    width="100%"
+                                    cellpadding="0"
+                                    cellspacing="0"
+                                    style="
+                                        border-collapse:collapse;
+                                    "
+                                >
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th
+                                                style="
+                                                    padding:12px;
+                                                    text-align:left;
+                                                "
+                                            >
+                                                #
+                                            </th>
+
+                                            <th
+                                                style="
+                                                    padding:12px;
+                                                    text-align:left;
+                                                "
+                                            >
+                                                Product
+                                            </th>
+
+                                            <th
+                                                style="
+                                                    padding:12px;
+                                                    text-align:center;
+                                                "
+                                            >
+                                                Qty
+                                            </th>
+
+                                            <th
+                                                style="
+                                                    padding:12px;
+                                                    text-align:right;
+                                                "
+                                            >
+                                                Amount
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+                                        ${productsHTML}
+
+                                    </tbody>
+
+                                </table>
+
+
+                                <div style="
+                                    margin-top:30px;
+                                    padding:20px;
+                                    text-align:center;
+                                    background:#f8fafc;
+                                ">
+
+                                    <strong>
+                                        Total Amount:
+                                    </strong>
+
+                                    <span>
+                                        ₹${Number(total)
+                                            .toLocaleString("en-IN")}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div style="
+                                padding:20px;
+                                text-align:center;
+                                background:#f8fafc;
+                                color:#64748b;
+                                font-size:13px;
+                            ">
+
+                                ElectroMart Electronic Shop
+
+                            </div>
+
+                        </div>
+
+                    `
+                });
+
+
+            console.log(
+                "================================"
+            );
+
+            console.log(
+                "ORDER EMAIL SENT SUCCESSFULLY"
+            );
+
+            console.log(
+                "To:",
+                customerEmail
+            );
+
+            console.log(
+                "Message ID:",
+                mailResult.messageId
+            );
+
+            console.log(
+                "================================"
+            );
+
+        }
+
+    }
+
+} catch (emailError) {
+
+    console.error(
+        "ORDER EMAIL ERROR:"
+    );
+
+    console.error(
+        "Code:",
+        emailError.code
+    );
+
+    console.error(
+        "Message:",
+        emailError.message
+    );
+
+}
+
+
+/* =====================================================
+   SEND RESPONSE
+===================================================== */
+
+return res.status(201).json({
+
+    success: true,
+
+    message:
+        "Order placed successfully!",
+
+    orderId,
+
+    total
+
+});
+
 
         } catch (error) {
 
@@ -1101,16 +2456,18 @@ app.post(
                 error
             );
 
-            res.status(500).json({
-                success: false,
-                message:
-                    "Unable to place order."
-            });
+         res.status(500).json({
+    success: false,
+    message: error.sqlMessage || error.message || "Unable to place order."
+});
         }
     }
 );
 
 
+/* =====================================================
+   CUSTOMER ORDERS
+===================================================== */
 /* =====================================================
    CUSTOMER ORDERS
 ===================================================== */
@@ -1123,66 +2480,104 @@ app.get(
         try {
 
             const userId =
-                req.session.userId;
+                Number(req.session.userId);
+
 
             const [orders] =
                 await db.execute(
-                    `SELECT
+                    `
+                    SELECT
                         id,
                         total,
                         address,
                         status,
                         created_at
-                     FROM orders
-                     WHERE user_id = ?
-                     ORDER BY created_at DESC`,
+                    FROM orders
+                    WHERE user_id = ?
+                    ORDER BY created_at DESC
+                    `,
                     [userId]
                 );
+
 
             for (const order of orders) {
 
                 const [items] =
                     await db.execute(
-                        `SELECT
-                            order_items.id,
-                            order_items.product_id,
-                            order_items.quantity,
-                            order_items.price,
-                            products.name,
-                            products.icon
-                         FROM order_items
-                         INNER JOIN products
-                         ON order_items.product_id =
-                            products.id
-                         WHERE order_items.order_id = ?`,
+                        `
+                        SELECT
+                            oi.id,
+                            oi.product_id,
+                            oi.quantity,
+                            oi.price,
+
+                            p.name,
+                            p.icon
+
+                        FROM order_items oi
+
+                        LEFT JOIN products p
+                            ON oi.product_id = p.id
+
+                        WHERE oi.order_id = ?
+                        `,
                         [order.id]
                     );
 
+
                 order.items = items;
+
             }
+
 
             res.json({
                 success: true,
-                orders
+                orders: orders
             });
+
 
         } catch (error) {
 
             console.error(
-                "ORDERS ERROR:",
-                error
+                "================================"
             );
+
+            console.error(
+                "ORDERS MYSQL ERROR"
+            );
+
+            console.error(
+                "Code:",
+                error.code
+            );
+
+            console.error(
+                "Message:",
+                error.message
+            );
+
+            console.error(
+                "SQL Message:",
+                error.sqlMessage
+            );
+
+            console.error(
+                "================================"
+            );
+
 
             res.status(500).json({
                 success: false,
                 message:
+                    error.sqlMessage ||
+                    error.message ||
                     "Unable to load orders."
             });
+
         }
+
     }
 );
-
-
 /* =====================================================
    ADMIN GET PRODUCTS
 ===================================================== */
@@ -1632,7 +3027,85 @@ app.get(
         }
     }
 );
+/* =====================================================
+   ADMIN SALES REPORT
+===================================================== */
 
+app.get(
+    "/api/admin/sales",
+    requireAdmin,
+    async (req, res) => {
+
+        try {
+
+            const year =
+                Number(
+                    req.query.year
+                ) ||
+                new Date().getFullYear();
+
+
+            const [sales] =
+                await db.execute(
+                    `
+                    SELECT
+                        MONTH(created_at)
+                            AS month,
+
+                        COALESCE(
+                            SUM(total),
+                            0
+                        ) AS total
+
+                    FROM orders
+
+                    WHERE
+                        YEAR(created_at) = ?
+
+                    AND status != 'Cancelled'
+
+                    GROUP BY
+                        MONTH(created_at)
+
+                    ORDER BY
+                        MONTH(created_at)
+                    `,
+                    [year]
+                );
+
+
+            res.json({
+
+                success: true,
+
+                year: year,
+
+                sales: sales
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "ADMIN SALES ERROR:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load sales."
+
+            });
+
+        }
+
+    }
+);
 
 /* =====================================================
    ADMIN ORDERS
@@ -1933,21 +3406,23 @@ app.post(
             }
 
 
-            /* CHECK SUBJECT */
+            /* CHECK SUBJECT
+   Subject is required ONLY for Complaint
+*/
 
-            if (
-                !subject ||
-                subject.trim().length < 3
-            ) {
+if (
+    issueType === "Complaint" &&
+    (!subject || subject.trim().length < 3)
+) {
 
-                return res.status(400).json({
+    return res.status(400).json({
 
-                    message:
-                        "Please enter a valid subject."
+        message:
+            "Please enter a valid subject."
 
-                });
+    });
 
-            }
+}
 
 
             /* CHECK MESSAGE */
@@ -2889,6 +4364,239 @@ app.delete(
     }
 );
 
+/* =========================================================
+   GET CUSTOMER SUPPORT CHAT
+   ========================================================= */
+
+app.get(
+    "/api/support/:supportId/messages",
+    requireLogin,
+    async (req, res) => {
+
+        try {
+
+            const supportId =
+                Number(req.params.supportId);
+
+            const userId =
+                req.session.userId;
+
+            if (
+                !Number.isInteger(supportId) ||
+                supportId <= 0
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid support ticket."
+                });
+            }
+
+            /* Make sure ticket belongs to logged-in customer */
+
+            const [tickets] =
+                await db.execute(
+                    `
+                    SELECT id
+                    FROM support_requests
+                    WHERE id = ?
+                    AND user_id = ?
+                    `,
+                    [
+                        supportId,
+                        userId
+                    ]
+                );
+
+            if (tickets.length === 0) {
+
+                return res.status(403).json({
+                    success: false,
+                    message:
+                        "You cannot access this support ticket."
+                });
+            }
+
+            const [messages] =
+                await db.execute(
+                    `
+                    SELECT
+                        sm.id,
+                        sm.support_id,
+                        sm.sender_type,
+                        sm.sender_id,
+                        sm.message,
+                        sm.created_at
+                    FROM support_messages sm
+                    WHERE sm.support_id = ?
+                    ORDER BY sm.created_at ASC
+                    `,
+                    [supportId]
+                );
+
+            res.json({
+                success: true,
+                messages
+            });
+
+        } catch (error) {
+
+            console.error(
+                "GET SUPPORT CHAT ERROR:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Unable to load support chat."
+            });
+        }
+    }
+);
+
+/* =========================================================
+   CUSTOMER SEND SUPPORT MESSAGE
+   ========================================================= */
+
+app.post("/api/support/:supportId/messages", requireLogin,
+    async (req, res) => {
+
+        try {
+
+            const supportId =
+                Number(req.params.supportId);
+
+            const userId =
+                req.session.userId;
+
+            const message =
+                String(
+                    req.body.message || ""
+                ).trim();
+
+            if (
+                !Number.isInteger(supportId) ||
+                supportId <= 0
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid support ticket."
+                });
+            }
+
+            if (!message) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Please enter a message."
+                });
+            }
+
+            if (message.length > 2000) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Message cannot exceed 2000 characters."
+                });
+            }
+
+            /* Check ticket ownership */
+
+            const [tickets] =
+                await db.execute(
+                    `
+                    SELECT id, status
+                    FROM support_requests
+                    WHERE id = ?
+                    AND user_id = ?
+                    `,
+                    [
+                        supportId,
+                        userId
+                    ]
+                );
+
+            if (tickets.length === 0) {
+
+                return res.status(403).json({
+                    success: false,
+                    message:
+                        "You cannot reply to this ticket."
+                });
+            }
+
+            const ticket =
+                tickets[0];
+
+            /* Don't allow messages on closed tickets */
+
+            if (
+                String(ticket.status)
+                    .toLowerCase() === "closed"
+            ) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "This support ticket is closed."
+                });
+            }
+
+            const [result] =
+                await db.execute(
+                    `
+                    INSERT INTO support_messages
+                    (
+                        support_id,
+                        sender_type,
+                        sender_id,
+                        message
+                    )
+                    VALUES (?, 'customer', ?, ?)
+                    `,
+                    [
+                        supportId,
+                        userId,
+                        message
+                    ]
+                );
+
+            /* Set ticket back to Open */
+
+            await db.execute(
+                `
+                UPDATE support_requests
+                SET status = 'Open'
+                WHERE id = ?
+                `,
+                [supportId]
+            );
+
+            res.json({
+                success: true,
+                message:
+                    "Message sent successfully.",
+                messageId:
+                    result.insertId
+            });
+
+        } catch (error) {
+
+            console.error(
+                "CUSTOMER SUPPORT MESSAGE ERROR:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Unable to send message."
+            });
+        }
+    }
+);
 
 /* =====================================================
    API 404
@@ -2947,3 +4655,4 @@ async function startServer() {
 }
 
 startServer();
+ 

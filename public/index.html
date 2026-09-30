@@ -33,18 +33,22 @@
         </button>
 
         <button onclick="showPage('cart')">
-            🛒 Cart
-            <span id="cartCount">0</span>
-        </button>
-
+    🛒 Cart
+    <span id="cartCount" class="nav-count" style="display:none;">0</span>
+</button>
         <button onclick="showPage('orders')">
             📦 Orders
         </button>
 
         <button onclick="showPage('wishlist')">
     ❤️ Wishlist
-    <span id="wishlistCount">0</span>
+    <span id="wishlistCount" class="nav-count" style="display:none;">0</span>
 </button>
+       <button onclick="showPage('referral')">
+    🎁 Refer & Earn
+    <span id="referralCount" class="nav-count" style="display:none;">0</span>
+</button>
+    
 
          <button
     onclick="showPage('support')">
@@ -66,14 +70,62 @@
                 onclick="logout()">
             Logout
         </button>
-      <button class="notification-btn">
-    🔔 
+
+<!-- =====================================================
+     NOTIFICATION BUTTON
+===================================================== -->
+
+<div class="notification-wrapper">
+<button
+    type="button"
+    id="notificationBtn"
+    class="notification-btn"
+    title="Notifications"
+    onclick="toggleNotifications(event)"
+>
+    🔔
+
+    <span
+        id="notificationCount"
+        class="notification-count"
+        style="display:none;">
+        0
+    </span>
 </button>
-
-    </nav>
-
+</div>
+</nav>
 </header>
+<!-- =====================================================
+     NOTIFICATION PANEL
+===================================================== -->
 
+<div id="notificationPanel"
+     class="notification-panel hidden">
+
+    <div class="notification-header">
+
+        <div>
+            <h3>Notifications</h3>
+
+            <p id="notificationSubtitle">
+                No new notifications
+            </p>
+        </div>
+
+        <button
+            type="button"
+            class="mark-read-btn"
+            onclick="markAllNotificationsRead()">
+            Mark all as read
+        </button>
+
+    </div>
+
+    <div id="notificationList"
+         class="notification-list">
+    </div>
+
+</div>
 
 <!-- =====================================================
      HOME PAGE
@@ -216,7 +268,6 @@
 
 </section>
 
-
 <!-- =====================================================
      PRODUCTS PAGE
 ===================================================== -->
@@ -241,50 +292,54 @@
     </div>
 
 
-    <div class="product-tools">
+  <div class="product-tools">
 
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="🔎 Search product..."
-            oninput="filterProducts"
-        >
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔎 Search product..."
+        oninput="filterProducts"
+    >
+<!-- =====================================================
+     PIN CODE DELIVERY CHECKER
+===================================================== -->
 
+    <select
+        id="categoryFilter"
+        onchange="filterProducts()"
+    >
+    
+        <option value="all">
+            All Categories
+        </option>
 
-        <select id="categoryFilter"
-                onchange="filterProducts()">
+        <option value="mobile">
+            Mobiles
+        </option>
 
-            <option value="all">
-                All Categories
-            </option>
+        <option value="laptop">
+            Laptops
+        </option>
 
-            <option value="mobile">
-                Mobiles
-            </option>
+        <option value="headphone">
+            Headphones
+        </option>
 
-            <option value="laptop">
-                Laptops
-            </option>
+        <option value="camera">
+            Cameras
+        </option>
 
-            <option value="headphone">
-                Headphones
-            </option>
+        <option value="tv">
+            Televisions
+        </option>
 
-            <option value="camera">
-                Cameras
-            </option>
+        <option value="speaker">
+            Speakers
+        </option>
 
-            <option value="tv">
-                Televisions
-            </option>
+    </select>
 
-            <option value="speaker">
-                Speakers
-            </option>
-
-        </select>
-
-    </div>
+</div>
 
 
     <div id="productContainer"
@@ -293,6 +348,7 @@
     </div>
 
 </section>
+
 
 
 <!-- =====================================================
@@ -338,14 +394,13 @@
             </h2>
 
         </div>
-
-
-        <button class="primary-btn"
-                onclick="checkout()">
-
-            Proceed to Checkout
-
-        </button>
+<button
+    type="button"
+    class="primary-btn"
+    onclick="checkout()"
+>
+    Proceed to Checkout
+</button>
 
     </div>
 
@@ -416,6 +471,139 @@
     </div>
 
 </section>
+<!-- =====================================================
+     REFER & EARN PAGE
+===================================================== -->
+<section id="referralPage" class="page hidden">
+
+    <div class="page-heading">
+
+        <div class="small-title">
+            REWARDS
+        </div>
+
+        <h2>
+            🎁 Refer & Earn
+        </h2>
+
+        <p>
+            Invite your friends to ElectroMart and earn rewards.
+        </p>
+
+    </div>
+
+
+    <div class="referral-card">
+
+        <div class="referral-icon">
+            🎁
+        </div>
+
+        <h2>
+            Invite Friends & Earn
+        </h2>
+
+        <p>
+            Share your referral code with friends.
+            When they register using your code,
+            you earn referral rewards.
+        </p>
+
+
+        <!-- REWARD -->
+        <div class="referral-reward">
+
+            <div>
+                <span>Reward per referral</span>
+
+                <strong>
+                    ₹100
+                </strong>
+            </div>
+
+            <div>
+                <span>Your Earnings</span>
+
+                <strong id="referralEarnings">
+                    ₹0
+                </strong>
+            </div>
+
+        </div>
+
+
+        <!-- REFERRAL CODE -->
+        <div class="referral-code-box">
+
+            <label>
+                Your Referral Code
+            </label>
+
+            <div class="referral-code-row">
+
+                <input
+                    type="text"
+                    id="myReferralCode"
+                    readonly
+                >
+
+                <button
+                    type="button"
+                    onclick="copyReferralCode()"
+                    class="primary-btn">
+                    📋 Copy
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- SHARE -->
+        <div class="referral-share">
+
+            <h3>
+                Share your referral
+            </h3>
+
+            <button
+                type="button"
+                onclick="shareReferralWhatsApp()"
+                class="referral-whatsapp">
+                💬 WhatsApp
+            </button>
+
+            <button
+                type="button"
+                onclick="shareReferralLink()"
+                class="primary-btn">
+                🔗 Copy Referral Link
+            </button>
+
+        </div>
+
+
+        <!-- REFERRED FRIENDS -->
+        <div class="referral-history">
+
+            <h3>
+                Referral History
+            </h3>
+
+            <div id="referralHistory">
+
+                <p class="no-referrals">
+                    No referrals yet.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 <!-- =====================================================
      LOGIN MODAL
@@ -446,34 +634,34 @@
             <label>
                 Email Address
             </label>
+      <input
+    type="email"
+    id="loginEmail"
+    placeholder="Enter your email"
+    required
+>
 
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Enter your email"
-                required
-            >
+<input
+    type="password"
+    id="loginPassword"
+    placeholder="Enter your password"
+    required
+>
 
+<div class="forgot-password-row">
+    <button
+        type="button"
+        class="forgot-password-link"
+        onclick="openForgotPassword()">
+        Forgot Password?
+    </button>
+</div>
 
-            <label>
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Enter your password"
-                required
-            >
-
-
-            <button
-                type="submit"
-                class="primary-btn full-btn">
-
-                Login
-
-            </button>
+<button
+    type="submit"
+    class="login-submit">
+    Login
+</button>
 
         </form>
 
@@ -603,78 +791,477 @@
     </div>
 
 </div>
+<!-- =====================================================
+     FORGOT PASSWORD MODAL
+===================================================== -->
+
+<div
+    id="forgotPasswordModal"
+    class="modal hidden">
+
+    <div class="modal-content forgot-password-modal">
+
+        <button
+            type="button"
+            class="modal-close"
+            onclick="closeForgotPassword()">
+            ×
+        </button>
+
+        <!-- STEP 1 -->
+
+        <div id="forgotStep1">
+
+            <h2>Forgot Password?</h2>
+
+            <p>
+                Enter your registered email address.
+            </p>
+
+            <form
+                onsubmit="sendResetOTP(event)">
+
+                <input
+                    type="email"
+                    id="forgotEmail"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <p
+                    id="forgotMessage"
+                    class="forgot-message">
+                </p>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="sendOtpBtn">
+
+                    Send OTP
+
+                </button>
+
+            </form>
+
+        </div>
 
 
+        <!-- STEP 2 -->
+
+        <div
+            id="forgotStep2"
+            class="hidden">
+
+            <h2>Verify OTP</h2>
+
+            <p>
+                Enter the 6-digit OTP sent to your email.
+            </p>
+
+            <input
+                type="text"
+                id="resetOTP"
+                placeholder="Enter 6-digit OTP"
+                maxlength="6"
+                inputmode="numeric"
+            >
+
+            <p
+                id="otpMessage"
+                class="forgot-message">
+            </p>
+
+            <button
+                type="button"
+                class="primary-btn"
+                onclick="verifyResetOTP()">
+
+                Verify OTP
+
+            </button>
+
+        </div>
+
+
+        <!-- STEP 3 -->
+
+        <div
+            id="forgotStep3"
+            class="hidden">
+
+            <h2>Set New Password</h2>
+
+            <p>
+                Enter your new password.
+            </p>
+
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="New password"
+                minlength="6"
+                required
+            >
+
+            <input
+                type="password"
+                id="confirmNewPassword"
+                placeholder="Confirm new password"
+                minlength="6"
+                required
+            >
+
+            <p
+                id="resetMessage"
+                class="forgot-message">
+            </p>
+
+            <button
+                type="button"
+                class="primary-btn"
+                onclick="resetPassword()">
+
+                Reset Password
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- =====================================================
+     CHECKOUT MODAL
+===================================================== -->
+<!-- =====================================================
+     CHECKOUT MODAL
+===================================================== -->
 <!-- =====================================================
      CHECKOUT MODAL
 ===================================================== -->
 
-<div id="checkoutModal"
-     class="modal hidden">
+<div id="checkoutModal" class="modal hidden">
 
-    <div class="modal-box">
+    <div class="modal-box checkout-modal-box">
 
-        <button class="close-btn"
-                onclick="closeModals()">
+        <!-- CLOSE -->
+
+        <button
+            class="close-btn"
+            type="button"
+            onclick="closeModals()"
+        >
             ×
         </button>
 
+
+        <!-- TITLE -->
 
         <h2>
             Checkout
         </h2>
 
         <p class="modal-description">
-            Complete your order.
+            Enter your details and place your order.
         </p>
 
 
-        <div class="checkout-total">
+        <!-- =================================================
+             CHECKOUT FORM
+        ================================================== -->
 
-            Order Total:
-
-            <strong>
-                ₹<span id="checkoutTotal">0</span>
-            </strong>
-
-        </div>
+        <form
+            id="checkoutForm"
+            onsubmit="placeOrder(event)"
+        >
 
 
-        <form onsubmit="placeOrder(event)">
+            <!-- =================================================
+                 CUSTOMER DETAILS
+            ================================================== -->
 
-            <label>
-                Delivery Address
+            <h3 class="checkout-section-title">
+                👤 Customer Details
+            </h3>
+
+
+            <!-- FULL NAME -->
+
+            <label for="checkoutFullName">
+                Full Name
             </label>
 
-            <textarea
-                id="deliveryAddress"
-                rows="5"
-                placeholder="Enter your complete delivery address"
-                required></textarea>
+            <input
+                type="text"
+                id="checkoutFullName"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
 
 
-            <!-- PAYMENT METHOD REMOVED -->
+            <!-- PHONE NUMBER -->
+
+            <label for="checkoutPhone">
+                Phone Number
+            </label>
+
+            <input
+                type="tel"
+                id="checkoutPhone"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                placeholder="Enter 10-digit phone number"
+                required
+            >
+         <!-- EMAIL / GMAIL -->
+<label for="checkoutEmail">
+    Gmail / Email
+</label>
+
+<input
+    type="email"
+    id="checkoutEmail"
+    placeholder="Enter your Gmail address"
+    autocomplete="email"
+    required
+>
+
+            <!-- =================================================
+                 DELIVERY ADDRESS
+            ================================================== -->
+
+            <h3 class="checkout-section-title">
+                📍 Delivery Address
+            </h3>
 
 
-            <button
-                type="submit"
-                class="primary-btn full-btn">
+            <!-- PINCODE -->
 
-                Place Order
-
-            </button>
-
-        </form>
+            <label for="deliveryPincode">
+                Pincode
+            </label>
 
 
-        <p id="checkoutMessage"
-           class="message">
-        </p>
+            <div class="pincode-row">
+
+                <input
+                    type="text"
+                    id="deliveryPincode"
+                    maxlength="6"
+                    inputmode="numeric"
+                    autocomplete="postal-code"
+                    placeholder="Enter 6-digit Pincode"
+                    required
+                >
+
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    id="pincodeBtn"
+                    onclick="fetchPincodeAddress()"
+                >
+                    🔍 Get Address
+                </button>
+
+            </div>
+
+
+            <!-- PINCODE MESSAGE -->
+
+            <p
+                id="pincodeMessage"
+                class="checkout-small-message"
+            ></p>
+
+
+            <!-- CITY -->
+
+            <label for="deliveryCity">
+                City
+            </label>
+
+            <input
+                type="text"
+                id="deliveryCity"
+                placeholder="City"
+                readonly
+                required
+            >
+
+
+            <!-- STATE -->
+
+            <label for="deliveryState">
+                State
+            </label>
+
+            <input
+                type="text"
+                id="deliveryState"
+                placeholder="State"
+                readonly
+                required
+            >
+
+
+            <!-- POST OFFICE -->
+
+            <label for="deliveryPostOffice">
+                Post Office
+            </label>
+
+            <input
+                type="text"
+                id="deliveryPostOffice"
+                placeholder="Post Office"
+                readonly
+                required
+            >
+
+
+            <!-- HOUSE / STREET / AREA -->
+<label for="deliveryAddress">
+    House No / Street / Area
+</label>
+
+<textarea
+    id="deliveryAddress"
+    rows="5"
+    placeholder="Enter your complete delivery address"
+    required></textarea>
+
+
+<!-- =====================================================
+     SAVED ADDRESSES
+===================================================== -->
+
+<section
+    id="savedAddressesSection"
+    class="saved-addresses-section"
+>
+
+    <h3 class="saved-addresses-title">
+        Saved Addresses
+    </h3>
+
+    <div id="savedAddressesList">
+        <!-- Saved address cards will appear here -->
+    </div>
+
+    <button
+        type="button"
+        id="addNewAddressBtn"
+        class="add-new-address-btn"
+    >
+        ＋ Add New Address
+    </button>
+
+</section>
+
+
+
+    <button
+        type="submit"
+        class="primary-btn full-btn">
+        Place Order
+    </button>
+
+</form>
+
+
+            <!-- =================================================
+                 ADDRESS PREVIEW
+            ================================================== -->
+
+            <div
+                id="addressPreview"
+                class="address-preview"
+                style="display:none;"
+            >
+
+                <strong>
+                    📦 Delivery Address
+                </strong>
+
+                <p id="fullAddressPreview"></p>
+
+            </div>
+
+
+            <!-- =================================================
+                 FINAL ORDER SUMMARY
+            ================================================== -->
+
+   <div class="checkout-final-summary">
+
+    <h3>
+        🧾 Order Summary
+    </h3>
+
+    <!-- ORIGINAL TOTAL -->
+    <div class="checkout-summary-row">
+
+        <span>
+            Original Total
+        </span>
+
+        <strong>
+            ₹<span id="checkoutSubtotal">0.00</span>
+        </strong>
+
+    </div>
+
+    <!-- DISCOUNT -->
+    <div class="checkout-summary-row discount-row">
+
+        <span>
+            Discount (12%)
+        </span>
+
+        <strong style="color:#16a34a;">
+            - ₹<span id="checkoutDiscount">0.00</span>
+        </strong>
+
+    </div>
+
+    <!-- FINAL TOTAL -->
+    <div class="checkout-summary-row final-total-row">
+
+        <span>
+            Final Total
+        </span>
+
+        <strong>
+            ₹<span id="checkoutTotal">0.00</span>
+        </strong>
 
     </div>
 
 </div>
 
+            <!-- =================================================
+                 PLACE ORDER BUTTON
+            ================================================== -->
+
+
+
+            <!-- MESSAGE -->
+
+            <p
+                id="checkoutMessage"
+                class="message"
+            ></p>
+
+
+        </form>
+
+    </div>
+
+</div>
 
 <!-- =====================================================
      TOAST MESSAGE
@@ -683,8 +1270,12 @@
 <div id="toast"></div>
 
 
-<script src="script.js"></script>
+<!-- =====================================================
+     PDF LIBRARIES
+===================================================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+ <script src="script.js"></script>
 <!-- ==========================================
      CUSTOMER SUPPORT PAGE
 ========================================== -->
@@ -775,19 +1366,23 @@
                 </select>
 
 
-                <!-- SUBJECT -->
+                <!-- SUBJECT - ONLY FOR COMPLAINT -->
 
-                <label for="supportSubject">
-                    Subject
-                </label>
+<div id="subjectGroup" style="display: none;">
 
-                <input
-                    type="text"
-                    id="supportSubject"
-                    placeholder="Enter your problem"
-                    maxlength="200"
-                    required
-                >
+    <label for="supportSubject">
+        Complaint Subject
+        <span style="color: red;">*</span>
+    </label>
+
+    <input
+        type="text"
+        id="supportSubject"
+        placeholder="Enter complaint subject"
+        maxlength="200"
+    >
+
+</div>
 
 
                 <!-- MESSAGE -->
@@ -851,7 +1446,301 @@
     </div>
 
 </section>
+<!-- =====================================================
+     ORDER DETAILS MODAL
+===================================================== -->
+
+<div id="orderDetailsModal" class="order-details-modal hidden">
+
+    <div
+        class="order-details-overlay"
+        onclick="closeOrderDetails()">
+    </div>
+
+    <div class="order-details-box">
+
+        <!-- HEADER -->
+
+        <div class="order-details-top">
+
+            <div>
+                <span class="order-details-label">
+                    ORDER DETAILS
+                </span>
+
+                <h2>
+                    Order details
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="order-details-close"
+                onclick="closeOrderDetails()">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- ORDER ID -->
+
+        <div class="order-info-row">
+
+            <span>Order ID</span>
+
+            <strong id="detailsOrderId">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="order-info-row">
+
+            <span>Status</span>
+
+            <strong id="detailsOrderStatus">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- TRACKING -->
+
+        <div class="order-details-tracking">
+
+            <div
+                class="detail-track-step"
+                id="detailStep0">
+
+                <div class="detail-track-circle">
+                    1
+                </div>
+
+                <span>
+                    Order
+                </span>
+
+            </div>
+
+
+            <div
+                class="detail-track-line"
+                id="detailLine0">
+            </div>
+
+
+            <div
+                class="detail-track-step"
+                id="detailStep1">
+
+                <div class="detail-track-circle">
+                    2
+                </div>
+
+                <span>
+                    Packed
+                </span>
+
+            </div>
+
+
+            <div
+                class="detail-track-line"
+                id="detailLine1">
+            </div>
+
+
+            <div
+                class="detail-track-step"
+                id="detailStep2">
+
+                <div class="detail-track-circle">
+                    3
+                </div>
+
+                <span>
+                    Shipped
+                </span>
+
+            </div>
+
+
+            <div
+                class="detail-track-line"
+                id="detailLine2">
+            </div>
+
+
+            <div
+                class="detail-track-step"
+                id="detailStep3">
+
+                <div class="detail-track-circle">
+                    4
+                </div>
+
+                <span>
+                    Out for<br>
+                    Delivery
+                </span>
+
+            </div>
+
+
+            <div
+                class="detail-track-line"
+                id="detailLine3">
+            </div>
+
+
+            <div
+                class="detail-track-step"
+                id="detailStep4">
+
+                <div class="detail-track-circle">
+                    5
+                </div>
+
+                <span>
+                    Delivered
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ITEMS -->
+
+        <div class="order-info-row">
+
+            <span>
+                Items
+            </span>
+
+            <strong id="detailsItems">
+                0 items
+            </strong>
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="order-info-row address-row">
+
+            <span>
+                Address
+            </span>
+
+            <strong id="detailsAddress">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- CURRENT LOCATION -->
+
+        <div class="order-info-row">
+
+            <span>
+                📍 Current location
+            </span>
+
+            <strong id="detailsLocation">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- DELIVERY CHARGE -->
+
+        <div class="order-info-row">
+
+            <span>
+                Delivery charge
+            </span>
+
+            <strong id="detailsDeliveryCharge">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <!-- DELIVERY DAYS -->
+
+        <div class="order-info-row">
+
+            <span>
+                Delivery days
+            </span>
+
+            <strong id="detailsDeliveryDays">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="order-info-row total-row">
+
+            <span>
+                Total
+            </span>
+
+            <strong id="detailsTotal">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div
+            id="detailsProducts"
+            class="details-products">
+        </div>
+
+
+        <!-- ACTION -->
+<!-- ==========================================
+     ORDER ACTION BUTTONS
+========================================== -->
+
+<div
+    id="orderDetailsActions"
+    class="order-details-actions">
+
+    <button
+        type="button"
+        class="invoice-print-btn"
+        onclick="printCustomerInvoice()">
+        🖨️ Print Invoice
+    </button>
+
+   <button
+    type="button"
+    class="invoice-download-btn"
+    id="customerDownloadInvoiceBtn"
+>
+    📥 Download Invoice
+</button>
+
+</div>
+    </div>
+</section>
+
 
 </body>
 </html>
-```
