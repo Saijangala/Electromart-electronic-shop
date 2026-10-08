@@ -126,12 +126,7 @@
                 💰 Sales
             </button>
 
-            <button
-                class="side-link"
-                data-section="support"
-                onclick="showAdminSection('support')">
-                🛟 Customer Support
-            </button>
+    
 
             <button
                 class="side-link"
@@ -771,7 +766,6 @@
 <!-- ==========================================
      SALES
 ========================================== -->
-
 <section
     id="salesSection"
     class="admin-section">
@@ -785,7 +779,9 @@
         <button
             class="add-btn"
             onclick="loadDashboard()">
+
             Refresh
+
         </button>
 
     </div>
@@ -797,10 +793,12 @@
         <div
             class="sales-total"
             id="salesPageTotal">
+
             ₹0
+
         </div>
 
-        <p style="margin-top:10px;color:#64748b;">
+        <p>
             Total sales from non-cancelled orders.
         </p>
 
@@ -811,209 +809,167 @@
  <!-- ==========================================
      CUSTOMER SUPPORT
 ========================================== -->
-<section
-    id="supportSection"
-    class="admin-section">
-    <h2>🛟 Customer Support</h2>
 
-    <p class="admin-section-description">
-        Manage customer support requests, complaints,
-        delivery issues, return requests and refund requests.
-    </p>
-    <!-- ==========================================
-     CUSTOMER SUPPORT EXPORT BUTTONS
-========================================== -->
-
-<div class="support-export-buttons">
-
-    <button
-        type="button"
-        class="support-export-btn support-print-btn"
-        onclick="printSupportTable()">
-        🖨️ Print
-    </button>
-
-    <button
-        type="button"
-        class="support-export-btn support-csv-btn"
-        onclick="downloadSupportCSV()">
-        📊 Download CSV
-    </button>
-
-    <button
-        type="button"
-        class="support-export-btn support-pdf-btn"
-        onclick="downloadSupportPDF()">
-        📄 Download PDF
-    </button>
-
-</div>
-
-    <!-- SUPPORT STATUS SUMMARY -->
-   <!-- SUPPORT STATUS SUMMARY -->
-<div class="support-status-grid">
-
-    <!-- TOTAL -->
-    <div
-        class="status-card support-filter-card active"
-        onclick="filterSupportRequests('all')"
-    >
-        <h3>🛟 Total Complaints</h3>
-
-        <div
-            class="status-number"
-            id="totalComplaints">
-            0
-        </div>
-    </div>
-
-
-    <!-- PENDING -->
-    <div
-        class="status-card support-filter-card"
-        onclick="filterSupportRequests('pending')"
-    >
-        <h3>⏳ Pending</h3>
-
-        <div
-            class="status-number"
-            id="pendingComplaints">
-            0
-        </div>
-    </div>
-
-
-    <!-- IN PROGRESS -->
-    <div
-        class="status-card support-filter-card"
-        onclick="filterSupportRequests('in progress')"
-    >
-        <h3>🔄 In Progress</h3>
-
-        <div
-            class="status-number"
-            id="inProgressComplaints">
-            0
-        </div>
-    </div>
-
-
-    <!-- SOLVED -->
-    <div
-        class="status-card support-filter-card"
-        onclick="filterSupportRequests('solved')"
-    >
-        <h3>✅ Solved</h3>
-
-        <div
-            class="status-number"
-            id="solvedComplaints">
-            0
-        </div>
-    </div>
-
-
-    <!-- CLOSED -->
-    <div
-        class="status-card support-filter-card"
-        onclick="filterSupportRequests('closed')"
-    >
-        <h3>🔒 Closed</h3>
-
-        <div
-            class="status-number"
-            id="closedComplaints">
-            0
-        </div>
-    </div>
-
-</div>
 <!-- ==========================================
-     CUSTOMER SUPPORT TYPES BAR CHART
+     CUSTOMER REVIEWS
 ========================================== -->
 
-<div class="support-types-dashboard">
+<section
+    id="reviewsSection"
+    class="admin-section">
 
-    <div class="support-types-header">
+    <div class="section-header">
 
-        <div class="support-types-title">
+        <h2>
+            ⭐ Customer Reviews
+        </h2>
 
-            <div class="support-types-icon">
-                📊
+        <button
+            type="button"
+            class="add-btn"
+            onclick="loadReviews()">
+
+            🔄 Refresh
+
+        </button>
+
+    </div>
+
+
+    <!-- REVIEW SUMMARY -->
+
+    <div class="review-summary-grid">
+
+        <div class="review-summary-card">
+
+            <div class="review-summary-icon">
+                ⭐
             </div>
 
             <div>
-                <h2>Support Types</h2>
 
-                <p>
-                    Customer support request distribution
-                </p>
+                <h3>Total Reviews</h3>
+
+                <strong id="totalReviews">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="review-summary-card">
+
+            <div class="review-summary-icon">
+                👥
+            </div>
+
+            <div>
+
+                <h3>Customers Reviewed</h3>
+
+                <strong id="reviewCustomers">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="review-summary-card">
+
+            <div class="review-summary-icon">
+                📦
+            </div>
+
+            <div>
+
+                <h3>Products Reviewed</h3>
+
+                <strong id="reviewedProducts">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="review-summary-card">
+
+            <div class="review-summary-icon">
+                💯
+            </div>
+
+            <div>
+
+                <h3>Average Rating</h3>
+
+                <strong id="overallRating">
+                    0.0 ⭐
+                </strong>
+
             </div>
 
         </div>
 
     </div>
 
+
+    <!-- PRODUCT REVIEW TABLE -->
+
+    <div class="table-wrapper">
+
+        <table class="reviews-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Product</th>
+
+                    <th>Customers</th>
+
+                    <th>Total Reviews</th>
+
+                    <th>Average Rating</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody
+                id="reviewsTableBody">
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="text-align:center;">
+
+                        Loading reviews...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- INDIVIDUAL REVIEWS -->
+
     <div
-        id="supportTypesChart"
-        class="support-types-chart"
-    >
-        <div class="support-types-empty">
-            Loading support types...
-        </div>
-    </div>
-
-</div>
-  <!-- ==========================================
-     CUSTOMER SUPPORT PIE CHART
-========================================== -->
-
-<div class="support-pie-dashboard">
-
-    <div class="support-pie-header">
-        <div>
-            <h2>📊 Support Status Distribution</h2>
-            <p>Current customer support percentage</p>
-        </div>
-       
-    </div>
-
-    <div class="support-pie-content">
-
-        <div class="support-pie-area">
-
-           <div
-    class="support-pie"
-    id="supportPieChart"
-    title="Click a color to see percentage">
-
-    <div class="support-pie-center">
-        <strong id="supportPieTotal">0</strong>
-        <span>Total</span>
-    </div>
-
-</div>
-
-<!-- SELECTED PERCENTAGE -->
-
-        </div>
-
-        <div
-            class="support-pie-labels"
-            id="supportPieLabels">
-
-        </div>
-
-    </div>
-
-</div>
-
-
-    <div id="supportAdminTable">
-
-        <div class="support-admin-loading">
-            Loading customer support requests...
-        </div>
+        id="reviewDetails"
+        class="review-details hidden">
 
     </div>
 

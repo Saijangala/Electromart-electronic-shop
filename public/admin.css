@@ -5032,3 +5032,2731 @@ td select:focus {
 
     z-index: 15 !important;
 }
+/* =====================================================
+   CUSTOMER REVIEWS ADMIN
+===================================================== */
+
+.review-summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin: 25px 0;
+
+}
+
+
+.review-summary-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 22px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 18px
+        rgba(15,23,42,0.06);
+
+}
+
+
+.review-summary-icon {
+
+    width: 50px;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #eff6ff;
+
+    font-size: 25px;
+
+}
+
+
+.review-summary-card h3 {
+
+    margin: 0 0 5px;
+
+    font-size: 13px;
+
+    color: #64748b;
+
+}
+
+
+.review-summary-card strong {
+
+    font-size: 25px;
+
+    color: #0f172a;
+
+}
+
+
+.reviews-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.reviews-table th {
+
+    padding: 15px;
+
+    background: #eff6ff;
+
+    color: #1e3a8a;
+
+    text-align: left;
+
+}
+
+
+.reviews-table td {
+
+    padding: 15px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    color: #334155;
+
+}
+
+
+.review-stars {
+
+    color: #f59e0b;
+
+    font-size: 18px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.view-review-btn {
+
+    border: none;
+
+    padding: 9px 14px;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.view-review-btn:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+.no-review-text {
+
+    color: #94a3b8;
+
+}
+
+
+.review-details {
+
+    margin-top: 25px;
+
+    padding: 25px;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 24px
+        rgba(15,23,42,0.07);
+
+}
+
+
+.review-details-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding-bottom: 18px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+}
+
+
+.review-details-header h2 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+}
+
+
+.review-details-header p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+}
+
+
+.close-review-details {
+
+    border: none;
+
+    padding: 9px 14px;
+
+    border-radius: 8px;
+
+    background: #ef4444;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+}
+
+
+.review-details-body {
+
+    margin-top: 20px;
+
+}
+
+
+.admin-review-card {
+
+    padding: 18px 0;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+}
+
+
+.admin-review-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    align-items: flex-start;
+
+}
+
+
+.admin-review-top strong {
+
+    color: #0f172a;
+
+}
+
+
+.review-date {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+.admin-review-card p {
+
+    margin: 10px 0 0;
+
+    color: #475569;
+
+    line-height: 1.6;
+
+}
+
+
+.no-reviews-admin {
+
+    text-align: center;
+
+    padding: 40px;
+
+    color: #64748b;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .review-summary-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .review-summary-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .reviews-table {
+
+        min-width: 700px;
+
+    }
+
+
+    .table-wrapper {
+
+        overflow-x: auto;
+
+    }
+
+
+    .review-details-header {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+}
+/* =====================================================
+   SUPPORT CATEGORY DISTRIBUTION - NEW LAYOUT
+===================================================== */
+
+.support-category-pie-dashboard {
+    width: 100%;
+    margin: 25px 0;
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.08);
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.support-category-pie-header {
+    margin-bottom: 28px;
+}
+
+.support-category-pie-header h2 {
+    margin: 0;
+
+    font-size: 28px;
+    font-weight: 800;
+
+    color: #0f172a;
+}
+
+.support-category-pie-header p {
+    margin: 6px 0 0;
+
+    font-size: 16px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+.support-category-pie-content {
+
+    display: grid;
+
+    grid-template-columns: 45% 55%;
+
+    align-items: center;
+
+    gap: 35px;
+
+    min-height: 430px;
+}
+
+
+/* =====================================================
+   PIE AREA
+===================================================== */
+
+.support-category-pie-area {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+/* =====================================================
+   SOLID 2D PIE
+===================================================== */
+
+.support-category-pie {
+
+    position: relative;
+
+    width: 330px;
+    height: 330px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #e5e7eb;
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.15);
+}
+
+
+/* =====================================================
+   PIE PERCENTAGE
+===================================================== */
+
+.support-category-percentage {
+
+    position: absolute;
+
+    transform:
+        translate(-50%, -50%);
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.45);
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
+    z-index: 5;
+}
+
+
+/* =====================================================
+   CATEGORY BOX AREA
+===================================================== */
+
+.support-category-pie-labels {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   CATEGORY BOX
+===================================================== */
+
+.support-category-pie-label {
+
+    min-height: 125px;
+
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ec;
+
+    border-radius: 15px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+    cursor: default;
+}
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.support-category-pie-label:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 22px rgba(15, 23, 42, 0.10);
+
+    border-color: #cbd5e1;
+}
+
+
+/* =====================================================
+   LEFT CONTENT
+===================================================== */
+
+.support-category-pie-label-left {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    min-width: 0;
+}
+
+
+/* =====================================================
+   COLOR DOT
+===================================================== */
+
+.support-category-pie-dot {
+
+    width: 14px;
+    height: 14px;
+
+    min-width: 14px;
+
+    margin-top: 5px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+
+/* =====================================================
+   CATEGORY NAME
+===================================================== */
+
+.support-category-pie-name {
+
+    display: block;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    color: #1e293b;
+}
+
+
+/* =====================================================
+   TICKET COUNT
+===================================================== */
+
+.support-category-pie-count {
+
+    display: block;
+
+    margin-top: 7px;
+
+    font-size: 13px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   PERCENTAGE
+===================================================== */
+
+.support-category-pie-percent {
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    line-height: 1;
+}
+
+
+/* =====================================================
+   CATEGORY COLORS
+===================================================== */
+
+.category-delivery {
+    background: #f97316;
+}
+
+.category-payment {
+    background: #2563eb;
+}
+
+.category-return {
+    background: #16a34a;
+}
+
+.category-refund {
+    background: #9333ea;
+}
+
+.category-complaint {
+    background: #ef4444;
+}
+
+
+/* =====================================================
+   PERCENTAGE COLORS
+===================================================== */
+
+.support-category-pie-label:nth-child(1)
+.support-category-pie-percent {
+    color: #f97316;
+}
+
+.support-category-pie-label:nth-child(2)
+.support-category-pie-percent {
+    color: #2563eb;
+}
+
+.support-category-pie-label:nth-child(3)
+.support-category-pie-percent {
+    color: #16a34a;
+}
+
+.support-category-pie-label:nth-child(4)
+.support-category-pie-percent {
+    color: #9333ea;
+}
+
+.support-category-pie-label:nth-child(5)
+.support-category-pie-percent {
+    color: #ef4444;
+}
+
+
+/* =====================================================
+   DELIVERY ISSUE - TOP FULL WIDTH
+===================================================== */
+
+.support-category-pie-label:first-child {
+
+    grid-column: 1 / -1;
+
+    min-height: 145px;
+
+    padding: 24px 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff7ed,
+            #ffffff
+        );
+
+    border: 2px solid #fed7aa;
+}
+
+
+/* DELIVERY NAME */
+
+.support-category-pie-label:first-child
+.support-category-pie-name {
+
+    font-size: 20px;
+}
+
+
+/* DELIVERY COUNT */
+
+.support-category-pie-label:first-child
+.support-category-pie-count {
+
+    font-size: 14px;
+}
+
+
+/* DELIVERY PERCENTAGE */
+
+.support-category-pie-label:first-child
+.support-category-pie-percent {
+
+    font-size: 30px;
+
+    color: #f97316;
+}
+
+
+/* =====================================================
+   EMPTY PIE
+===================================================== */
+
+.support-category-pie-empty {
+
+    width: 330px;
+    height: 330px;
+
+    border-radius: 50%;
+
+    background: #e5e7eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   TABLE BELOW CHART
+===================================================== */
+
+#supportAdminTable {
+
+    margin-top: 25px;
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .support-category-pie-content {
+
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+    }
+
+    .support-category-pie-labels {
+
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .support-category-pie-labels {
+
+        grid-template-columns: 1fr;
+    }
+
+    .support-category-pie-label:first-child {
+
+        grid-column: auto;
+    }
+
+    .support-category-pie {
+
+        width: 280px;
+        height: 280px;
+    }
+
+    .support-category-pie-empty {
+
+        width: 280px;
+        height: 280px;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .support-category-pie-dashboard {
+
+        padding: 20px 15px;
+    }
+
+    .support-category-pie-label {
+
+        min-height: 110px;
+
+        padding: 16px;
+    }
+
+    .support-category-pie-label:first-child {
+
+        min-height: 120px;
+    }
+
+}
+
+/* HEADER */
+
+.support-category-pie-header {
+
+    margin-bottom: 25px;
+
+}
+
+
+.support-category-pie-header h2 {
+
+    margin: 0;
+
+    font-size: 26px;
+
+    color: #0f172a;
+
+}
+
+
+.support-category-pie-header p {
+
+    margin-top: 6px;
+
+    color: #64748b;
+
+    font-size: 16px;
+
+}
+
+
+/* MAIN CONTENT */
+
+.support-category-pie-content {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 70px;
+
+    min-height: 430px;
+
+}
+
+
+/* PIE AREA */
+
+.support-category-pie-area {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+/* =====================================================
+   SOLID 2D PIE
+===================================================== */
+
+.support-category-pie {
+
+    position: relative;
+
+    width: 330px;
+
+    height: 330px;
+
+    border-radius: 50%;
+
+    background: #e5e7eb;
+
+    box-shadow:
+        0 10px 25px
+        rgba(15, 23, 42, 0.15);
+
+}
+
+
+/* PERCENTAGE LABEL */
+
+.support-category-percentage {
+
+    position: absolute;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 1px 3px
+        rgba(0, 0, 0, 0.45);
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
+}
+
+
+/* CATEGORY LEGEND */
+
+.support-category-pie-labels {
+
+    width: 330px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+}
+
+
+.support-category-pie-label {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 13px 16px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    transition: 0.2s;
+
+}
+
+
+.support-category-pie-label:hover {
+
+    transform: translateX(4px);
+
+    box-shadow:
+        0 5px 15px
+        rgba(15, 23, 42, 0.08);
+
+}
+
+
+.support-category-pie-label-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.support-category-pie-dot {
+
+    width: 13px;
+
+    height: 13px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+
+}
+
+
+.support-category-pie-name {
+
+    font-weight: 700;
+
+    color: #334155;
+
+}
+
+
+.support-category-pie-percent {
+
+    font-size: 16px;
+
+    color: #0f172a;
+
+}
+
+
+.support-category-pie-count {
+
+    display: block;
+
+    font-size: 12px;
+
+    color: #64748b;
+
+    margin-top: 3px;
+
+}
+
+
+/* COLORS */
+
+.category-delivery {
+
+    background: #f97316;
+
+}
+
+
+.category-payment {
+
+    background: #2563eb;
+
+}
+
+
+.category-return {
+
+    background: #16a34a;
+
+}
+
+
+.category-refund {
+
+    background: #9333ea;
+
+}
+
+
+.category-complaint {
+
+    background: #ef4444;
+
+}
+
+
+/* EMPTY */
+
+.support-category-pie-empty {
+
+    width: 330px;
+
+    height: 330px;
+
+    border-radius: 50%;
+
+    background: #e5e7eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-weight: 700;
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 850px) {
+
+    .support-category-pie-content {
+
+        flex-direction: column;
+
+        gap: 30px;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .support-category-pie-dashboard {
+
+        padding: 20px 15px;
+
+    }
+
+
+    .support-category-pie {
+
+        width: 280px;
+
+        height: 280px;
+
+    }
+
+
+    .support-category-pie-labels {
+
+        width: 100%;
+
+    }
+
+}
+/* =====================================================
+   CLICKABLE SUPPORT CATEGORY
+===================================================== */
+
+.support-category-pie-label {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.support-category-pie-label:hover {
+    transform: translateX(6px);
+    border-color: #2563eb;
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.15);
+}
+
+.support-category-pie-label.selected {
+    border: 2px solid #2563eb;
+    background: #eff6ff;
+    transform: translateX(6px);
+}
+
+
+/* CLICK TEXT */
+
+.support-category-click-text {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   CATEGORY STATUS RESULT
+===================================================== */
+
+.support-category-status-details {
+    width: 100%;
+    margin-top: 30px;
+    padding: 25px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-sizing: border-box;
+}
+
+
+/* HEADER */
+
+.support-category-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.support-category-status-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.support-category-status-title h3 {
+    margin: 0;
+    font-size: 22px;
+    color: #0f172a;
+}
+
+.support-category-status-title p {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* TOTAL */
+
+.support-category-status-total {
+    padding: 12px 20px;
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.support-category-status-total strong {
+    display: block;
+    font-size: 25px;
+    color: #2563eb;
+}
+
+.support-category-status-total span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+
+/* =====================================================
+   STATUS CARDS
+===================================================== */
+
+.support-category-status-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+
+/* CARD */
+
+.support-category-status-card {
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    text-align: center;
+    transition: 0.2s ease;
+}
+
+.support-category-status-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+
+/* STATUS DOT */
+
+.support-category-status-dot {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+
+/* STATUS NAME */
+
+.support-category-status-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+}
+
+
+/* COUNT */
+
+.support-category-status-count {
+    margin-top: 8px;
+    font-size: 27px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+
+/* PERCENTAGE */
+
+.support-category-status-percent {
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+
+/* COLORS */
+
+.status-pending {
+    background: #f59e0b;
+}
+
+.status-progress {
+    background: #2563eb;
+}
+
+.status-solved {
+    background: #16a34a;
+}
+
+.status-closed {
+    background: #ef4444;
+}
+
+
+/* EMPTY */
+
+.support-category-status-empty {
+    padding: 25px;
+    text-align: center;
+    color: #64748b;
+    font-weight: 600;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+    .support-category-status-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .support-category-status-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .support-category-status-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =====================================================
+   SUPPORT CATEGORY DISTRIBUTION
+===================================================== */
+
+.support-category-pie-dashboard {
+
+    width: 100%;
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    margin-top: 25px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* HEADER */
+
+.support-category-pie-header {
+
+    margin-bottom: 25px;
+
+}
+
+.support-category-pie-header h2 {
+
+    margin: 0;
+
+    font-size: 27px;
+
+    color: #0f172a;
+
+}
+
+.support-category-pie-header p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 16px;
+
+}
+
+
+/* MAIN AREA */
+
+.support-category-pie-content {
+
+    display: grid;
+
+    grid-template-columns:
+        45%
+        55%;
+
+    gap: 30px;
+
+    align-items: center;
+
+}
+
+
+/* PIE */
+
+.support-category-pie-area {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+
+/* =====================================================
+   CATEGORY BOX GRID
+===================================================== */
+
+.support-category-pie-labels {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+}
+
+
+/* =====================================================
+   CATEGORY BOX
+===================================================== */
+
+.support-category-pie-label {
+
+    min-height: 125px;
+
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 14px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    transition: 0.25s ease;
+
+}
+
+
+/* HOVER */
+
+.support-category-pie-label:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 22px
+        rgba(15, 23, 42, 0.10);
+
+    border-color: #cbd5e1;
+
+}
+
+
+/* LEFT SIDE */
+
+.support-category-pie-label-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+
+}
+
+
+/* COLOR DOT */
+
+.support-category-pie-dot {
+
+    width: 14px;
+
+    height: 14px;
+
+    min-width: 14px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+
+}
+
+
+/* CATEGORY NAME */
+
+.support-category-pie-name {
+
+    display: block;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #1e293b;
+
+    line-height: 1.2;
+
+}
+
+
+/* TICKET COUNT */
+
+.support-category-pie-count {
+
+    display: block;
+
+    margin-top: 7px;
+
+    font-size: 13px;
+
+    color: #64748b;
+
+}
+
+
+/* PERCENTAGE */
+
+.support-category-pie-percent {
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+}
+
+
+/* =====================================================
+   CATEGORY COLORS
+===================================================== */
+
+.category-delivery {
+
+    background: #f97316;
+
+}
+
+.category-payment {
+
+    background: #2563eb;
+
+}
+
+.category-return {
+
+    background: #16a34a;
+
+}
+
+.category-refund {
+
+    background: #9333ea;
+
+}
+
+.category-complaint {
+
+    background: #ef4444;
+
+}
+
+
+/* PERCENTAGE COLORS */
+
+.support-category-pie-label:nth-child(1)
+.support-category-pie-percent {
+
+    color: #f97316;
+
+}
+
+.support-category-pie-label:nth-child(2)
+.support-category-pie-percent {
+
+    color: #2563eb;
+
+}
+
+.support-category-pie-label:nth-child(3)
+.support-category-pie-percent {
+
+    color: #16a34a;
+
+}
+
+.support-category-pie-label:nth-child(4)
+.support-category-pie-percent {
+
+    color: #9333ea;
+
+}
+
+.support-category-pie-label:nth-child(5)
+.support-category-pie-percent {
+
+    color: #ef4444;
+
+}
+
+
+/* =====================================================
+   DELIVERY ISSUE
+   FULL WIDTH
+===================================================== */
+
+.support-category-pie-label:first-child {
+
+    grid-column:
+        1 / -1;
+
+    min-height: 135px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff7ed,
+            #ffffff
+        );
+
+    border:
+        2px solid #fed7aa;
+
+}
+
+
+/* DELIVERY PERCENTAGE */
+
+.support-category-pie-label:first-child
+.support-category-pie-percent {
+
+    font-size: 30px;
+
+    color: #f97316;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .support-category-pie-content {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .support-category-pie-labels {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .support-category-pie-label:first-child {
+
+        grid-column: auto;
+
+    }
+
+}
+/* =====================================================
+   ELECTROMART SUPPORT CATEGORY - EXACT LAYOUT
+   2D PIE + CATEGORY LIST + STATUS PANEL
+===================================================== */
+
+
+/* MAIN CONTAINER */
+
+.support-category-pie-dashboard {
+    width: 100%;
+    margin: 25px 0;
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.08);
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.support-category-pie-header {
+    margin-bottom: 25px;
+}
+
+.support-category-pie-header h2 {
+    margin: 0;
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    color: #0f172a;
+}
+
+.support-category-pie-header p {
+    margin: 6px 0 0;
+
+    font-size: 16px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   THREE COLUMN LAYOUT
+===================================================== */
+
+.support-category-pie-content {
+
+    display: grid;
+
+    grid-template-columns:
+        43%
+        21%
+        36%;
+
+    align-items: center;
+
+    gap: 20px;
+
+    min-height: 500px;
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   LEFT PIE AREA
+===================================================== */
+
+.support-category-pie-area {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   SOLID 2D PIE
+===================================================== */
+
+.support-category-pie {
+
+    position: relative;
+
+    width: 355px;
+
+    height: 355px;
+
+    max-width: 100%;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.15);
+}
+
+
+/* =====================================================
+   PIE PERCENTAGES
+===================================================== */
+
+.support-category-percentage {
+
+    position: absolute;
+
+    transform:
+        translate(-50%, -50%);
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.45);
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
+    z-index: 5;
+}
+
+
+/* =====================================================
+   CENTER CATEGORY LIST
+===================================================== */
+
+.support-category-pie-labels {
+
+    width: 100%;
+
+    max-width: 200px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    justify-self: center;
+}
+
+
+/* =====================================================
+   CATEGORY CARD
+===================================================== */
+
+.support-category-pie-label {
+
+    width: 100%;
+
+    min-height: 102px;
+
+    padding: 14px 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ec;
+
+    border-radius: 12px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.support-category-pie-label:hover {
+
+    transform: translateX(4px);
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =====================================================
+   SELECTED CATEGORY
+===================================================== */
+
+.support-category-pie-label.selected {
+
+    border: 2px solid #2563eb;
+
+    background: #eff6ff;
+
+    transform: translateX(4px);
+}
+
+
+/* =====================================================
+   LEFT PART OF CATEGORY
+===================================================== */
+
+.support-category-pie-label-left {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+/* =====================================================
+   COLOR DOT
+===================================================== */
+
+.support-category-pie-dot {
+
+    width: 12px;
+
+    height: 12px;
+
+    min-width: 12px;
+
+    margin-top: 5px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+
+/* =====================================================
+   CATEGORY NAME
+===================================================== */
+
+.support-category-pie-name {
+
+    display: block;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    color: #334155;
+
+    word-break: normal;
+}
+
+
+/* =====================================================
+   TICKET COUNT
+===================================================== */
+
+.support-category-pie-count {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 12px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   CLICK TEXT
+===================================================== */
+
+.support-category-click-text {
+
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    line-height: 1.1;
+
+    color: #2563eb;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   PERCENTAGE
+===================================================== */
+
+.support-category-pie-percent {
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    line-height: 1;
+}
+
+
+/* =====================================================
+   CATEGORY COLORS
+===================================================== */
+
+.category-delivery {
+    background: #f97316;
+}
+
+.category-payment {
+    background: #2563eb;
+}
+
+.category-return {
+    background: #16a34a;
+}
+
+.category-refund {
+    background: #9333ea;
+}
+
+.category-complaint {
+    background: #ef4444;
+}
+
+
+/* =====================================================
+   PERCENTAGE COLORS
+===================================================== */
+
+.support-category-pie-label:nth-child(1)
+.support-category-pie-percent {
+    color: #f97316;
+}
+
+.support-category-pie-label:nth-child(2)
+.support-category-pie-percent {
+    color: #2563eb;
+}
+
+.support-category-pie-label:nth-child(3)
+.support-category-pie-percent {
+    color: #16a34a;
+}
+
+.support-category-pie-label:nth-child(4)
+.support-category-pie-percent {
+    color: #9333ea;
+}
+
+.support-category-pie-label:nth-child(5)
+.support-category-pie-percent {
+    color: #ef4444;
+}
+
+
+/* =====================================================
+   REMOVE OLD FULL WIDTH DELIVERY RULE
+===================================================== */
+
+.support-category-pie-label:first-child {
+
+    grid-column: auto !important;
+
+    min-height: 102px !important;
+
+    padding: 14px 15px !important;
+
+    background: #f8fafc !important;
+
+    border: 1px solid #dbe3ec !important;
+}
+
+
+/* =====================================================
+   DELIVERY PERCENTAGE
+===================================================== */
+
+.support-category-pie-label:first-child
+.support-category-pie-percent {
+
+    font-size: 18px !important;
+
+    color: #f97316 !important;
+}
+
+
+/* =====================================================
+   RIGHT STATUS PANEL
+===================================================== */
+
+.support-category-status-details {
+
+    width: 100%;
+
+    min-height: 155px;
+
+    padding: 25px;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ec;
+
+    border-radius: 16px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: 0.25s ease;
+}
+
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.support-category-status-placeholder {
+
+    width: 100%;
+
+    text-align: center;
+
+    color: #64748b;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+}
+
+
+.support-placeholder-icon {
+
+    font-size: 22px;
+
+    margin-bottom: 5px;
+}
+
+
+.support-category-status-placeholder strong {
+
+    font-size: 16px;
+
+    color: #64748b;
+}
+
+
+.support-category-status-placeholder span {
+
+    font-size: 15px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   STATUS HEADER
+===================================================== */
+
+.support-category-status-header {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+
+.support-category-status-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.support-category-status-title h3 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+    color: #0f172a;
+}
+
+
+.support-category-status-title p {
+
+    margin: 4px 0 0;
+
+    font-size: 12px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   STATUS TOTAL
+===================================================== */
+
+.support-category-status-total {
+
+    padding: 10px 15px;
+
+    background: #ffffff;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+
+.support-category-status-total strong {
+
+    display: block;
+
+    font-size: 22px;
+
+    color: #2563eb;
+}
+
+
+.support-category-status-total span {
+
+    font-size: 11px;
+
+    color: #64748b;
+}
+
+
+/* =====================================================
+   STATUS GRID
+===================================================== */
+
+.support-category-status-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+
+/* =====================================================
+   STATUS CARD
+===================================================== */
+
+.support-category-status-card {
+
+    padding: 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1200px) {
+
+    .support-category-pie-content {
+
+        grid-template-columns:
+            42%
+            23%
+            35%;
+
+        gap: 15px;
+    }
+
+    .support-category-pie {
+
+        width: 300px;
+
+        height: 300px;
+    }
+
+    .support-category-pie-labels {
+
+        max-width: 190px;
+    }
+
+}
+
+
+@media (max-width: 950px) {
+
+    .support-category-pie-content {
+
+        grid-template-columns: 1fr 1fr;
+
+        align-items: start;
+    }
+
+    .support-category-pie-area {
+
+        grid-row: span 2;
+    }
+
+    .support-category-status-details {
+
+        min-height: 200px;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .support-category-pie-content {
+
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+    }
+
+    .support-category-pie-area {
+
+        grid-row: auto;
+    }
+
+    .support-category-pie {
+
+        width: 290px;
+
+        height: 290px;
+    }
+
+    .support-category-pie-labels {
+
+        max-width: 100%;
+
+        width: 100%;
+    }
+
+    .support-category-status-details {
+
+        min-height: 180px;
+    }
+
+}
+/* =====================================================
+   SALES PAGE
+===================================================== */
+
+.sales-summary {
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    padding: 30px;
+
+    margin-top: 20px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+}
+
+
+.sales-summary h3 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+    color: #111827;
+
+}
+
+
+.sales-total {
+
+    font-size: 42px;
+
+    font-weight: 800;
+
+    color: #16a34a;
+
+    margin-top: 10px;
+
+}
+
+
+.monthly-sales-container {
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    padding: 30px;
+
+    margin-top: 25px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08);
+
+}
+
+
+.monthly-sales-header {
+
+    margin-bottom: 25px;
+
+}
+
+
+.monthly-sales-header h2 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+    color: #111827;
+
+}
+
+
+.monthly-sales-header p {
+
+    margin-top: 6px;
+
+    color: #64748b;
+
+}
+
+
+/* =====================================================
+   BAR CHART
+===================================================== */
+
+.monthly-sales-chart {
+
+    height: 350px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 15px;
+
+    padding: 20px 10px 0;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+
+.monthly-sales-bar {
+
+    flex: 1;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    min-width: 45px;
+
+}
+
+
+.monthly-sales-value {
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #334155;
+
+    margin-bottom: 6px;
+
+    text-align: center;
+
+}
+
+
+.monthly-sales-bar-area {
+
+    height: 240px;
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+}
+
+
+.monthly-sales-bar-fill {
+
+    width: 70%;
+
+    min-height: 2px;
+
+    background: #2563eb;
+
+    border-radius:
+        7px 7px 0 0;
+
+    transition:
+        height 0.5s ease;
+
+}
+
+
+.monthly-sales-bar-fill:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+.monthly-sales-month {
+
+    margin-top: 10px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #475569;
+
+}
+
+
+/* =====================================================
+   SALES TABLE
+===================================================== */
+
+.monthly-sales-table-wrapper {
+
+    margin-top: 30px;
+
+    overflow-x: auto;
+
+}
+
+
+.monthly-sales-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.monthly-sales-table th {
+
+    background: #f1f5f9;
+
+    padding: 14px;
+
+    text-align: left;
+
+    color: #334155;
+
+}
+
+
+.monthly-sales-table td {
+
+    padding: 14px;
+
+    border-bottom:
+        1px solid #e5e7eb;
+
+    color: #475569;
+
+}
+
+
+.monthly-sales-table td:last-child {
+
+    font-weight: 700;
+
+    color: #16a34a;
+
+}
+
+
+@media (max-width: 768px) {
+
+    .monthly-sales-chart {
+
+        gap: 6px;
+
+        padding-left: 2px;
+
+        padding-right: 2px;
+
+    }
+
+
+    .monthly-sales-value {
+
+        font-size: 9px;
+
+    }
+
+
+    .monthly-sales-month {
+
+        font-size: 10px;
+
+    }
+
+}

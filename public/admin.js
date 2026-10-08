@@ -5,6 +5,12 @@
 
 console.log("admin.js loaded successfully");
 /* =====================================================
+   GLOBAL CUSTOMER SUPPORT DATA
+===================================================== */
+
+window.allSupportRequests = [];
+window.currentSupportFilter = "all";
+/* =====================================================
    SEND NOTIFICATION TO CUSTOMER
 ===================================================== */
 
@@ -283,6 +289,29 @@ async function loadDashboard() {
                 data.stats.totalUsers || 0;
 
         }
+
+  const salesElement =
+    document.getElementById("salesPageTotal");
+
+  if (salesElement) {
+
+            salesElement.textContent =
+                "₹" +
+                Number(
+                    data.stats.totalSales || 0
+                ).toLocaleString(
+                    "en-IN",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+         console.log(
+            "Total Sales:",
+            data.stats.totalSales
+        );
 
     } catch (error) {
 
@@ -996,6 +1025,102 @@ async function deleteProduct(id) {
     }
 
 }
+/* =====================================================
+   SALES
+===================================================== */
+
+async function loadSales() {
+
+    console.log("Loading Sales...");
+
+    const salesTotalElement =
+        document.getElementById("salesPageTotal");
+
+    if (!salesTotalElement) {
+        console.error(
+            "salesPageTotal element not found."
+        );
+        return;
+    }
+
+    try {
+
+        const currentYear =
+            new Date().getFullYear();
+
+        const response =
+            await fetch(
+                `/api/admin/sales?year=${currentYear}`,
+                {
+                    credentials: "include"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        console.log(
+            "Sales API response:",
+            data
+        );
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            salesTotalElement.textContent =
+                "₹0.00";
+
+            return;
+        }
+
+        let totalSales = 0;
+
+        if (Array.isArray(data.sales)) {
+
+            data.sales.forEach(
+                function (sale) {
+
+                    totalSales +=
+                        Number(
+                            sale.total
+                        ) || 0;
+
+                }
+            );
+
+        }
+
+        salesTotalElement.textContent =
+            "₹" +
+            totalSales.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+        renderMonthlySales(
+            data.sales || [],
+            data.year
+        );
+
+    } catch (error) {
+
+        console.error(
+            "SALES ERROR:",
+            error
+        );
+
+        salesTotalElement.textContent =
+            "₹0.00";
+
+    }
+
+}
+
 
 
 /* =====================================================
@@ -2867,8 +2992,6 @@ async function loadSupportRequests() {
    CUSTOMER SUPPORT - STATUS FILTER
 ===================================================== */
 
-let allSupportRequests = [];
-let currentSupportFilter = "all";
 
 
 function updateSupportCounts(requests) {
@@ -3071,22 +3194,34 @@ function filterSupportRequests(filter) {
                 : Array.isArray(data.requests)
                     ? data.requests
                     : [];
-allSupportRequests = requests;
+window.allSupportRequests = requests;
+
 
 /* UPDATE SUPPORT TYPES BAR GRAPH */
-updateSupportTypesChart(requests);
 
-renderSupportRequests(requests);
- return; 
+updateSupportTypesChart(
+    requests
+);
+
+
+/* UPDATE NEW CATEGORY PIE CHART */
+
+updateSupportCategoryPieChart(
+    requests
+);
+/* UPDATE SUPPORT COUNTS */
+
 updateSupportCounts(
     requests
 );
 
-renderSupportRequests(
+
+/* RENDER SUPPORT TABLE */
+
+window.renderSupportRequests(
     requests
-); 
-      /* UPDATE SUPPORT COUNTS */
-     updateSupportCounts(requests);                
+);
+               
 
         if (requests.length === 0) {
 
@@ -3645,12 +3780,11 @@ function showAdminSection(sectionName) {
         loadOrders();
 
     }
+   else if (sectionName === "sales") {
 
-    else if (sectionName === "sales") {
+    loadDashboard();
 
-        loadDashboard();
-
-    }
+}
 
     else if (sectionName === "support") {
 
@@ -3758,6 +3892,11 @@ function showAdminSection(sectionName) {
         loadSupportRequests();
 
     }
+    else if (sectionName === "reviews") {
+
+    loadReviews();
+
+}
 
 }
 /* =========================================
@@ -4737,151 +4876,206 @@ async function updateSupportRequest(
    /* =====================================================
    SUPPORT TABLE FILTER
 ===================================================== */
+/* =====================================================
+   SUPPORT CARD FILTER
+   SHOW SUPPORT TABLE
+===================================================== */
 
 function filterSupportRequests(filter) {
 
-    const rows =
-        document.querySelectorAll(
-            "#supportAdminTable .support-table-row"
-        );
+    console.log(
+        "Support filter clicked:",
+        filter
+    );
 
+    window.currentSupportFilter = filter;
 
-    const filterCards =
+    /* Get all support requests */
+    const allRequests =
+        Array.isArray(window.allSupportRequests)
+            ? window.allSupportRequests
+            : [];
+
+    console.log(
+        "Available support requests:",
+        allRequests
+    );
+
+    /* =========================================
+       FILTER REQUESTS
+    ========================================= */
+
+    let filteredRequests = [];
+
+    if (filter === "all") {
+
+        filteredRequests =
+            allRequests;
+
+    }
+
+    else if (filter === "pending") {
+
+        filteredRequests =
+            allRequests.filter(function(request) {
+
+                const status =
+                    String(
+                        request.status || "Open"
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                return (
+                    status === "open" ||
+                    status === "pending"
+                );
+
+            });
+
+    }
+
+    else if (filter === "in progress") {
+
+        filteredRequests =
+            allRequests.filter(function(request) {
+
+                const status =
+                    String(
+                        request.status || "Open"
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                return (
+                    status === "in progress" ||
+                    status === "processing"
+                );
+
+            });
+
+    }
+
+    else if (filter === "solved") {
+
+        filteredRequests =
+            allRequests.filter(function(request) {
+
+                const status =
+                    String(
+                        request.status || "Open"
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                return (
+                    status === "solved" ||
+                    status === "resolved"
+                );
+
+            });
+
+    }
+
+    else if (filter === "closed") {
+
+        filteredRequests =
+            allRequests.filter(function(request) {
+
+                const status =
+                    String(
+                        request.status || "Open"
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                return status === "closed";
+
+            });
+
+    }
+
+    /* =========================================
+       ACTIVE CARD
+    ========================================= */
+
+    document
+        .querySelectorAll(".support-filter-card")
+        .forEach(function(card) {
+
+            card.classList.remove("active");
+
+        });
+
+    const cardMap = {
+        "all": 0,
+        "pending": 1,
+        "in progress": 2,
+        "solved": 3,
+        "closed": 4
+    };
+
+    const cards =
         document.querySelectorAll(
             ".support-filter-card"
         );
 
+    if (cards[cardMap[filter]]) {
 
-    /* Remove active */
-
-    filterCards.forEach(function(card) {
-
-        card.classList.remove("active");
-
-    });
-
-
-    /* Activate selected card */
-
-    const cardIndex = {
-
-        all: 0,
-
-        pending: 1,
-
-        "in progress": 2,
-
-        solved: 3,
-
-        closed: 4
-
-    };
-
-
-    if (
-        filterCards[cardIndex[filter]]
-    ) {
-
-        filterCards[
-            cardIndex[filter]
+        cards[
+            cardMap[filter]
         ].classList.add("active");
 
     }
 
+    /* =========================================
+       SHOW TABLE
+    ========================================= */
 
-    /* =================================================
-       FILTER TABLE ROWS
-    ================================================= */
+    if (
+        typeof window.renderSupportRequests ===
+        "function"
+    ) {
 
-    rows.forEach(function(row) {
+        window.renderSupportRequests(
+            filteredRequests
+        );
 
-        const status =
-            String(
-                row.dataset.supportStatus ||
-                ""
-            )
-            .trim()
-            .toLowerCase();
+    }
 
+    else {
 
-        let show = false;
+        console.error(
+            "renderSupportRequests function not found"
+        );
 
+        return;
 
-        /* TOTAL */
+    }
 
-        if (filter === "all") {
+    /* =========================================
+       SCROLL TO TABLE
+    ========================================= */
 
-            show = true;
-
-        }
-
-
-        /* PENDING */
-
-        else if (filter === "pending") {
-
-            show =
-                status === "open" ||
-                status === "pending";
-
-        }
-
-
-        /* IN PROGRESS */
-
-        else if (
-            filter === "in progress"
-        ) {
-
-            show =
-                status === "in progress" ||
-                status === "processing";
-
-        }
-
-
-        /* SOLVED */
-
-        else if (filter === "solved") {
-
-            show =
-                status === "solved" ||
-                status === "resolved";
-
-        }
-
-
-        /* CLOSED */
-
-        else if (filter === "closed") {
-
-            show =
-                status === "closed";
-
-        }
-
-
-        row.style.display =
-            show ? "" : "none";
-
-    });
-
-}
-    /* Scroll to tickets */
-
-    const supportTable =
+    const table =
         document.getElementById(
             "supportAdminTable"
         );
 
-    if (supportTable) {
+    if (table) {
 
-        supportTable.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+        setTimeout(function() {
+
+            table.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 100);
 
     }
+
+}
     /* =====================================================
    UPDATE SUPPORT STATUS DIRECTLY FROM TABLE
 ===================================================== */
@@ -7551,4 +7745,1664 @@ function updateSupportTypesChart(requests) {
         </div>
 
     `;
+}
+/* =====================================================
+   CUSTOMER REVIEWS
+===================================================== */
+
+async function loadReviews() {
+
+    const table =
+        document.getElementById(
+            "reviewsTableBody"
+        );
+
+    if (!table) {
+        return;
+    }
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td colspan="5"
+                style="text-align:center;">
+
+                Loading reviews...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        /*
+         * The existing /api/products endpoint
+         * already returns:
+         *
+         * average_rating
+         * review_count
+         */
+
+        const response =
+            await fetch(
+                "/api/products",
+                {
+                    credentials: "include"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load reviews."
+            );
+
+        }
+
+
+        const products =
+            Array.isArray(
+                data.products
+            )
+                ? data.products
+                : [];
+
+
+        /* =========================================
+           SUMMARY
+        ========================================= */
+
+        const totalReviews =
+            products.reduce(
+                function(total, product) {
+
+                    return total +
+                        Number(
+                            product.review_count || 0
+                        );
+
+                },
+                0
+            );
+
+
+        const productsReviewed =
+            products.filter(
+                function(product) {
+
+                    return Number(
+                        product.review_count || 0
+                    ) > 0;
+
+                }
+            ).length;
+
+
+        const customersReviewed =
+            totalReviews;
+
+
+        let ratingTotal = 0;
+
+        let ratingCount = 0;
+
+
+        products.forEach(
+            function(product) {
+
+                const reviewCount =
+                    Number(
+                        product.review_count || 0
+                    );
+
+                const rating =
+                    Number(
+                        product.average_rating || 0
+                    );
+
+
+                if (
+                    reviewCount > 0
+                ) {
+
+                    ratingTotal +=
+                        rating *
+                        reviewCount;
+
+                    ratingCount +=
+                        reviewCount;
+
+                }
+
+            }
+        );
+
+
+        const overallRating =
+            ratingCount > 0
+                ? (
+                    ratingTotal /
+                    ratingCount
+                ).toFixed(1)
+                : "0.0";
+
+
+        document.getElementById(
+            "totalReviews"
+        ).textContent =
+            totalReviews;
+
+
+        document.getElementById(
+            "reviewCustomers"
+        ).textContent =
+            customersReviewed;
+
+
+        document.getElementById(
+            "reviewedProducts"
+        ).textContent =
+            productsReviewed;
+
+
+        document.getElementById(
+            "overallRating"
+        ).textContent =
+            `${overallRating} ⭐`;
+
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        if (products.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        style="text-align:center;">
+
+                        No products found.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+        }
+
+
+        table.innerHTML =
+            products
+                .map(
+                    function(product) {
+
+                        const count =
+                            Number(
+                                product.review_count || 0
+                            );
+
+
+                        const rating =
+                            Number(
+                                product.average_rating || 0
+                            );
+
+
+                        return `
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+
+                                        ${escapeHTML(
+                                            product.icon || "📦"
+                                        )}
+
+                                        ${escapeHTML(
+                                            product.name || "Product"
+                                        )}
+
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    ${count}
+
+                                </td>
+
+
+                                <td>
+
+                                    ${count}
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="review-stars">
+
+                                        ${createReviewStars(
+                                            rating
+                                        )}
+
+                                    </span>
+
+                                    <strong>
+
+                                        ${rating.toFixed(1)}
+
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    ${
+                                        count > 0
+
+                                        ? `
+
+                                            <button
+                                                type="button"
+                                                class="view-review-btn"
+                                                onclick="viewProductReviews(${Number(product.id)}, '${escapeHTML(product.name || "")}')">
+
+                                                👁 View Reviews
+
+                                            </button>
+
+                                        `
+
+                                        : `
+
+                                            <span
+                                                class="no-review-text">
+
+                                                No Reviews
+
+                                            </span>
+
+                                        `
+                                    }
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "LOAD REVIEWS ERROR:",
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    style="
+                        text-align:center;
+                        color:red;
+                    ">
+
+                    Unable to load reviews.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   CREATE STAR DISPLAY
+===================================================== */
+
+function createReviewStars(
+    rating
+) {
+
+    let stars = "";
+
+
+    for (
+        let i = 1;
+        i <= 5;
+        i++
+    ) {
+
+        stars +=
+            i <=
+            Math.round(
+                Number(rating)
+            )
+                ? "★"
+                : "☆";
+
+    }
+
+
+    return stars;
+}
+
+
+/* =====================================================
+   VIEW PRODUCT REVIEWS
+===================================================== */
+
+async function viewProductReviews(
+    productId,
+    productName
+) {
+
+    const container =
+        document.getElementById(
+            "reviewDetails"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.classList.remove(
+        "hidden"
+    );
+
+
+    container.innerHTML = `
+
+        <div
+            class="review-details-header">
+
+            <div>
+
+                <h2>
+                    ⭐ ${escapeHTML(
+                        productName ||
+                        "Product"
+                    )}
+                </h2>
+
+                <p>
+                    Customer Reviews
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="close-review-details"
+                onclick="closeReviewDetails()">
+
+                ✕ Close
+
+            </button>
+
+        </div>
+
+
+        <div class="review-details-body">
+
+            Loading customer reviews...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/products/${productId}/reviews`,
+                {
+                    credentials: "include"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load product reviews."
+            );
+
+        }
+
+
+        const reviews =
+            Array.isArray(
+                data.reviews
+            )
+                ? data.reviews
+                : [];
+
+
+        const body =
+            container.querySelector(
+                ".review-details-body"
+            );
+
+
+        if (
+            reviews.length === 0
+        ) {
+
+            body.innerHTML = `
+
+                <div
+                    class="no-reviews-admin">
+
+                    ⭐ No customer reviews yet.
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        body.innerHTML =
+            reviews
+                .map(
+                    function(review) {
+
+                        const rating =
+                            Number(
+                                review.rating || 0
+                            );
+
+
+                        const date =
+                            review.created_at
+                                ? new Date(
+                                    review.created_at
+                                ).toLocaleString(
+                                    "en-IN"
+                                )
+                                : "";
+
+
+                        return `
+
+                            <div
+                                class="admin-review-card">
+
+                                <div
+                                    class="admin-review-top">
+
+                                    <div>
+
+                                        <strong>
+
+                                            👤 ${escapeHTML(
+                                                review.customer_name ||
+                                                "Customer"
+                                            )}
+
+                                        </strong>
+
+                                        <div
+                                            class="review-stars">
+
+                                            ${createReviewStars(
+                                                rating
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span
+                                        class="review-date">
+
+                                        ${escapeHTML(
+                                            date
+                                        )}
+
+                                    </span>
+
+                                </div>
+
+
+                                <p>
+
+                                    ${escapeHTML(
+                                        review.review ||
+                                        "No written review."
+                                    )}
+
+                                </p>
+
+
+                            </div>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "VIEW PRODUCT REVIEWS ERROR:",
+            error
+        );
+
+
+        const body =
+            container.querySelector(
+                ".review-details-body"
+            );
+
+
+        if (body) {
+
+            body.innerHTML = `
+
+                <div
+                    class="no-reviews-admin">
+
+                    Unable to load customer reviews.
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   CLOSE REVIEW DETAILS
+===================================================== */
+
+function closeReviewDetails() {
+
+    const container =
+        document.getElementById(
+            "reviewDetails"
+        );
+
+
+    if (container) {
+
+        container.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+/* =====================================================
+   SUPPORT CATEGORY 2D PIE CHART
+===================================================== */
+
+function updateSupportCategoryPieChart(requests) {
+
+    const pie =
+        document.getElementById(
+            "supportCategoryPieChart"
+        );
+
+    const labels =
+        document.getElementById(
+            "supportCategoryPieLabels"
+        );
+
+
+    if (!pie || !labels) {
+
+        console.log(
+            "Support category pie chart not found."
+        );
+
+        return;
+    }
+
+
+    if (!Array.isArray(requests)) {
+
+        requests = [];
+
+    }
+
+
+    /* =================================================
+       EXACT 5 CATEGORIES
+    ================================================= */
+
+    const categories = {
+
+        "Delivery Issue": 0,
+
+        "Payment Issue": 0,
+
+        "Return Product": 0,
+
+        "Refund Request": 0,
+
+        "Complaint": 0
+
+    };
+
+
+    /* =================================================
+       COUNT SUPPORT REQUESTS
+    ================================================= */
+
+    requests.forEach(function(request) {
+
+        const type = String(
+
+            request.issue_type ||
+
+            request.category ||
+
+            ""
+
+        )
+        .trim()
+        .toLowerCase();
+
+
+        /* DELIVERY */
+
+        if (
+            type.includes("delivery")
+        ) {
+
+            categories[
+                "Delivery Issue"
+            ]++;
+
+        }
+
+
+        /* PAYMENT */
+
+        else if (
+            type.includes("payment")
+        ) {
+
+            categories[
+                "Payment Issue"
+            ]++;
+
+        }
+
+
+        /* RETURN */
+
+        else if (
+            type.includes("return") ||
+            type.includes("exchange")
+        ) {
+
+            categories[
+                "Return Product"
+            ]++;
+
+        }
+
+
+        /* REFUND */
+
+        else if (
+            type.includes("refund")
+        ) {
+
+            categories[
+                "Refund Request"
+            ]++;
+
+        }
+
+
+        /* COMPLAINT */
+
+        else {
+
+            categories[
+                "Complaint"
+            ]++;
+
+        }
+
+    });
+
+
+    /* =================================================
+       TOTAL
+    ================================================= */
+
+    const total =
+        Object.values(categories)
+            .reduce(
+                function(sum, value) {
+
+                    return sum + value;
+
+                },
+                0
+            );
+
+
+    /* =================================================
+       NO DATA
+    ================================================= */
+
+    if (total === 0) {
+
+        pie.style.background =
+            "#e5e7eb";
+
+        pie.innerHTML = `
+            <span
+                style="
+                    position:absolute;
+                    inset:0;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    color:#64748b;
+                    font-weight:700;
+                "
+            >
+                No Support Tickets
+            </span>
+        `;
+
+        labels.innerHTML = "";
+
+        return;
+    }
+
+
+    /* =================================================
+       COLORS
+    ================================================= */
+
+    const colors = {
+
+        "Delivery Issue":
+            "#f97316",
+
+        "Payment Issue":
+            "#2563eb",
+
+        "Return Product":
+            "#16a34a",
+
+        "Refund Request":
+            "#9333ea",
+
+        "Complaint":
+            "#ef4444"
+
+    };
+
+
+    /* =================================================
+       CALCULATE PERCENTAGES
+    ================================================= */
+
+    const data = Object.entries(
+        categories
+    ).map(function([name, count]) {
+
+        return {
+
+            name: name,
+
+            count: count,
+
+            percent:
+                (count / total) * 100
+
+        };
+
+    });
+
+
+    /* =================================================
+       CREATE CONIC GRADIENT
+    ================================================= */
+
+    let currentDegree = 0;
+
+    const gradientParts = [];
+
+
+    data.forEach(function(item) {
+
+        const start =
+            currentDegree;
+
+        const degree =
+            item.percent * 3.6;
+
+        const end =
+            currentDegree + degree;
+
+
+        gradientParts.push(
+
+            `${colors[item.name]} ${start}deg ${end}deg`
+
+        );
+
+
+        currentDegree = end;
+
+    });
+
+
+    pie.style.background =
+        `conic-gradient(${gradientParts.join(",")})`;
+
+
+    /* =================================================
+       REMOVE OLD PERCENTAGE LABELS
+    ================================================= */
+
+    pie.innerHTML = "";
+
+
+    /* =================================================
+       CREATE PERCENTAGE LABELS
+    ================================================= */
+
+    let accumulatedPercent = 0;
+
+
+    data.forEach(function(item) {
+
+        if (item.percent <= 0) {
+
+            return;
+
+        }
+
+
+        const middlePercent =
+            accumulatedPercent +
+            (item.percent / 2);
+
+
+        const angle =
+            (middlePercent * 3.6) -
+            90;
+
+
+        const radians =
+            angle *
+            Math.PI /
+            180;
+
+
+        const radius = 105;
+
+
+        const x =
+            50 +
+            (
+                Math.cos(radians) *
+                radius /
+                165 *
+                50
+            );
+
+
+        const y =
+            50 +
+            (
+                Math.sin(radians) *
+                radius /
+                165 *
+                50
+            );
+
+
+        const percentage =
+            document.createElement(
+                "span"
+            );
+
+
+        percentage.className =
+            "support-category-percentage";
+
+
+        percentage.textContent =
+            `${item.percent.toFixed(1)}%`;
+
+
+        percentage.style.left =
+            `${x}%`;
+
+
+        percentage.style.top =
+            `${y}%`;
+
+
+        pie.appendChild(
+            percentage
+        );
+
+
+        accumulatedPercent +=
+            item.percent;
+
+    });
+
+
+    /* =================================================
+       CREATE LEGEND
+    ================================================= */
+/* =====================================================
+   CREATE CATEGORY BOXES
+===================================================== */
+/* =====================================================
+   CREATE CLICKABLE CATEGORY LIST
+===================================================== */
+
+labels.innerHTML = data.map(function(item) {
+
+    let dotClass = "";
+
+
+    /* DELIVERY */
+
+    if (item.name === "Delivery Issue") {
+
+        dotClass = "category-delivery";
+
+    }
+
+
+    /* PAYMENT */
+
+    else if (item.name === "Payment Issue") {
+
+        dotClass = "category-payment";
+
+    }
+
+
+    /* RETURN */
+
+    else if (item.name === "Return Product") {
+
+        dotClass = "category-return";
+
+    }
+
+
+    /* REFUND */
+
+    else if (item.name === "Refund Request") {
+
+        dotClass = "category-refund";
+
+    }
+
+
+    /* COMPLAINT */
+
+    else {
+
+        dotClass = "category-complaint";
+
+    }
+
+
+    return `
+
+        <div
+            class="support-category-pie-label"
+            onclick="showSupportCategoryStatus(
+                '${item.name.replace(/'/g, "\\'")}'
+            )"
+            title="Click to view status distribution"
+        >
+
+            <div
+                class="support-category-pie-label-left"
+            >
+
+                <span
+                    class="
+                        support-category-pie-dot
+                        ${dotClass}
+                    "
+                ></span>
+
+
+                <div>
+
+                    <span
+                        class="support-category-pie-name"
+                    >
+                        ${escapeHTML(item.name)}
+                    </span>
+
+
+                    <span
+                        class="support-category-pie-count"
+                    >
+                        ${item.count}
+                        ticket${item.count === 1 ? "" : "s"}
+                    </span>
+
+
+                    <span
+                        class="support-category-click-text"
+                    >
+                        👆 Click to view status
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <strong
+                class="support-category-pie-percent"
+            >
+                ${item.percent.toFixed(1)}%
+            </strong>
+
+        </div>
+
+    `;
+
+}).join("");
+
+
+    console.log(
+        "Support category pie updated:",
+        categories
+    );
+
+}
+/* =====================================================
+   SHOW CATEGORY STATUS DISTRIBUTION
+===================================================== */
+
+function showSupportCategoryStatus(category) {
+
+    console.log(
+        "Selected support category:",
+        category
+    );
+
+
+    const container =
+        document.getElementById(
+            "supportCategoryStatusDetails"
+        );
+
+
+    if (!container) {
+
+        console.error(
+            "supportCategoryStatusDetails not found."
+        );
+
+        return;
+    }
+
+
+    /* GET ALL SUPPORT REQUESTS */
+
+    const requests =
+        Array.isArray(window.allSupportRequests)
+            ? window.allSupportRequests
+            : [];
+
+
+    /* FILTER SELECTED CATEGORY */
+
+    const categoryRequests =
+        requests.filter(function(request) {
+
+            const type = String(
+
+                request.issue_type ||
+                request.category ||
+                ""
+
+            )
+            .trim()
+            .toLowerCase();
+
+
+            const selected =
+                category
+                    .trim()
+                    .toLowerCase();
+
+
+            if (
+                selected ===
+                "delivery issue"
+            ) {
+
+                return type.includes(
+                    "delivery"
+                );
+
+            }
+
+
+            if (
+                selected ===
+                "payment issue"
+            ) {
+
+                return type.includes(
+                    "payment"
+                );
+
+            }
+
+
+            if (
+                selected ===
+                "return product"
+            ) {
+
+                return (
+                    type.includes("return") ||
+                    type.includes("exchange")
+                );
+
+            }
+
+
+            if (
+                selected ===
+                "refund request"
+            ) {
+
+                return type.includes(
+                    "refund"
+                );
+
+            }
+
+
+            if (
+                selected ===
+                "complaint"
+            ) {
+
+                return (
+                    !type.includes("delivery") &&
+                    !type.includes("payment") &&
+                    !type.includes("return") &&
+                    !type.includes("exchange") &&
+                    !type.includes("refund")
+                );
+
+            }
+
+
+            return false;
+
+        });
+
+
+    /* =================================================
+       COUNT STATUS
+    ================================================= */
+
+    let pending = 0;
+
+    let inProgress = 0;
+
+    let solved = 0;
+
+    let closed = 0;
+
+
+    categoryRequests.forEach(
+        function(request) {
+
+            const status = String(
+
+                request.status ||
+                "Open"
+
+            )
+            .trim()
+            .toLowerCase();
+
+
+            if (
+                status === "open" ||
+                status === "pending"
+            ) {
+
+                pending++;
+
+            }
+
+            else if (
+                status === "in progress" ||
+                status === "processing"
+            ) {
+
+                inProgress++;
+
+            }
+
+            else if (
+                status === "resolved" ||
+                status === "solved"
+            ) {
+
+                solved++;
+
+            }
+
+            else if (
+                status === "closed"
+            ) {
+
+                closed++;
+
+            }
+
+        }
+    );
+
+
+    const total =
+        pending +
+        inProgress +
+        solved +
+        closed;
+
+
+    /* =================================================
+       PERCENTAGES
+    ================================================= */
+
+    function percentage(value) {
+
+        if (total === 0) {
+
+            return "0.0";
+
+        }
+
+        return (
+            (value / total) *
+            100
+        ).toFixed(1);
+
+    }
+
+
+    /* =================================================
+       DISPLAY RESULT
+    ================================================= */
+
+    container.innerHTML = `
+
+        <div class="support-category-status-header">
+
+            <div
+                class="
+                    support-category-status-title
+                "
+            >
+
+                <div>
+
+                    <h3>
+                        📊 ${escapeHTML(category)}
+                    </h3>
+
+                    <p>
+                        Status distribution for this
+                        support category
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                    support-category-status-total
+                "
+            >
+
+                <strong>
+                    ${total}
+                </strong>
+
+                <span>
+                    Total Tickets
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="
+                support-category-status-grid
+            "
+        >
+
+            <!-- PENDING -->
+
+            <div
+                class="
+                    support-category-status-card
+                "
+            >
+
+                <div>
+
+                    <span
+                        class="
+                            support-category-status-dot
+                            status-pending
+                        "
+                    ></span>
+
+                    <span
+                        class="
+                            support-category-status-name
+                        "
+                    >
+                        Pending
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-count
+                    "
+                >
+                    ${pending}
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-percent
+                    "
+                >
+                    ${percentage(pending)}%
+                </div>
+
+            </div>
+
+
+            <!-- IN PROGRESS -->
+
+            <div
+                class="
+                    support-category-status-card
+                "
+            >
+
+                <div>
+
+                    <span
+                        class="
+                            support-category-status-dot
+                            status-progress
+                        "
+                    ></span>
+
+                    <span
+                        class="
+                            support-category-status-name
+                        "
+                    >
+                        In Progress
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-count
+                    "
+                >
+                    ${inProgress}
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-percent
+                    "
+                >
+                    ${percentage(inProgress)}%
+                </div>
+
+            </div>
+
+
+            <!-- SOLVED -->
+
+            <div
+                class="
+                    support-category-status-card
+                "
+            >
+
+                <div>
+
+                    <span
+                        class="
+                            support-category-status-dot
+                            status-solved
+                        "
+                    ></span>
+
+                    <span
+                        class="
+                            support-category-status-name
+                        "
+                    >
+                        Solved
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-count
+                    "
+                >
+                    ${solved}
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-percent
+                    "
+                >
+                    ${percentage(solved)}%
+                </div>
+
+            </div>
+
+
+            <!-- CLOSED -->
+
+            <div
+                class="
+                    support-category-status-card
+                "
+            >
+
+                <div>
+
+                    <span
+                        class="
+                            support-category-status-dot
+                            status-closed
+                        "
+                    ></span>
+
+                    <span
+                        class="
+                            support-category-status-name
+                        "
+                    >
+                        Closed
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-count
+                    "
+                >
+                    ${closed}
+                </div>
+
+
+                <div
+                    class="
+                        support-category-status-percent
+                    "
+                >
+                    ${percentage(closed)}%
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /* SCROLL TO RESULT */
+
+    container.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+
+    /* HIGHLIGHT SELECTED CATEGORY */
+
+    document
+        .querySelectorAll(
+            ".support-category-pie-label"
+        )
+        .forEach(function(element) {
+
+            element.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            ".support-category-pie-label"
+        )
+        .forEach(function(element) {
+
+            const nameElement =
+                element.querySelector(
+                    ".support-category-pie-name"
+                );
+
+
+            if (
+                nameElement &&
+                nameElement.textContent.trim()
+                    === category
+            ) {
+
+                element.classList.add(
+                    "selected"
+                );
+
+            }
+
+        });
+
 }

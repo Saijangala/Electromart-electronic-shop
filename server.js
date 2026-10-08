@@ -1,3 +1,4 @@
+
 const express = require("express");
 const mysql = require("mysql2/promise");
 const bcrypt = require("bcryptjs");
@@ -3347,6 +3348,21 @@ app.get(
         );
     }
 );
+app.get(
+    "/admin-support.html",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "admin-support.html"
+            )
+        );
+
+    }
+);
+
 
 /* ==========================================
    CUSTOMER SUPPORT API
@@ -4623,35 +4639,28 @@ async function startServer() {
 
     await testDatabase();
 
-    app.listen(
-        PORT,
-        () => {
+    app.listen(PORT, () => {
 
-            console.log(
-                "================================"
-            );
+    console.log("");
+    console.log("========================================");
+    console.log("       ELECTROMART SERVER RUNNING");
+    console.log("========================================");
 
-            console.log(
-                "      ELECTROMART SERVER"
-            );
+    console.log("");
+    console.log("🌐 Website:");
+    console.log(`   http://localhost:${PORT}`);
 
-            console.log(
-                "================================"
-            );
+    console.log("");
+    console.log("🔐 Admin Panel:");
+    console.log(`   http://localhost:${PORT}/admin.html`);
 
-            console.log(
-                `Website: http://localhost:${PORT}`
-            );
+    console.log("");
+    console.log("🛟 Customer Support:");
+    console.log(`   http://localhost:${PORT}/admin-support.html`);
 
-            console.log(
-                `Admin: http://localhost:${PORT}/admin.html`
-            );
-
-            console.log(
-                "================================"
-            );
-        }
-    );
+    console.log("");
+    console.log("========================================");
+});
 }
 
 startServer();

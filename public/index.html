@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -344,6 +345,350 @@
 
     <div id="productContainer"
          class="product-grid">
+
+    </div>
+
+</section>
+<!-- =====================================================
+     PRODUCT DETAILS PAGE
+===================================================== -->
+
+<section
+    id="productDetailsPage"
+    class="page hidden">
+
+    <div class="product-details-page">
+
+        <!-- BREADCRUMB -->
+
+        <div class="product-breadcrumb">
+
+            <button
+                type="button"
+                onclick="showPage('products')">
+
+                ← Back to Products
+
+            </button>
+
+            <span>›</span>
+
+            <span id="productDetailsCategory">
+                Electronics
+            </span>
+
+            <span>›</span>
+
+            <strong id="productDetailsBreadcrumbName">
+                Product
+            </strong>
+
+        </div>
+
+
+        <!-- MAIN PRODUCT AREA -->
+
+        <div class="product-details-main">
+
+
+            <!-- =====================================
+                 LEFT IMAGE
+            ====================================== -->
+
+            <div class="product-details-gallery">
+
+                <div
+                    id="productDetailsImage"
+                    class="product-details-image">
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 RIGHT PRODUCT INFORMATION
+            ====================================== -->
+
+            <div class="product-details-info">
+
+                <span
+                    id="productDetailsCategoryBadge"
+                    class="product-details-category">
+                    MOBILE
+                </span>
+
+
+                <h1 id="productDetailsName">
+                    Product Name
+                </h1>
+
+
+                <!-- RATING -->
+
+                <div class="product-details-rating">
+
+                    <span
+                        id="productDetailsStars">
+                        ★★★★★
+                    </span>
+
+                    <strong
+                        id="productDetailsRating">
+                        5.0
+                    </strong>
+
+                    <span>
+                        (
+                        <span id="productDetailsReviewCount">
+                            0
+                        </span>
+                        reviews)
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="productDetailsDescription"
+                    class="product-details-short-description">
+                </div>
+
+
+                <hr>
+
+
+                <!-- PRICE -->
+
+                <div class="product-details-price">
+
+                    ₹<span id="productDetailsPrice">
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="product-details-tax">
+                    Inclusive of applicable taxes
+                </div>
+
+
+                <!-- STOCK -->
+
+                <div
+                    id="productDetailsStock"
+                    class="product-details-stock">
+                </div>
+
+
+                <!-- DELIVERY -->
+
+                <div class="product-delivery-box">
+
+                    <div class="delivery-icon">
+                        🚚
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            FREE Delivery
+                        </strong>
+
+                        <p>
+                            Fast and reliable delivery
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HIGHLIGHTS -->
+
+                <div class="product-highlights-box">
+
+                    <h3>
+                        Product Highlights
+                    </h3>
+
+                    <ul id="productDetailsHighlights">
+                    </ul>
+
+                </div>
+
+
+                <!-- QUANTITY -->
+
+                <div class="product-detail-quantity">
+
+                    <strong>
+                        Quantity:
+                    </strong>
+
+                    <div class="detail-quantity-control">
+
+                        <button
+                            type="button"
+                            onclick="changeDetailQuantity(-1)">
+                            −
+                        </button>
+
+                        <span
+                            id="productDetailQuantity">
+                            1
+                        </span>
+
+                        <button
+                            type="button"
+                            onclick="changeDetailQuantity(1)">
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTION BUTTONS -->
+
+                <div class="product-detail-actions">
+
+                    <button
+                        type="button"
+                        class="detail-add-cart-btn"
+                        onclick="addDetailProductToCart()">
+
+                        🛒 Add to Cart
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="detail-buy-now-btn"
+                        onclick="buyDetailProductNow()">
+
+                        ⚡ Buy Now
+
+                    </button>
+
+                </div>
+
+
+                <!-- WISHLIST / SHARE -->
+
+                <div class="product-detail-secondary-actions">
+
+                    <button
+                        type="button"
+                        onclick="toggleDetailWishlist()">
+
+                        ♡ Add to Wishlist
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        onclick="shareDetailProduct()">
+
+                        ↗ Share Product
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             PRODUCT INFORMATION
+        ====================================== -->
+
+        <div class="product-information-card">
+
+            <div class="product-information-tabs">
+
+                <button class="active">
+                    Product Details
+                </button>
+
+            </div>
+
+
+            <div class="product-information-content">
+
+                <h2>
+                    Product Details
+                </h2>
+
+
+                <div class="product-specification-grid">
+
+                    <div>
+                        <span>Product Name</span>
+                        <strong id="detailSpecName">
+                            -
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Category</span>
+                        <strong id="detailSpecCategory">
+                            -
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Price</span>
+                        <strong id="detailSpecPrice">
+                            -
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Availability</span>
+                        <strong id="detailSpecStock">
+                            -
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Customer Rating</span>
+                        <strong id="detailSpecRating">
+                            -
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Product ID</span>
+                        <strong id="detailSpecId">
+                            -
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <h2 class="detail-description-title">
+                    Product Description
+                </h2>
+
+
+                <p id="productDetailsLongDescription">
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ElectroMart - Customer Support</title>
+
+    <link rel="stylesheet" href="/admin-support.css">
+</head>
+
+
+<body>
+    <!-- =====================================================
+     SUPPORT ADMIN LOGIN
+===================================================== -->
+
+<section
+    id="supportLoginSection"
+    class="support-login-wrapper"
+>
+
+    <div class="support-login-box">
+
+        <h1>
+            ⚡ ElectroMart
+        </h1>
+
+        <p>
+            Customer Support Login
+        </p>
+
+        <form id="supportLoginForm">
+
+            <label>
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="supportAdminEmail"
+                placeholder="Enter admin email"
+                required
+            >
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="supportAdminPassword"
+                placeholder="Enter password"
+                required
+            >
+
+            <button
+                type="submit"
+                class="support-login-btn"
+            >
+                Login to Support Panel
+            </button>
+
+        </form>
+
+        <p
+            id="supportLoginMessage"
+            class="support-login-message"
+        ></p>
+
+    </div>
+
+</section>
+<body>
+<div
+    id="supportDashboard"
+    class="support-app hidden"
+>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="support-sidebar">
+
+       <div class="brand">
+
+    <div class="brand-icon">
+        🎧
+    </div>
+
+    <div>
+        <strong>ElectroMart</strong>
+        <span>Customer Support</span>
+    </div>
+
+</div>
+
+        <nav>
+
+            <a href="/admin.html">
+                📊 Dashboard
+            </a>
+
+            <a href="/admin-support.html" class="active">
+                🛟 Customer Support
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+<button
+    type="button"
+    class="support-logout-btn"
+    onclick="supportAdminLogout()"
+>
+    🚪 Logout
+</button>
+        
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="support-main">
+
+        <!-- HEADER -->
+
+        <header class="support-header">
+
+            <div>
+
+                <h1>Customer Support</h1>
+
+                <p>
+                    Manage customer support requests,
+                    complaints and conversations
+                </p>
+
+            </div>
+
+            <div class="header-actions">
+
+                <button
+                    type="button"
+                    id="refreshBtn">
+                    ↻ Refresh
+                </button>
+
+                <button
+                    type="button"
+                    id="csvBtn">
+                    ⇩ CSV
+                </button>
+
+                <button
+                    type="button"
+                    id="pdfBtn">
+                    ▣ PDF
+                </button>
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="logout-btn">
+                    🚪 Logout
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             SUMMARY CARDS
+        ========================== -->
+
+        <section class="summary-grid">
+    <div
+    class="summary-card total clickable-summary"
+    onclick="showTotalRequests()"
+    title="Click to view all support requests"
+>
+
+    <div class="summary-icon">
+        🎫
+    </div>
+
+    <div>
+
+        <b id="totalCount">0</b>
+
+        <span>
+            Total Requests
+        </span>
+
+        <em id="totalPercent">
+            100%
+        </em>
+
+    </div>
+
+</div>
+
+
+          <div
+    class="summary-card open clickable-summary"
+    onclick="showOpenRequests()"
+    title="Click to view open requests"
+>
+
+    <div class="summary-icon">
+        ◷
+    </div>
+
+    <div>
+
+        <b id="openCount">0</b>
+
+        <span>
+            Open Requests
+        </span>
+
+        <em id="openPercent">
+            0%
+        </em>
+
+    </div>
+
+</div>
+
+
+          <div class="summary-card progress clickable-summary"
+    onclick="showProgressRequests()"
+    title="Click to view in-progress requests"
+>
+
+                <div class="summary-icon">
+                    ↻
+                </div>
+
+                <div>
+
+                    <b id="progressCount">0</b>
+
+                    <span>
+                        In Progress
+                    </span>
+
+                    <em id="progressPercent">
+                        0%
+                    </em>
+
+                </div>
+
+            </div>
+
+
+           <div class="summary-card closed clickable-summary"
+    onclick="showClosedRequests()"
+    title="Click to view closed and resolved requests"
+>
+
+                <div class="summary-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <b id="closedCount">0</b>
+
+                    <span>
+                        Closed / Resolved
+                    </span>
+
+                    <em id="closedPercent">
+                        0%
+                    </em>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SUPPORT TYPES
+        ========================== -->
+
+        <section class="types-section">
+
+            <div class="section-title">
+
+                <h2>
+                    Support Types
+                </h2>
+
+                <span id="lastUpdated">
+                    Loading...
+                </span>
+
+            </div>
+
+            <div
+                class="type-grid"
+                id="typeGrid">
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ANALYTICS
+        ========================== -->
+
+        <section class="support-analytics">
+
+            <!-- STATUS -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-header">
+
+                    <div>
+
+                        <h2>
+                            Support Status Distribution
+                        </h2>
+
+                        <p>
+                            Current support request status
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="pie-chart-area">
+
+                    <canvas
+                        id="supportStatusChart"
+                        width="280"
+                        height="280">
+                    </canvas>
+
+                    <div
+                        id="supportStatusLegend"
+                        class="chart-legend">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-header">
+
+                    <div>
+
+                        <h2>
+                            Support Category Distribution
+                        </h2>
+
+                        <p>
+                            Requests by issue type
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="pie-chart-area">
+
+                    <canvas
+                        id="supportCategoryChart"
+                        width="280"
+                        height="280">
+                    </canvas>
+
+                    <div
+                        id="supportCategoryLegend"
+                        class="chart-legend">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+<!-- =========================================================
+     CATEGORY DETAILS
+========================================================= -->
+
+<section
+    id="categoryDetailsPanel"
+    class="category-details-panel hidden"
+>
+
+    <div class="category-details-header">
+
+        <div>
+
+            <h2 id="categoryDetailsTitle">
+                Support Category
+            </h2>
+
+            <p id="categoryDetailsSubtitle">
+                Support request status breakdown
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            onclick="closeCategoryDetails()"
+            class="category-close-btn"
+        >
+            ✕ Close
+        </button>
+
+    </div>
+
+
+    <!-- STATUS CARDS -->
+
+    <div class="category-status-grid">
+
+
+        <!-- OPEN -->
+
+        <div class="category-status-card open">
+
+            <div class="category-status-icon">
+                ◷
+            </div>
+
+            <div>
+
+                <strong id="categoryOpenCount">
+                    0
+                </strong>
+
+                <span>
+                    Open
+                </span>
+
+                <em id="categoryOpenPercent">
+                    0%
+                </em>
+
+            </div>
+
+        </div>
+
+
+        <!-- IN PROGRESS -->
+
+        <div class="category-status-card progress">
+
+            <div class="category-status-icon">
+                ↻
+            </div>
+
+            <div>
+
+                <strong id="categoryProgressCount">
+                    0
+                </strong>
+
+                <span>
+                    In Progress
+                </span>
+
+                <em id="categoryProgressPercent">
+                    0%
+                </em>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESOLVED -->
+
+        <div class="category-status-card resolved">
+
+            <div class="category-status-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <strong id="categoryResolvedCount">
+                    0
+                </strong>
+
+                <span>
+                    Resolved
+                </span>
+
+                <em id="categoryResolvedPercent">
+                    0%
+                </em>
+
+            </div>
+
+        </div>
+
+
+        <!-- CLOSED -->
+
+        <div class="category-status-card closed">
+
+            <div class="category-status-icon">
+                ✕
+            </div>
+
+            <div>
+
+                <strong id="categoryClosedCount">
+                    0
+                </strong>
+
+                <span>
+                    Closed
+                </span>
+
+                <em id="categoryClosedPercent">
+                    0%
+                </em>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTAL -->
+
+    <div class="category-total-box">
+
+        <strong id="categoryTotalCount">
+            0
+        </strong>
+
+        <span>
+            Total Requests
+        </span>
+
+    </div>
+
+
+    <!-- REQUEST LIST -->
+
+    <div class="category-request-list">
+
+        <div class="category-request-list-header">
+
+            <div>
+
+                <h3>
+                    Category Requests
+                </h3>
+
+                <p id="categoryRequestCount">
+                    0 requests
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Ticket</th>
+
+                        <th>Customer</th>
+
+                        <th>Issue</th>
+
+                        <th>Order</th>
+
+                        <th>Created</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="categoryRequestBody"
+                >
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+        <!-- =========================
+             SUPPORT REQUESTS
+        ========================== -->
+<section
+    class="ticket-section"
+    id="supportRequestsSection"
+>
+
+            <div class="ticket-toolbar">
+
+                <div>
+
+                    <h2>
+                        Support Requests
+                    </h2>
+
+                    <span
+                        id="ticketCountLabel"
+                        class="ticket-count-label">
+                        0 tickets
+                    </span>
+
+                </div>
+
+
+                <div class="toolbar-controls">
+
+                    <button
+                        type="button"
+                        id="allRequestsBtn">
+                        All Requests
+                    </button>
+
+                    <input
+                        id="searchInput"
+                        type="search"
+                        placeholder="Search ticket, customer, order...">
+
+                    <select id="statusFilter">
+
+                        <option value="all">
+                            All Status
+                        </option>
+
+                        <option value="Open">
+                            Open
+                        </option>
+
+                        <option value="In Progress">
+                            In Progress
+                        </option>
+
+                        <option value="Resolved">
+                            Resolved
+                        </option>
+
+                        <option value="Closed">
+                            Closed
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Ticket</th>
+
+                            <th>Customer</th>
+
+                            <th>Issue</th>
+
+                            <th>Order</th>
+
+                            <th>Created</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="ticketBody">
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="loading">
+
+                                Loading support requests...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     TICKET MODAL
+========================== -->
+
+<div
+    class="modal-backdrop"
+    id="ticketModal">
+
+    <div class="ticket-modal">
+
+        <div class="modal-head">
+
+            <div>
+
+                <span id="modalTicket">
+                    Ticket #
+                </span>
+
+                <h2 id="modalSubject">
+                    Support Request
+                </h2>
+
+            </div>
+
+            <button
+                type="button"
+                id="closeModal">
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="ticket-meta"
+            id="modalMeta">
+        </div>
+
+
+        <div class="customer-message">
+
+            <h3>
+                Customer Message
+            </h3>
+
+            <p id="modalMessage">
+            </p>
+
+        </div>
+
+
+        <div
+            id="previousReplyBox"
+            class="previous-reply">
+
+            <h3>
+                Previous Admin Reply
+            </h3>
+
+            <p id="previousReply">
+            </p>
+
+        </div>
+
+
+        <div class="reply-area">
+
+            <label for="adminReply">
+                Admin Reply
+            </label>
+
+            <textarea
+                id="adminReply"
+                rows="6"
+                placeholder="Write your reply to the customer...">
+            </textarea>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <select id="modalStatus">
+
+                <option value="Open">
+                    Open
+                </option>
+
+                <option value="In Progress">
+                    In Progress
+                </option>
+
+                <option value="Resolved">
+                    Resolved
+                </option>
+
+                <option value="Closed">
+                    Closed
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                class="save-btn"
+                id="saveTicket">
+
+                💾 Save Reply & Status
+
+            </button>
+
+        </div>
+
+
+        <div class="quick-status">
+
+            <span>
+                Quick Status:
+            </span>
+
+            <button
+                type="button"
+                data-status="Open">
+                Open
+            </button>
+
+            <button
+                type="button"
+                data-status="In Progress">
+                In Progress
+            </button>
+
+            <button
+                type="button"
+                data-status="Resolved">
+                Resolved
+            </button>
+
+            <button
+                type="button"
+                data-status="Closed">
+                Closed
+            </button>
+
+        </div>
+
+
+        <div class="modal-note">
+
+            Saving updates the customer support
+            ticket in the database.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="/admin-support.js"></script>
+
+</body>
+</html>

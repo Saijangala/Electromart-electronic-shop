@@ -1,3 +1,4 @@
+
 /* =========================================================
    ELECTROMART - CUSTOMER SCRIPT
    ========================================================= */
@@ -55,108 +56,197 @@ document.addEventListener("DOMContentLoaded", async () => {
 /* =========================================================
    PAGE NAVIGATION
    ========================================================= */
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
 
 async function showPage(page) {
 
+    console.log(
+        "SHOW PAGE:",
+        page
+    );
+
     const pages = [
-        "homePage", 
+        "homePage",
         "productsPage",
+        "productDetailsPage",
         "cartPage",
         "ordersPage",
         "wishlistPage",
+        "referralPage",
         "supportPage"
     ];
 
-    pages.forEach(id => {
-        const element = document.getElementById(id);
+    /* =====================================
+       HIDE ALL PAGES
+    ===================================== */
+
+    pages.forEach(function(id) {
+
+        const element =
+            document.getElementById(id);
 
         if (element) {
-            element.classList.add("hidden");
+
+            element.classList.add(
+                "hidden"
+            );
+
         }
+
     });
 
+
+    /* =====================================
+       SHOW SELECTED PAGE
+    ===================================== */
+
     const selectedPage =
-        document.getElementById(page + "Page");
+        document.getElementById(
+            page + "Page"
+        );
 
     if (selectedPage) {
-        selectedPage.classList.remove("hidden");
+
+        selectedPage.classList.remove(
+            "hidden"
+        );
+
+        console.log(
+            "PAGE OPENED:",
+            page + "Page"
+        );
+
+    } else {
+
+        console.error(
+            "PAGE NOT FOUND:",
+            page + "Page"
+        );
+
+        return;
     }
 
-    /* PRODUCTS */
+
+    /* =====================================
+       PRODUCTS
+    ===================================== */
+
     if (page === "products") {
+
         await loadProducts();
+
     }
 
-    /* CART */
+
+    /* =====================================
+       CART
+    ===================================== */
+
     if (page === "cart") {
 
         if (!currentUser) {
+
             openLogin();
+
             return;
         }
 
         await loadCart();
+
         displayCart();
+
     }
 
-    /* ORDERS */
+
+    /* =====================================
+       ORDERS
+    ===================================== */
+
     if (page === "orders") {
 
         if (!currentUser) {
+
             openLogin();
+
             return;
         }
 
         await loadOrders();
+
     }
 
-    /* WISHLIST */
+
+    /* =====================================
+       WISHLIST
+    ===================================== */
+
     if (page === "wishlist") {
 
         if (!currentUser) {
+
             openLogin();
+
             return;
         }
 
         await loadWishlist();
-    }
-    /* REFERRAL */
-
-if (page === "referral") {
-
-    if (!currentUser) {
-
-        openLogin();
-
-        return;
 
     }
 
-    loadReferralPage();
 
-}
+    /* =====================================
+       REFERRAL
+    ===================================== */
 
-    /* SUPPORT */
+    if (page === "referral") {
+
+        if (!currentUser) {
+
+            openLogin();
+
+            return;
+        }
+
+        if (typeof loadReferralPage === "function") {
+
+            loadReferralPage();
+
+        }
+
+    }
+
+
+    /* =====================================
+       SUPPORT
+    ===================================== */
+
     if (page === "support") {
 
         if (!currentUser) {
 
-            alert(
-                "Please login to use Customer Support."
-            );
-
             openLogin();
+
             return;
         }
 
         await loadSupportOrders();
+
         await loadSupportRequests();
+
     }
-   
+
+
+    /* =====================================
+       SCROLL TOP
+    ===================================== */
+
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
+
 }
 
 
@@ -214,20 +304,114 @@ function updateLoginUI() {
     const logoutBtn =
         document.getElementById("logoutBtn");
 
+    const notificationWrapper =
+        document.querySelector(".notification-wrapper");
+
+    /*
+     * All navigation buttons that require login
+     */
+    const protectedNavButtons =
+        document.querySelectorAll(
+            ".navbar nav button:not(#loginBtn):not(#registerBtn):not(#logoutBtn)"
+        );
+
+
+    /* =====================================================
+       LOGGED IN
+    ===================================================== */
+
     if (currentUser) {
 
+        console.log(
+            "USER LOGGED IN - SHOW FULL NAVBAR"
+        );
+
+        /* Hide Login */
         loginBtn?.classList.add("hidden");
+
+        /* Hide Register */
         registerBtn?.classList.add("hidden");
+
+        /* Show Logout */
         logoutBtn?.classList.remove("hidden");
 
-    } else {
 
+        /* Show Home, Products, Cart, Orders,
+           Wishlist, Refer, Support */
+        protectedNavButtons.forEach(
+            function(button) {
+
+                button.classList.remove(
+                    "hidden"
+                );
+
+                button.style.display = "";
+            }
+        );
+
+
+        /* Show Notification */
+        if (notificationWrapper) {
+
+            notificationWrapper.style.display =
+                "inline-block";
+        }
+
+    }
+
+    /* =====================================================
+       LOGGED OUT
+    ===================================================== */
+
+    else {
+
+        console.log(
+            "USER LOGGED OUT - SHOW LOGIN/REGISTER ONLY"
+        );
+
+        /* Show Login */
         loginBtn?.classList.remove("hidden");
+
+        loginBtn?.style.removeProperty(
+            "display"
+        );
+
+
+        /* Show Register */
         registerBtn?.classList.remove("hidden");
+
+        registerBtn?.style.removeProperty(
+            "display"
+        );
+
+
+        /* Hide Logout */
         logoutBtn?.classList.add("hidden");
+
+
+        /* Hide Home, Products, Cart, Orders,
+           Wishlist, Refer, Support */
+        protectedNavButtons.forEach(
+            function(button) {
+
+                button.classList.add(
+                    "hidden"
+                );
+
+                button.style.display =
+                    "none";
+            }
+        );
+
+
+        /* Hide Notification */
+        if (notificationWrapper) {
+
+            notificationWrapper.style.display =
+                "none";
+        }
     }
 }
-
 
 /* =========================================================
    MODALS
@@ -288,24 +472,30 @@ function closeModals() {
 /* =========================================================
    LOGIN
    ========================================================= */
+/* =========================================================
+   LOGIN
+========================================================= */
 
 async function login(event) {
 
     event.preventDefault();
 
-    const email =
-        document
-            .getElementById("loginEmail")
-            .value
-            .trim();
+    console.log("LOGIN BUTTON CLICKED");
 
-    const password =
-        document
-            .getElementById("loginPassword")
-            .value;
+    const emailInput =
+        document.getElementById("loginEmail");
+
+    const passwordInput =
+        document.getElementById("loginPassword");
 
     const message =
         document.getElementById("loginMessage");
+
+    const email =
+        emailInput.value.trim();
+
+    const password =
+        passwordInput.value;
 
     if (!email || !password) {
 
@@ -322,7 +512,12 @@ async function login(event) {
         message.textContent =
             "Logging in...";
 
-        message.style.color = "blue";
+        message.style.color =
+            "#2563eb";
+
+        console.log(
+            "Sending login request..."
+        );
 
         const response =
             await fetch(
@@ -338,48 +533,180 @@ async function login(event) {
                     credentials: "include",
 
                     body: JSON.stringify({
-                        email,
-                        password
+                        email: email,
+                        password: password
                     })
                 }
             );
 
+        console.log(
+            "Login response:",
+            response.status
+        );
+
         const data =
             await response.json();
 
-        if (!response.ok || !data.success) {
+        console.log(
+            "Login data:",
+            data
+        );
+
+        /* =====================================
+           LOGIN FAILED
+        ===================================== */
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
             message.textContent =
                 data.message ||
                 "Invalid email or password.";
 
-            message.style.color = "red";
+            message.style.color =
+                "red";
 
             return;
         }
 
-        currentUser = data.user;
 
-        updateLoginUI();
+        /* =====================================
+           LOGIN SUCCESS
+        ===================================== */
 
-        document
-            .getElementById("loginEmail")
-            .value = "";
+        console.log(
+            "LOGIN SUCCESS"
+        );
 
-        document
-            .getElementById("loginPassword")
-            .value = "";
 
-        closeModals();
+        /* SAVE USER */
 
-        await loadCart();
-        await loadWishlist();
+        currentUser =
+            data.user;
 
-        displayProducts(filteredProducts);
+
+        /* UPDATE LOGIN BUTTONS */
+updateLoginUI();
+
+/* SHOW NAVBAR */
+
+const navbar =
+    document.querySelector(".navbar");
+
+if (navbar) {
+
+    navbar.style.display =
+        "flex";
+}
+
+/* CLOSE LOGIN */
+
+const loginModal =
+    document.getElementById(
+        "loginModal"
+    );
+
+if (loginModal) {
+
+    loginModal.classList.add(
+        "hidden"
+    );
+
+    loginModal.style.display =
+        "none";
+
+    loginModal.style.visibility =
+        "hidden";
+
+    loginModal.style.opacity =
+        "0";
+
+    loginModal.style.pointerEvents =
+        "none";
+}
+
+/* SHOW HOME */
+
+await showPage("home");
+
+        /* =====================================
+           LOAD CART
+        ===================================== */
+
+        try {
+
+            await loadCart();
+
+        } catch (error) {
+
+            console.error(
+                "Cart loading error:",
+                error
+            );
+
+        }
+
+
+        /* =====================================
+           LOAD WISHLIST
+        ===================================== */
+
+        try {
+
+            await loadWishlist();
+
+        } catch (error) {
+
+            console.error(
+                "Wishlist loading error:",
+                error
+            );
+
+        }
+
+
+        /* =====================================
+           START NOTIFICATIONS
+        ===================================== */
+
+        try {
+
+            startNotificationSystem();
+
+        } catch (error) {
+
+            console.error(
+                "Notification error:",
+                error
+            );
+
+        }
+
+
+        /* =====================================
+           CLEAR LOGIN FIELDS
+        ===================================== */
+
+        emailInput.value = "";
+
+        passwordInput.value = "";
+
+
+        /* =====================================
+           SUCCESS MESSAGE
+        ===================================== */
 
         showToast(
-            "Login successful!"
+            "Login successful! Welcome to ElectroMart."
         );
+
+
+        console.log(
+            "ElectroMart UI opened successfully."
+        );
+
 
     } catch (error) {
 
@@ -391,7 +718,8 @@ async function login(event) {
         message.textContent =
             "Unable to connect to server.";
 
-        message.style.color = "red";
+        message.style.color =
+            "red";
     }
 }
 /* =========================================================
