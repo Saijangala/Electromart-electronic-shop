@@ -7760,3 +7760,281 @@ td select:focus {
     }
 
 }
+/* =====================================================
+   SALES LIST
+===================================================== */
+
+.sales-list-section {
+    margin-top: 25px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+.sales-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+.sales-list-header h2 {
+    margin: 0;
+    font-size: 25px;
+    color: #111827;
+}
+
+
+.sales-list-header p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+.sales-refresh-btn {
+    background: #16a34a;
+    color: #ffffff;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+
+.sales-refresh-btn:hover {
+    background: #15803d;
+}
+
+
+/* SEARCH */
+
+.sales-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+
+.sales-controls input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+
+.sales-controls input:focus {
+    border-color: #2563eb;
+}
+
+
+.sales-controls select {
+    width: 190px;
+    padding: 12px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+/* TABLE */
+
+.sales-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+
+.sales-table th {
+    background: #f1f5f9;
+    color: #334155;
+    padding: 14px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.sales-table td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #334155;
+    font-size: 14px;
+}
+
+
+.sales-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+
+/* ORDER ID */
+
+.sales-order-id {
+    font-weight: 700;
+    color: #2563eb;
+}
+
+
+/* AMOUNT */
+
+.sales-amount {
+    font-weight: 700;
+    color: #16a34a;
+}
+
+
+/* PAYMENT */
+
+.sales-payment-paid {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+
+.sales-payment-pending {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+
+.sales-payment-failed {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+
+/* STATUS */
+
+.sales-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.sales-status-placed {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+
+.sales-status-processing {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+
+.sales-status-shipped {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+
+.sales-status-delivered {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+.sales-status-cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* VIEW BUTTON */
+
+.sales-view-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+
+.sales-view-btn:hover {
+    background: #1d4ed8;
+}
+
+
+/* LOADING */
+
+.sales-loading {
+    text-align: center;
+    padding: 35px !important;
+    color: #64748b;
+}
+
+
+/* FOOTER */
+
+.sales-list-footer {
+    margin-top: 20px;
+    padding: 18px;
+    background: #f8fafc;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.sales-list-footer strong {
+    color: #334155;
+}
+
+
+.sales-list-footer span {
+    color: #16a34a;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .sales-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .sales-controls {
+        flex-direction: column;
+    }
+
+    .sales-controls select {
+        width: 100%;
+    }
+
+    .sales-list-footer {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+}

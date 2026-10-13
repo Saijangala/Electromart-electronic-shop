@@ -67,16 +67,18 @@ async function showPage(page) {
         page
     );
 
-    const pages = [
-        "homePage",
-        "productsPage",
-        "productDetailsPage",
-        "cartPage",
-        "ordersPage",
-        "wishlistPage",
-        "referralPage",
-        "supportPage"
-    ];
+   const pages = [
+    "homePage",
+    "productsPage",
+    "productDetailsPage",
+    "cartPage",
+    "ordersPage",
+    "wishlistPage",
+    "referralPage",
+    "supportPage",
+    "profilePage",
+    "settingsPage"
+];
 
     /* =====================================
        HIDE ALL PAGES
@@ -333,7 +335,38 @@ function updateLoginUI() {
         registerBtn?.classList.add("hidden");
 
         /* Show Logout */
-        logoutBtn?.classList.remove("hidden");
+       /* Show Logout */
+logoutBtn?.classList.remove("hidden");
+
+
+/* =====================================================
+   SHOW CUSTOMER PROFILE
+===================================================== */
+
+const profileWrapper =
+    document.getElementById(
+        "customerProfileWrapper"
+    );
+
+if (profileWrapper) {
+
+    profileWrapper.classList.remove(
+        "hidden"
+    );
+
+    profileWrapper.style.display =
+        "inline-block";
+
+}
+
+
+/* UPDATE CUSTOMER PROFILE NAME */
+
+if (typeof updateCustomerProfilePage === "function") {
+
+    updateCustomerProfilePage();
+
+}
 
 
         /* Show Home, Products, Cart, Orders,
@@ -387,6 +420,25 @@ function updateLoginUI() {
 
         /* Hide Logout */
         logoutBtn?.classList.add("hidden");
+ /* =====================================================
+   HIDE CUSTOMER PROFILE
+===================================================== */
+
+const profileWrapper =
+    document.getElementById(
+        "customerProfileWrapper"
+    );
+
+if (profileWrapper) {
+
+    profileWrapper.classList.add(
+        "hidden"
+    );
+
+    profileWrapper.style.display =
+        "none";
+
+}
 
 
         /* Hide Home, Products, Cart, Orders,
@@ -11768,3 +11820,376 @@ document.addEventListener(
 
     }
 );
+/* =====================================================
+   CUSTOMER PROFILE MENU
+===================================================== */
+
+function toggleCustomerProfile(event) {
+
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const menu =
+        document.getElementById(
+            "customerProfileMenu"
+        );
+
+    if (!menu) {
+        console.error(
+            "❌ customerProfileMenu not found"
+        );
+        return;
+    }
+
+    menu.classList.toggle("hidden");
+
+}
+
+
+/* =====================================================
+   CLOSE PROFILE MENU
+===================================================== */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const wrapper =
+            document.getElementById(
+                "customerProfileWrapper"
+            );
+
+        const menu =
+            document.getElementById(
+                "customerProfileMenu"
+            );
+
+        if (
+            wrapper &&
+            menu &&
+            !wrapper.contains(event.target)
+        ) {
+
+            menu.classList.add("hidden");
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   OPEN CUSTOMER PROFILE
+===================================================== */
+
+function openCustomerProfile() {
+
+    const menu =
+        document.getElementById(
+            "customerProfileMenu"
+        );
+
+    if (menu) {
+        menu.classList.add("hidden");
+    }
+
+    if (!currentUser) {
+
+        openLogin();
+
+        return;
+
+    }
+
+    updateCustomerProfilePage();
+
+    showPage("profile");
+
+}
+
+
+/* =====================================================
+   OPEN CUSTOMER SETTINGS
+===================================================== */
+
+function openCustomerSettings() {
+
+    const menu =
+        document.getElementById(
+            "customerProfileMenu"
+        );
+
+    if (menu) {
+        menu.classList.add("hidden");
+    }
+
+    if (!currentUser) {
+
+        openLogin();
+
+        return;
+
+    }
+
+    showPage("settings");
+
+}
+
+
+/* =====================================================
+   UPDATE PROFILE PAGE
+===================================================== */
+
+function updateCustomerProfilePage() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    const name =
+        currentUser.name ||
+        "Customer";
+
+    const email =
+        currentUser.email ||
+        "-";
+
+    const id =
+        currentUser.id ||
+        "-";
+
+
+    const elements = {
+
+        profilePageName:
+            name,
+
+        profilePageEmail:
+            email,
+
+        profileFullName:
+            name,
+
+        profileEmail:
+            email,
+
+        profileAccountId:
+            id,
+
+        profileMenuName:
+            name,
+
+        profileMenuEmail:
+            email,
+
+        customerName:
+            name
+
+    };
+
+
+    Object.keys(elements).forEach(
+        function(id) {
+
+            const element =
+                document.getElementById(id);
+
+            if (element) {
+
+                element.textContent =
+                    elements[id];
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CHANGE LANGUAGE
+===================================================== */
+
+function changeCustomerLanguage() {
+
+    const menu =
+        document.getElementById(
+            "customerProfileMenu"
+        );
+
+    if (menu) {
+        menu.classList.add("hidden");
+    }
+
+    showToast(
+        "Language selection will be available soon."
+    );
+
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+function toggleCustomerDarkMode() {
+
+    document.body.classList.toggle(
+        "customer-dark-mode"
+    );
+
+    const enabled =
+        document.body.classList.contains(
+            "customer-dark-mode"
+        );
+
+    localStorage.setItem(
+        "electromartDarkMode",
+        enabled
+            ? "true"
+            : "false"
+    );
+
+}
+
+
+/* =====================================================
+   LOAD DARK MODE
+===================================================== */
+
+function loadCustomerDarkMode() {
+
+    const enabled =
+        localStorage.getItem(
+            "electromartDarkMode"
+        ) === "true";
+
+    if (enabled) {
+
+        document.body.classList.add(
+            "customer-dark-mode"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CHANGE PASSWORD
+===================================================== */
+
+function openChangePassword() {
+
+    showToast(
+        "Please use Forgot Password to change your password."
+    );
+
+}
+
+
+/* =====================================================
+   DELETE CUSTOMER ACCOUNT
+===================================================== */
+
+async function deleteCustomerAccount() {
+
+    if (!currentUser) {
+
+        openLogin();
+
+        return;
+
+    }
+
+
+    const firstConfirm =
+        confirm(
+            "Are you sure you want to delete your account?"
+        );
+
+    if (!firstConfirm) {
+        return;
+    }
+
+
+    const secondConfirm =
+        confirm(
+            "This action is permanent. Your account and associated data will be deleted. Continue?"
+        );
+
+    if (!secondConfirm) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/user/account",
+                {
+                    method: "DELETE",
+                    credentials: "include",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to delete account."
+            );
+
+        }
+
+
+        showToast(
+            "Your account has been deleted."
+        );
+
+
+        currentUser = null;
+
+
+        updateLoginUI();
+
+
+        setTimeout(
+            function() {
+
+                showPage("home");
+
+            },
+            1000
+        );
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "DELETE ACCOUNT ERROR:",
+            error
+        );
+
+        showToast(
+            error.message ||
+            "Unable to delete account."
+        );
+
+    }
+
+}

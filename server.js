@@ -238,7 +238,6 @@ async function testDatabase() {
     }
 }
 
-
 /* =====================================================
    CUSTOMER REGISTER
 ===================================================== */
@@ -255,6 +254,7 @@ app.post(
                 password
             } = req.body;
 
+
             if (
                 !name ||
                 !email ||
@@ -266,7 +266,9 @@ app.post(
                     message:
                         "Please enter name, email and password."
                 });
+
             }
+
 
             if (password.length < 6) {
 
@@ -275,29 +277,95 @@ app.post(
                     message:
                         "Password must be at least 6 characters."
                 });
+
             }
 
-            const [existing] =
+
+            // NORMALIZE EMAIL
+            const normalizedEmail =
+                String(email || "")
+                    .trim()
+                    .toLowerCase();
+
+
+            // CHECK CURRENT ACCOUNTS
+            const [existingUser] =
                 await db.execute(
-                    "SELECT id FROM users WHERE email = ?",
-                    [email]
+                    `SELECT id
+                     FROM users
+                     WHERE LOWER(TRIM(email)) = ?
+                     LIMIT 1`,
+                    [normalizedEmail]
                 );
 
-            if (existing.length > 0) {
+
+            if (existingUser.length > 0) {
 
                 return res.status(409).json({
                     success: false,
                     message:
-                        "Email is already registered."
+                        "This email is already registered."
                 });
+
             }
 
+
+            // CHECK DELETED ACCOUNTS
+           // MAKE SURE DELETED ACCOUNTS TABLE EXISTS
+await db.execute(`
+    CREATE TABLE IF NOT EXISTS deleted_accounts (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+`);
+
+
+// CHECK DELETED ACCOUNTS
+const [deletedUser] =
+    await db.execute(
+        `SELECT id
+         FROM deleted_accounts
+         WHERE LOWER(TRIM(email)) = ?
+         LIMIT 1`,
+        [normalizedEmail]
+    );
+
+
+if (deletedUser.length > 0) {
+
+    return res.status(409).json({
+
+        success: false,
+
+        message:
+            "This email is already registered."
+
+    });
+
+}
+
+
+            if (deletedUser.length > 0) {
+
+                return res.status(409).json({
+                    success: false,
+                    message:
+                        "This email is already registered."
+                });
+
+            }
+
+
+            // HASH PASSWORD
             const hashedPassword =
                 await bcrypt.hash(
                     password,
                     10
                 );
 
+
+            // CREATE USER
             const [result] =
                 await db.execute(
                     `INSERT INTO users
@@ -305,10 +373,11 @@ app.post(
                     VALUES (?, ?, ?, 'customer')`,
                     [
                         name,
-                        email,
+                        normalizedEmail,
                         hashedPassword
                     ]
                 );
+
 
             res.status(201).json({
 
@@ -319,7 +388,9 @@ app.post(
 
                 userId:
                     result.insertId
+
             });
+
 
         } catch (error) {
 
@@ -329,11 +400,17 @@ app.post(
             );
 
             res.status(500).json({
+
                 success: false,
+
                 message:
+                    error.message ||
                     "Registration failed."
+
             });
+
         }
+
     }
 );
 
@@ -461,11 +538,11 @@ app.post(
     async (req, res) => {
 
         try {
-
-            const email =
-                String(req.body.email || "")
-                    .trim()
-                    .toLowerCase();
+        const normalizedEmail =
+    String(email || "")
+        .trim()
+        .toLowerCase();
+           
 
 
             /* CHECK EMAIL */
@@ -1135,7 +1212,270 @@ function requireAdmin(
 
     next();
 }
+/* =====================================================
+   DELETE CUSTOMER ACCOUNT
+===================================================== */
 
+app.delete(
+    "/api/user/account",
+    requireLogin,
+    async (req, res) => {
+
+        const connection =
+            await db.getConnection();
+
+        try {
+
+           const userId =
+    req.session.userId;
+
+   
+// ==========================================
+// GET CUSTOMER EMAIL BEFORE DELETE
+// ==========================================
+
+const [userRows] = await connection.execute(
+    `SELECT email
+     FROM users
+     WHERE id = ?
+     AND role = 'customer'
+     LIMIT 1`,
+    [userId]
+);
+
+if (userRows.length === 0) {
+    connection.release();
+
+    return res.status(404).json({
+        success: false,
+        message: "Customer account not found."
+    });
+}
+
+const deletedEmail =
+    String(userRows[0].email)
+        .trim()
+        .toLowerCase();
+
+
+// ==========================================
+// START TRANSACTION
+// ==========================================
+
+await connection.beginTransaction();
+
+
+// ==========================================
+// SAVE EMAIL IN DELETED ACCOUNTS
+// ==========================================
+
+await connection.execute(
+    `INSERT IGNORE INTO deleted_accounts (email)
+     VALUES (?)`,
+    [deletedEmail]
+);
+
+
+            /*
+             * Remove cart
+             */
+
+            await connection.execute(
+                `DELETE FROM cart
+                 WHERE user_id = ?`,
+                [userId]
+            );
+
+
+            /*
+             * Remove wishlist
+             */
+
+            await connection.execute(
+                `DELETE FROM wishlist
+                 WHERE user_id = ?`,
+                [userId]
+            );
+
+
+            /*
+             * Remove password reset tokens
+             */
+
+            await connection.execute(
+                `DELETE FROM password_reset_tokens
+                 WHERE user_id = ?`,
+                [userId]
+            );
+
+
+            /*
+             * Find customer's orders
+             */
+
+            const [orders] =
+                await connection.execute(
+                    `SELECT id
+                     FROM orders
+                     WHERE user_id = ?`,
+                    [userId]
+                );
+
+
+            /*
+             * Remove order items
+             */
+
+            for (const order of orders) {
+
+                await connection.execute(
+                    `DELETE FROM order_items
+                     WHERE order_id = ?`,
+                    [order.id]
+                );
+
+            }
+
+
+            /*
+             * Remove orders
+             */
+
+            await connection.execute(
+                `DELETE FROM orders
+                 WHERE user_id = ?`,
+                [userId]
+            );
+
+
+            /*
+             * Remove support messages
+             * through customer's support tickets
+             */
+
+            const [tickets] =
+                await connection.execute(
+                    `SELECT id
+                     FROM support_requests
+                     WHERE user_id = ?`,
+                    [userId]
+                );
+
+
+            for (const ticket of tickets) {
+
+                await connection.execute(
+                    `DELETE FROM support_messages
+                     WHERE support_id = ?`,
+                    [ticket.id]
+                );
+
+            }
+
+
+            /*
+             * Remove support tickets
+             */
+
+            await connection.execute(
+                `DELETE FROM support_requests
+                 WHERE user_id = ?`,
+                [userId]
+            );
+
+
+            /*
+             * Finally delete customer
+             */
+
+            const [result] =
+                await connection.execute(
+                    `DELETE FROM users
+                     WHERE id = ?
+                     AND role = 'customer'`,
+                    [userId]
+                );
+
+
+            if (
+                result.affectedRows === 0
+            ) {
+
+                await connection.rollback();
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Customer account not found."
+
+                });
+
+            }
+
+
+            await connection.commit();
+
+
+            /*
+             * Destroy login session
+             */
+
+            req.session.destroy(
+                function(error) {
+
+                    if (error) {
+
+                        console.error(
+                            "SESSION DESTROY ERROR:",
+                            error
+                        );
+
+                    }
+
+                }
+            );
+
+
+            res.json({
+
+                success: true,
+
+                message:
+                    "Account deleted successfully."
+
+            });
+
+        }
+        catch (error) {
+
+            await connection.rollback();
+
+            console.error(
+                "DELETE ACCOUNT ERROR:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to delete account."
+
+            });
+
+        }
+        finally {
+
+            connection.release();
+
+        }
+
+    }
+);
 
 /* =====================================================
    PRODUCTS - CUSTOMER
@@ -3107,7 +3447,71 @@ app.get(
 
     }
 );
+/* =====================================================
+   ADMIN SALES LIST
+   INDIVIDUAL NON-CANCELLED ORDERS
+===================================================== */
 
+app.get(
+    "/api/admin/sales/list",
+    requireAdmin,
+    async (req, res) => {
+
+        try {
+
+            const [sales] =
+                await db.execute(
+                    `
+                    SELECT
+                        orders.id AS order_id,
+                        users.name AS customer_name,
+                        users.email AS customer_email,
+                        orders.created_at,
+                        orders.total,
+                        orders.status
+
+                    FROM orders
+
+                    INNER JOIN users
+                        ON orders.user_id = users.id
+
+                    WHERE orders.status != 'Cancelled'
+
+                    ORDER BY orders.created_at DESC
+                    `
+                );
+
+
+            res.json({
+
+                success: true,
+
+                sales: sales
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "ADMIN SALES LIST ERROR:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to load sales list."
+
+            });
+
+        }
+
+    }
+);
 /* =====================================================
    ADMIN ORDERS
 ===================================================== */

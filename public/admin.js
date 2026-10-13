@@ -226,12 +226,12 @@ async function adminLogin(event) {
         );
 
         /* Load all admin data */
-
-        loadDashboard();
-        loadProducts();
-        loadUsers();
-        loadOrders();
-        loadSupportRequests();
+ loadDashboard();
+loadProducts();
+loadUsers();
+loadOrders();
+loadSupportRequests();
+loadSalesList();
 
     } catch (error) {
 
@@ -822,29 +822,7 @@ if (!productId) {
     }
 
 }
-/* =====================================================
-   STOCK ADDED NOTIFICATION
-===================================================== */
 
-if (
-    productId &&
-    oldStock !== null &&
-    stock > oldStock
-) {
-
-    const addedQuantity =
-        stock - oldStock;
-
-    sendAdminNotification(
-        "stock",
-        "Product Stock Updated",
-        `${name} stock increased by ${addedQuantity} item(s).`,
-        {
-            productId: Number(productId),
-            quantity: addedQuantity
-        }
-    );
-}
 /* =====================================================
    EDIT PRODUCT
 ===================================================== */
@@ -3780,9 +3758,11 @@ function showAdminSection(sectionName) {
         loadOrders();
 
     }
-   else if (sectionName === "sales") {
+else if (sectionName === "sales") {
 
     loadDashboard();
+
+    loadSalesList();
 
 }
 
@@ -3880,25 +3860,38 @@ function showAdminSection(sectionName) {
         loadProducts();
 
     }
+   else if (sectionName === "orders") {
 
-    else if (sectionName === "orders") {
+    loadOrders();
 
-        loadOrders();
+}
 
-    }
+else if (sectionName === "sales") {
 
-    else if (sectionName === "support") {
+    console.log("💰 Opening Sales section...");
 
-        loadSupportRequests();
+    loadDashboard();
 
-    }
-    else if (sectionName === "reviews") {
+    loadSalesList();
+
+}
+
+else if (sectionName === "support") {
+
+    loadSupportRequests();
+
+}
+
+else if (sectionName === "reviews") {
 
     loadReviews();
 
 }
+   
 
 }
+
+
 /* =========================================
    FILTER ORDERS BY STATUS
 ========================================= */
@@ -9406,3 +9399,707 @@ function showSupportCategoryStatus(category) {
         });
 
 }
+/* =====================================================
+   SALES LIST
+===================================================== */
+var allSalesData = [];
+
+
+/* =====================================================
+   LOAD SALES LIST
+===================================================== */
+
+async function loadSalesList() {
+
+    const tbody =
+        document.getElementById("salesListBody");
+
+    if (!tbody) {
+        console.error("❌ salesListBody not found");
+        return;
+    }
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="8" class="sales-loading">
+                🔄 Loading sales...
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+      const currentYear =
+    new Date().getFullYear();
+
+const response =
+   await fetch("/api/admin/orders",
+        {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json"
+            }
+        }
+    );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "SALES API RESPONSE:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load sales"
+            );
+
+        }
+
+
+        /*
+         * Support different API response formats
+         */
+
+        if (Array.isArray(data)) {
+
+    allSalesData = data;
+
+}
+
+else if (Array.isArray(data.sales)) {
+
+    allSalesData = data.sales;
+
+}
+
+else if (Array.isArray(data.orders)) {
+
+    allSalesData = data.orders.filter(function(order) {
+
+        return String(
+            order.status || ""
+        ).toLowerCase() !== "cancelled";
+
+    });
+
+}
+
+else if (Array.isArray(data.data)) {
+
+    allSalesData = data.data;
+
+}
+
+else {
+
+    allSalesData = [];
+
+}
+
+
+        console.log(
+            "TOTAL SALES RECORDS:",
+            allSalesData.length
+        );
+
+
+        renderSalesList(
+            allSalesData
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ SALES LIST ERROR:",
+            error
+        );
+
+
+        tbody.innerHTML = `
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="sales-loading">
+
+                    ❌ Unable to load sales.
+
+                    <br><br>
+
+                    <small>
+                        ${escapeSalesHTML(
+                            error.message
+                        )}
+                    </small>
+
+                </td>
+
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER SALES
+===================================================== */
+
+function renderSalesList(
+    sales
+) {
+
+    const tbody =
+        document.getElementById(
+            "salesListBody"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    if (!sales.length) {
+
+        tbody.innerHTML = `
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="sales-loading">
+
+                    No sales found.
+
+                </td>
+
+            </tr>
+        `;
+
+        updateSalesFooter([]);
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        sales.map(
+            sale => {
+
+                const orderId =
+                    sale.order_id ??
+                    sale.orderId ??
+                    sale.id ??
+                    "-";
+
+
+                const customer =
+                    sale.customer_name ??
+                    sale.customerName ??
+                    sale.name ??
+                    sale.user_name ??
+                    "Customer";
+
+
+                const email =
+                    sale.email ??
+                    sale.customer_email ??
+                    "-";
+
+
+                const date =
+                    sale.created_at ??
+                    sale.createdAt ??
+                    sale.order_date ??
+                    sale.orderDate;
+
+
+                const amount =
+                    Number(
+                        sale.total_amount ??
+                        sale.total ??
+                        sale.amount ??
+                        sale.final_total ??
+                        0
+                    );
+
+
+                const payment =
+                    sale.payment_status ??
+                    sale.paymentStatus ??
+                    sale.payment_method ??
+                    "Paid";
+
+
+                const status =
+                    sale.status ??
+                    sale.order_status ??
+                    sale.orderStatus ??
+                    "Placed";
+
+
+                const normalizedStatus =
+                    String(status)
+                        .toLowerCase()
+                        .replace(/\s+/g, "-");
+
+
+                const statusClass =
+                    `sales-status-${normalizedStatus}`;
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <span
+                                class="sales-order-id">
+
+                                #${escapeSalesHTML(
+                                    String(orderId)
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+
+                                ${escapeSalesHTML(
+                                    String(customer)
+                                )}
+
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            ${escapeSalesHTML(
+                                String(email)
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            ${formatSalesDate(date)}
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="sales-amount">
+
+                                ₹${amount.toLocaleString(
+                                    "en-IN",
+                                    {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="${getPaymentClass(
+                                    payment
+                                )}">
+
+                                ${escapeSalesHTML(
+                                    String(payment)
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="sales-status ${statusClass}">
+
+                                ${escapeSalesHTML(
+                                    String(status)
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="sales-view-btn"
+                                onclick="viewSaleOrder(${Number(orderId)})">
+
+                                👁 View
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+
+    updateSalesFooter(
+        sales
+    );
+
+}
+
+
+/* =====================================================
+   SEARCH + FILTER
+===================================================== */
+
+function filterSalesList() {
+
+    const searchInput =
+        document.getElementById(
+            "salesSearch"
+        );
+
+
+    const statusFilter =
+        document.getElementById(
+            "salesStatusFilter"
+        );
+
+
+    const search =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const status =
+        statusFilter
+            ? statusFilter.value
+            : "all";
+
+
+    const filtered =
+        allSalesData.filter(
+            sale => {
+
+                const orderId =
+                    String(
+                        sale.order_id ??
+                        sale.orderId ??
+                        sale.id ??
+                        ""
+                    ).toLowerCase();
+
+
+                const customer =
+                    String(
+                        sale.customer_name ??
+                        sale.customerName ??
+                        sale.name ??
+                        sale.user_name ??
+                        ""
+                    ).toLowerCase();
+
+
+                const saleStatus =
+                    String(
+                        sale.status ??
+                        sale.order_status ??
+                        sale.orderStatus ??
+                        ""
+                    ).toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    orderId.includes(search) ||
+                    customer.includes(search);
+
+
+                const matchesStatus =
+                    status === "all" ||
+                    saleStatus ===
+                        status.toLowerCase();
+
+
+                return (
+                    matchesSearch &&
+                    matchesStatus
+                );
+
+            }
+        );
+
+
+    renderSalesList(
+        filtered
+    );
+
+}
+
+
+/* =====================================================
+   SALES FOOTER
+===================================================== */
+
+function updateSalesFooter(
+    sales
+) {
+
+    const countElement =
+        document.getElementById(
+            "salesOrderCount"
+        );
+
+
+    const totalElement =
+        document.getElementById(
+            "salesListTotal"
+        );
+
+
+    const total =
+        sales.reduce(
+            (sum, sale) => {
+
+                return sum +
+                    Number(
+                        sale.total_amount ??
+                        sale.total ??
+                        sale.amount ??
+                        sale.final_total ??
+                        0
+                    );
+
+            },
+            0
+        );
+
+
+    if (countElement) {
+
+        countElement.textContent =
+            sales.length;
+
+    }
+
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            "₹" +
+            total.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   VIEW ORDER
+===================================================== */
+
+function viewSaleOrder(
+    orderId
+) {
+
+    console.log(
+        "VIEW ORDER:",
+        orderId
+    );
+
+
+    /*
+     * If your existing Admin Panel already
+     * has an order-details function,
+     * use it here.
+     */
+
+    if (
+        typeof viewOrder === "function"
+    ) {
+
+        viewOrder(
+            orderId
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "Order ID: #" +
+        orderId
+    );
+
+}
+
+
+/* =====================================================
+   PAYMENT CLASS
+===================================================== */
+
+function getPaymentClass(
+    payment
+) {
+
+    const value =
+        String(payment)
+            .toLowerCase();
+
+
+    if (
+        value.includes("paid") ||
+        value.includes("success")
+    ) {
+
+        return "sales-payment-paid";
+
+    }
+
+
+    if (
+        value.includes("pending")
+    ) {
+
+        return "sales-payment-pending";
+
+    }
+
+
+    if (
+        value.includes("failed")
+    ) {
+
+        return "sales-payment-failed";
+
+    }
+
+
+    return "sales-payment-pending";
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function formatSalesDate(
+    date
+) {
+
+    if (!date) {
+        return "-";
+    }
+
+
+    const parsed =
+        new Date(date);
+
+
+    if (
+        Number.isNaN(
+            parsed.getTime()
+        )
+    ) {
+
+        return escapeSalesHTML(
+            String(date)
+        );
+
+    }
+
+
+    return parsed.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeSalesHTML(
+    value
+) {
+
+    return String(value ?? "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+

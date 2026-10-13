@@ -71,7 +71,97 @@
                 onclick="logout()">
             Logout
         </button>
+<!-- =====================================================
+     CUSTOMER PROFILE MENU
+===================================================== -->
 
+<div id="customerProfileWrapper"
+     class="customer-profile-wrapper hidden">
+
+    <button
+        type="button"
+        id="customerProfileBtn"
+        class="customer-profile-btn"
+        onclick="toggleCustomerProfile(event)">
+
+        <span class="customer-avatar">
+            👤
+        </span>
+
+        <span id="customerName">
+            Customer
+        </span>
+
+        <span class="profile-arrow">
+            ▾
+        </span>
+
+    </button>
+
+
+    <!-- PROFILE DROPDOWN -->
+
+    <div
+        id="customerProfileMenu"
+        class="customer-profile-menu hidden">
+
+        <div class="profile-menu-header">
+
+            <div class="profile-menu-avatar">
+                👤
+            </div>
+
+            <div>
+
+                <strong id="profileMenuName">
+                    Customer
+                </strong>
+
+                <small id="profileMenuEmail">
+                    customer@example.com
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            onclick="openCustomerProfile()">
+
+            👤
+            <span>Profile</span>
+
+        </button>
+
+
+        <button
+            type="button"
+            onclick="openCustomerSettings()">
+
+            ⚙️
+            <span>Settings</span>
+
+        </button>
+
+
+        <button
+            type="button"
+            onclick="changeCustomerLanguage()">
+
+            🌐
+            <span>Change Language</span>
+
+        </button>
+
+
+        <div class="profile-menu-divider"></div>
+
+
+    </div>
+
+</div>
 <!-- =====================================================
      NOTIFICATION BUTTON
 ===================================================== -->
@@ -1709,9 +1799,7 @@
                     </option>
 
                 </select>
-
-
-                <!-- SUBJECT - ONLY FOR COMPLAINT -->
+<!-- SUBJECT - ONLY FOR COMPLAINT -->
 
 <div id="subjectGroup" style="display: none;">
 
@@ -1787,6 +1875,404 @@
 
         </div>
 
+
+    </div>
+
+</section>
+<!-- =====================================================
+     CUSTOMER PROFILE PAGE
+===================================================== -->
+
+<section
+    id="profilePage"
+    class="page hidden">
+
+    <div class="account-page-container">
+
+        <div class="account-page-header">
+
+            <button
+                type="button"
+                class="back-account-btn"
+                onclick="showPage('home')">
+
+                ← Back
+
+            </button>
+
+            <div>
+
+                <h1>
+                    👤 My Profile
+                </h1>
+
+                <p>
+                    Manage your personal information
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE CARD -->
+
+        <div class="profile-account-card">
+
+            <div class="profile-large-avatar">
+                👤
+            </div>
+
+            <div class="profile-account-info">
+
+                <h2 id="profilePageName">
+                    Customer
+                </h2>
+
+                <p id="profilePageEmail">
+                    customer@example.com
+                </p>
+
+                <span class="account-status">
+                    ● Active Account
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- PERSONAL INFORMATION -->
+
+        <div class="account-section-card">
+
+            <div class="account-section-title">
+
+                <div>
+
+                    <h2>
+                        Personal Information
+                    </h2>
+
+                    <p>
+                        Your registered account details
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="account-info-grid">
+
+                <div class="account-info-item">
+
+                    <span>
+                        Full Name
+                    </span>
+
+                    <strong id="profileFullName">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="account-info-item">
+
+                    <span>
+                        Email Address
+                    </span>
+
+                    <strong id="profileEmail">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="account-info-item">
+
+                    <span>
+                        Account ID
+                    </span>
+
+                    <strong id="profileAccountId">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="account-info-item">
+
+                    <span>
+                        Account Type
+                    </span>
+
+                    <strong>
+                        Customer
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT ACTIONS -->
+
+        <div class="account-section-card">
+
+            <h2>
+                Account
+            </h2>
+
+            <p>
+                Manage your account settings and security.
+            </p>
+
+            <div class="account-action-buttons">
+
+                <button
+                    type="button"
+                    onclick="openCustomerSettings()">
+
+                    ⚙️ Account Settings
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     CUSTOMER SETTINGS PAGE
+===================================================== -->
+
+<section
+    id="settingsPage"
+    class="page hidden">
+
+    <div class="account-page-container">
+
+        <div class="account-page-header">
+
+            <button
+                type="button"
+                class="back-account-btn"
+                onclick="showPage('home')">
+
+                ← Back
+
+            </button>
+
+            <div>
+
+                <h1>
+                    ⚙️ Settings
+                </h1>
+
+                <p>
+                    Manage your account preferences
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT SETTINGS -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-header">
+
+                <div>
+
+                    <h2>
+                        🔐 Account Security
+                    </h2>
+
+                    <p>
+                        Manage your password and account security.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+
+                    <strong>
+                        Password
+                    </strong>
+
+                    <span>
+                        Update your account password
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="openChangePassword()">
+
+                    Change
+
+                </button>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+
+                    <strong>
+                        📧 Email Preferences
+                    </strong>
+
+                    <span>
+                        Manage notification emails
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="showToast('Email preferences coming soon.')">
+
+                    Manage
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREFERENCES -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-header">
+
+                <h2>
+                    Preferences
+                </h2>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+
+                    <strong>
+                        ☀️ Dark Mode
+                    </strong>
+
+                    <span>
+                        Toggle dark/light theme
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="toggleCustomerDarkMode()">
+
+                    Toggle
+
+                </button>
+
+            </div>
+
+
+            <div class="settings-row">
+
+                <div>
+
+                    <strong>
+                        🌐 Language
+                    </strong>
+
+                    <span>
+                        Change the interface language
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="changeCustomerLanguage()">
+
+                    Change
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- DANGER ZONE -->
+
+        <div class="settings-card danger-zone">
+
+            <div class="settings-card-header">
+
+                <div>
+
+                    <h2>
+                        Danger Zone
+                    </h2>
+
+                    <p>
+                        Permanently delete your account and all
+                        associated data.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-row delete-row">
+
+                <div>
+
+                    <strong>
+                        ❌ Delete Account
+                    </strong>
+
+                    <span>
+                        Permanently delete your account and all data
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="delete-account-btn"
+                    onclick="deleteCustomerAccount()">
+
+                    Delete Account
+
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
 

@@ -778,7 +778,7 @@
 
         <button
             class="add-btn"
-            onclick="loadDashboard()">
+          onclick="loadDashboard(); loadSalesList()"
 
             Refresh
 
@@ -801,6 +801,141 @@
         <p>
             Total sales from non-cancelled orders.
         </p>
+
+    </div>
+
+</section>
+<!-- =====================================================
+     SALES LIST
+===================================================== -->
+
+<section class="sales-list-section">
+
+    <div class="sales-list-header">
+
+        <div>
+            <h2>📊 Sales List</h2>
+            <p>All sales from non-cancelled orders</p>
+        </div>
+
+        <button
+            type="button"
+            class="sales-refresh-btn"
+            onclick="loadSalesList()">
+            🔄 Refresh
+        </button>
+
+    </div>
+
+
+    <!-- SEARCH + FILTER -->
+
+    <div class="sales-controls">
+
+        <input
+            type="search"
+            id="salesSearch"
+            placeholder="🔍 Search Order ID or Customer..."
+            oninput="filterSalesList()"
+        >
+
+        <select
+            id="salesStatusFilter"
+            onchange="filterSalesList()">
+
+            <option value="all">
+                All Status
+            </option>
+
+            <option value="Placed">
+                Placed
+            </option>
+
+            <option value="Processing">
+                Processing
+            </option>
+
+            <option value="Shipped">
+                Shipped
+            </option>
+
+            <option value="Delivered">
+                Delivered
+            </option>
+
+            <option value="Cancelled">
+                Cancelled
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- SALES TABLE -->
+
+    <div class="sales-table-wrapper">
+
+        <table class="sales-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Order ID</th>
+
+                    <th>Customer</th>
+
+                    <th>Email</th>
+
+                    <th>Date</th>
+
+                    <th>Amount</th>
+
+                    <th>Payment</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="salesListBody">
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="sales-loading">
+
+                        Loading sales...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- TOTAL -->
+
+    <div class="sales-list-footer">
+
+        <strong>
+            Total Orders:
+            <span id="salesOrderCount">0</span>
+        </strong>
+
+        <strong>
+            Total Sales:
+            <span id="salesListTotal">₹0.00</span>
+        </strong>
 
     </div>
 
@@ -989,7 +1124,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
-<script src="admin.js"></script>
+<script src="admin.js?v=21"></script>
 
     <!-- =====================================================
      SUPPORT CHAT / VIEW MODAL
